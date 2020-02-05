@@ -1,7 +1,7 @@
 version: "2"
 services:
   mysql-wecube:
-    image: mysql:5.6
+    image: ccr.ccs.tencentyun.com/webankpartners/mysql:5.6
     restart: always
     command:
       [
@@ -21,7 +21,7 @@ services:
       - 3307:3306
 
   mysql-auth-server:
-    image: mysql:5.6
+    image: ccr.ccs.tencentyun.com/webankpartners/mysql:5.6
     restart: always
     command:
       [
