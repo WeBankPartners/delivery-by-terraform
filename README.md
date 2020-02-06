@@ -21,7 +21,7 @@ Linux 64: [https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_li
 ### 3. 下载本仓库
 ```
 $cd d:\dev
-$git clone https://github.com/jordanzhangsz/delivery-by-terraform.git
+$git clone https://github.com/WeBankPartners/delivery-by-terraform.git
 ```
 
 ### 4. 运行Terraform部署应用
