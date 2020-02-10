@@ -1,7 +1,6 @@
 install_target_host=$1
-docker_registry_password=$2
-mysql_password=$3
-wecube_version=$4
+mysql_password=$2
+wecube_version=$3
 
 yum install git -y
 yum install docker -y

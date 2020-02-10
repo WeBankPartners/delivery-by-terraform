@@ -1,9 +1,4 @@
 #全局变量
-variable "docker_registry_password" {
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_docker_registry_password'"
-  default = "Wecube123"
-}
-
 variable "instance_root_password" {
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_instance_root_password'"
   default = "Wecube123"
@@ -109,7 +104,7 @@ resource "alicloud_instance" "instance_wecube_platform" {
 	  "yum install dos2unix -y",
       "dos2unix /root/application/wecube/*",
 	  "cd /root/application/wecube",
-	  "./install-wecube.sh ${alicloud_instance.instance_wecube_platform.private_ip} ${var.docker_registry_password} ${var.mysql_root_password} ${var.wecube_version}"
+	  "./install-wecube.sh ${alicloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version}"
     ]
   }
 
