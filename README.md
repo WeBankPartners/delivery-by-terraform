@@ -27,13 +27,13 @@ $git clone https://github.com/WeBankPartners/delivery-by-terraform.git
 ### 4. 运行Terraform部署应用
 部署之前，可以修改这些配置，否则会使用默认配置；
 
-WeCube主机的密码至环境变量（不改默认为WeCube1qazXSW@）：
+WeCube主机的密码至环境变量（不改默认为WeCube1qazXSW@）：  
 ![terraform app password](docs/images/instance_root_password.png) 
 
-配置mysql的root密码（不改默认为WeCube1qazXSW@）：
+配置mysql的root密码（不改默认为WeCube1qazXSW@）：  
 ![terraform app password](docs/images/mysql_root_password.png) 
 
-配置wecube的version，即镜像tag（不改默认为20200208182750-f47e408）：
+配置wecube的version，即镜像tag（不改默认为20200208182750-f47e408）：  
 ![terraform app password](docs/images/wecube_version.png) 
 
 #### 4.1 部署阿里云
