@@ -25,13 +25,24 @@ $git clone https://github.com/WeBankPartners/delivery-by-terraform.git
 ```
 
 ### 4. 运行Terraform部署应用
-部署之前先配WeCube打包的镜像仓库密码至环境变量，以及设置mysql的root密码
-![terraform app password](docs/images/passwords.png) 
+部署之前，可以修改这些配置，否则会使用默认配置；
+
+WeCube主机的密码至环境变量（不改默认为WeCube1qazXSW@）：  
+![terraform app password](docs/images/instance_root_password.png) 
+
+配置mysql的root密码（不改默认为WeCube1qazXSW@）：  
+![terraform app password](docs/images/mysql_root_password.png) 
+
+配置wecube的version，即镜像tag（不改默认为20200208182750-f47e408）：  
+![terraform app password](docs/images/wecube_version.png) 
 
 #### 4.1 部署阿里云
-##### 4.1.1 配置Access Key/Secret Key至本地环境变量 
+##### 4.1.1 配置Access Key/Secret Key至本地环境变量（默认使用region为cn-hangzhou） 
 ![terraform ali cloud key](docs/images/terraform_ali_cloud_key.png)
 >注意: Access Key/Secret Key是敏感信息，建议配置到本地环境变量，不要配置在Terraform的模板文件*.tf里
+
+>注意: 若配置的region不为"cn-hangzhou"，则需要相应的修改delivery-by-terraform\delivery-wecube\to_ali_cloud\aliyun_wecube.standalone.tf中出现的所有"availability_zone"的值。例如region配置为"cn-shenzhen",availability_zone则需要修改为"cn-shenzhen-a"或者深圳地域下的其他可用区。
+
 ##### 4.1.2 初始化Terraform
 ```
 $cd d:\dev\delivery-by-terraform\delivery-wecube\to_ali_cloud
@@ -63,7 +74,8 @@ $.....
 #### 4.2 部署腾讯云
 ##### 4.2.1 配置Access Key/Secret Key至本地环境变量 
 ![terraform tencent cloud key](docs/images/terraform_tencent_cloud_key.png)
->注意: Access Key/Secret Key是敏感信息，建议配置到本地环境变量，不要配置在Terraform的模板文件*.tf里
+>注意: Access Key/Secret Key是敏感信息，建议配置到本地环境变量，不要配置在Terraform的模板文件*.tf里  
+>注意: 若配置的region不为"ap-guangzhou"，则需要相应的修改delivery-by-terraform\delivery-wecube\to_tencent_cloud\tencent_wecube.tf中出现的所有"availability_zone"的值。例如region配置为"ap-chengdu",availability_zone则需要修改为"ap-chengdu-1"或成都地域下的其他可用区。
 
 ##### 4.1.2 初始化Terraform
 ```
