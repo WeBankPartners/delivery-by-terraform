@@ -11,7 +11,7 @@ variable "mysql_root_password" {
 
 variable "wecube_version" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default = "20200210224145-afa845a"
+  default = "20200212234110-08d00fc"
 }
 
 #创建VPC

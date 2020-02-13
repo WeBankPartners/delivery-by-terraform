@@ -88,7 +88,6 @@ services:
       - JWT_SSO_TOKEN_URI={{JWT_SSO_TOKEN_URI}}
       - WECUBE_PLUGIN_DEPLOY_PATH={{WECUBE_PLUGIN_DEPLOY_PATH}}
   
-
   auth-server:
     image: {{AUTH_SERVER_IMAGE_NAME}}:{{AUTH_SERVER_IMAGE_VERSION}}
     restart: always

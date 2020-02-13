@@ -21,24 +21,32 @@ insert into menu_items (id,parent_code,code,source,menu_order,description,local_
 ,('IMPLEMENTATION__IMPLEMENTATION_BATCH_EXECUTION', 'IMPLEMENTATION', 'IMPLEMENTATION_BATCH_EXECUTION', 'SYSTEM', 15, '', '批量执行');
 
 delete from role_menu;
-insert into role_menu (id, role_id, role_name, menu_code) values
-('SUPER_ADMIN__IMPLEMENTATION_WORKFLOW_EXECUTION','2c9280827019695c01701dc555e60042','SUPER_ADMIN','IMPLEMENTATION_WORKFLOW_EXECUTION'),
-('SUPER_ADMIN__COLLABORATION_PLUGIN_MANAGEMENT','2c9280827019695c01701dc555e60042','SUPER_ADMIN','COLLABORATION_PLUGIN_MANAGEMENT'),
-('SUPER_ADMIN__COLLABORATION_WORKFLOW_ORCHESTRATION','2c9280827019695c01701dc555e60042','SUPER_ADMIN','COLLABORATION_WORKFLOW_ORCHESTRATION'),
-('SUPER_ADMIN__ADMIN_SYSTEM_PARAMS','2c9280827019695c01701dc555e60042','SUPER_ADMIN','ADMIN_SYSTEM_PARAMS'),
-('SUPER_ADMIN__ADMIN_RESOURCES_MANAGEMENT','2c9280827019695c01701dc555e60042','SUPER_ADMIN','ADMIN_RESOURCES_MANAGEMENT'),
-('SUPER_ADMIN__ADMIN_USER_ROLE_MANAGEMENT','2c9280827019695c01701dc555e60042','SUPER_ADMIN','ADMIN_USER_ROLE_MANAGEMENT'),
-('SUPER_ADMIN__IMPLEMENTATION_BATCH_EXECUTION','2c9280827019695c01701dc555e60042','SUPER_ADMIN','IMPLEMENTATION_BATCH_EXECUTION');
+insert into role_menu (id, role_name, menu_code) values
+('SUPER_ADMIN__IMPLEMENTATION_WORKFLOW_EXECUTION','SUPER_ADMIN','IMPLEMENTATION_WORKFLOW_EXECUTION'),
+('SUPER_ADMIN__COLLABORATION_PLUGIN_MANAGEMENT','SUPER_ADMIN','COLLABORATION_PLUGIN_MANAGEMENT'),
+('SUPER_ADMIN__COLLABORATION_WORKFLOW_ORCHESTRATION','SUPER_ADMIN','COLLABORATION_WORKFLOW_ORCHESTRATION'),
+('SUPER_ADMIN__ADMIN_SYSTEM_PARAMS','SUPER_ADMIN','ADMIN_SYSTEM_PARAMS'),
+('SUPER_ADMIN__ADMIN_RESOURCES_MANAGEMENT','SUPER_ADMIN','ADMIN_RESOURCES_MANAGEMENT'),
+('SUPER_ADMIN__ADMIN_USER_ROLE_MANAGEMENT','SUPER_ADMIN','ADMIN_USER_ROLE_MANAGEMENT'),
+('SUPER_ADMIN__IMPLEMENTATION_BATCH_EXECUTION','SUPER_ADMIN','IMPLEMENTATION_BATCH_EXECUTION');
 
 
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_SERVER_URL', NULL, 'S3_SERVER_URL', NULL, 'http://10.128.202.3:9000', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_ACCESS_KEY', NULL, 'S3_ACCESS_KEY', NULL, 'access_key', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_SECRET_KEY', NULL, 'S3_SECRET_KEY', NULL, 'secret_key', 'global', 'system', 'active');
+<<<<<<< HEAD
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CORE_ADDR', NULL, 'CORE_ADDR', NULL, 'http://10.128.202.3:19090', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__BASE_MOUNT_PATH', NULL, 'BASE_MOUNT_PATH', NULL, '/data', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__ENCRYPT_SEED', NULL, 'ENCRYPT_SEED', NULL, 'seed-wecube2.1-2020', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CALLBACK_URL', NULL, 'CALLBACK_URL', NULL, '/v1/process/instances/callback', 'global', 'system', 'active');
+
+=======
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CORE_ADDR', NULL, 'CORE_ADDR', NULL, 'http://10.128.202.3:19090/platform', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__BASE_MOUNT_PATH', NULL, 'BASE_MOUNT_PATH', NULL, '/data', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__ENCRYPT_SEED', NULL, 'ENCRYPT_SEED', NULL, 'seed-wecube2.1-2020', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CALLBACK_URL', NULL, 'CALLBACK_URL', NULL, '/v1/process/instances/callback', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CMDB_URL', NULL, 'CMDB_URL', NULL, 'http://10.128.202.3:20000/wecmdb', 'global', 'system', 'active');
+>>>>>>> eaaa5cb854012306423a2355b529bb0fc3a33809
 
 INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.128.202.3__docker__containerHost','umadmin','2020-01-21 12:36:00','10.128.202.3',1,'d7ApXWZWiEeijD3IdPhS/A==','root','containerHost','22','ss','active','docker','umadmin','2020-01-21 12:36:00');
 INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.128.202.3__mysql__mysqlHost','umadmin','2020-01-21 12:37:03','10.128.202.3',1,'9P+ZliiJRXLctxnDCZOzgQ==','root','mysqlHost','3307','ss','active','mysql','umadmin','2020-01-21 12:37:03');

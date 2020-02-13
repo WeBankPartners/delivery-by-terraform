@@ -224,7 +224,7 @@ DROP TABLE IF EXISTS `core_ru_proc_role_binding`;
 CREATE TABLE `core_ru_proc_role_binding` (
   `id` varchar(255) NOT NULL,
   `proc_id` varchar(255) NOT NULL,
-  `role_id` varchar(255) NOT NULL,
+  `role_id` varchar(255) DEFAULT NULL,
   `permission` varchar(255) NOT NULL,
   `role_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -789,7 +789,10 @@ DROP TABLE IF EXISTS `role_menu`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `role_menu` (
   `id` varchar(255) NOT NULL,
+<<<<<<< HEAD
+=======
   `role_id` varchar(64) NOT NULL,
+>>>>>>> eaaa5cb854012306423a2355b529bb0fc3a33809
   `role_name` varchar(64) NOT NULL,
   `menu_code` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
