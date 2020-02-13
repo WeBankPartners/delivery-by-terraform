@@ -1,36 +1,31 @@
 #全局变量
-variable "docker_registry_password" {
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_docker_registry_password'"
-  default = "Wecube123"
-}
-
 variable "instance_root_password" {
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_instance_root_password'"
-  default = "Wecube123"
+  default = "WeCube1qazXSW@"
 }
 
 variable "mysql_root_password" {
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_mysql_root_password'"
-  default = "Wecube123"
+  default = "WeCube1qazXSW@"
 }
 
 variable "wecube_version" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default = "20200122120309-d199812"
+  default = "20200212234110-08d00fc"
 }
 
 #创建VPC
 resource "tencentcloud_vpc" "vpc" {
-  name       = "VPC_WECUBE"
-  cidr_block = "10.0.0.0/21"
+  name       = "GZ_MGMT"
+  cidr_block = "10.128.192.0/19"
 }
 
 #创建交换机（子网）- Wecube Platform组件运行的实例
 resource "tencentcloud_subnet" "subnet_app" {
-  name              = "SUBNET_WECUBE_APP"
+  name              = "GZP4_MGMT_MT_APP"
   vpc_id            = "${tencentcloud_vpc.vpc.id}"
-  cidr_block        = "10.0.0.0/24"
-  availability_zone = "ap-chengdu-1"
+  cidr_block        = "10.128.202.0/25"
+  availability_zone = "ap-guangzhou-4"
 }
 
 #创建安全组
@@ -40,17 +35,34 @@ resource "tencentcloud_security_group" "sc_group" {
 }
 
 #创建安全规则入站
-resource "tencentcloud_security_group_rule" "allow_all_tcp" {
+resource "tencentcloud_security_group_rule" "allow_19090_tcp" {
   security_group_id = "${tencentcloud_security_group.sc_group.id}"
   type              = "ingress"
   cidr_ip           = "0.0.0.0/0"
   ip_protocol       = "tcp"
-  port_range        = "1-65535"
+  port_range        = "19090"
   policy            = "accept"
-
 }
 
-#创建安全规则
+resource "tencentcloud_security_group_rule" "allow_22_tcp" {
+  security_group_id = "${tencentcloud_security_group.sc_group.id}"
+  type              = "ingress"
+  cidr_ip           = "0.0.0.0/0"
+  ip_protocol       = "tcp"
+  port_range        = "22"
+  policy            = "accept"
+}
+
+resource "tencentcloud_security_group_rule" "allow_9000_tcp" {
+  security_group_id = "${tencentcloud_security_group.sc_group.id}"
+  type              = "ingress"
+  cidr_ip           = "0.0.0.0/0"
+  ip_protocol       = "tcp"
+  port_range        = "9000"
+  policy            = "accept"
+}
+
+#创建安全规则出站
 resource "tencentcloud_security_group_rule" "allow_all_tcp_out" {
   security_group_id = "${tencentcloud_security_group.sc_group.id}"
   type              = "egress"
@@ -62,17 +74,16 @@ resource "tencentcloud_security_group_rule" "allow_all_tcp_out" {
 
 #创建WeCube Platform主机
 resource "tencentcloud_instance" "instance_wecube_platform" {
-  availability_zone = "ap-chengdu-1"  
+  availability_zone = "ap-guangzhou-4"  
   security_groups   = "${tencentcloud_security_group.sc_group.*.id}"
-  #instance_type     = "S5.SMALL2"
-  instance_type     = "S5.LARGE8"
+  instance_type     = "S5.LARGE16"
   image_id          = "img-oikl1tzv"
   instance_name     = "instance_wecube_platform"
   vpc_id            = "${tencentcloud_vpc.vpc.id}"
   subnet_id         = "${tencentcloud_subnet.subnet_app.id}"
   system_disk_type  = "CLOUD_PREMIUM"
   allocate_public_ip = true
-  private_ip        ="10.0.0.7"
+  private_ip        ="10.128.202.3"
   internet_max_bandwidth_out = 10
   password ="${var.instance_root_password}"
 
@@ -95,7 +106,7 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
 	  "yum install dos2unix -y",
       "dos2unix /root/application/wecube/*",
 	  "cd /root/application/wecube",
-	  "./install-wecube.sh ${tencentcloud_instance.instance_wecube_platform.private_ip} ${var.docker_registry_password} ${var.mysql_root_password} ${var.wecube_version}"
+	  "./install-wecube.sh ${tencentcloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version}"
     ]
   }
 }

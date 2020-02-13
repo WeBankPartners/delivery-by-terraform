@@ -1,4 +1,7 @@
+SET NAMES utf8 ;
+
 SET FOREIGN_KEY_CHECKS = 0;
+
 delete from menu_items;
 insert into menu_items (id,parent_code,code,source,menu_order,description,local_display_name) values
 ('JOBS',null,'JOBS','SYSTEM', 1, '', '任务')
@@ -19,21 +22,26 @@ insert into menu_items (id,parent_code,code,source,menu_order,description,local_
 
 delete from role_menu;
 insert into role_menu (id, role_id, role_name, menu_code) values
-('admin__IMPLEMENTATION_WORKFLOW_EXECUTION','admin','admin','IMPLEMENTATION_WORKFLOW_EXECUTION'),
-('admin__COLLABORATION_PLUGIN_MANAGEMENT','admin','admin','COLLABORATION_PLUGIN_MANAGEMENT'),
-('admin__COLLABORATION_WORKFLOW_ORCHESTRATION','admin','admin','COLLABORATION_WORKFLOW_ORCHESTRATION'),
-('admin__ADMIN_SYSTEM_PARAMS','admin','admin','ADMIN_SYSTEM_PARAMS'),
-('admin__ADMIN_RESOURCES_MANAGEMENT','admin','admin','ADMIN_RESOURCES_MANAGEMENT'),
-('admin__ADMIN_USER_ROLE_MANAGEMENT','admin','admin','ADMIN_USER_ROLE_MANAGEMENT'),
-('admin__IMPLEMENTATION_BATCH_EXECUTION','admin','admin','IMPLEMENTATION_BATCH_EXECUTION');
+('SUPER_ADMIN__IMPLEMENTATION_WORKFLOW_EXECUTION','2c9280827019695c01701dc555e60042','SUPER_ADMIN','IMPLEMENTATION_WORKFLOW_EXECUTION'),
+('SUPER_ADMIN__COLLABORATION_PLUGIN_MANAGEMENT','2c9280827019695c01701dc555e60042','SUPER_ADMIN','COLLABORATION_PLUGIN_MANAGEMENT'),
+('SUPER_ADMIN__COLLABORATION_WORKFLOW_ORCHESTRATION','2c9280827019695c01701dc555e60042','SUPER_ADMIN','COLLABORATION_WORKFLOW_ORCHESTRATION'),
+('SUPER_ADMIN__ADMIN_SYSTEM_PARAMS','2c9280827019695c01701dc555e60042','SUPER_ADMIN','ADMIN_SYSTEM_PARAMS'),
+('SUPER_ADMIN__ADMIN_RESOURCES_MANAGEMENT','2c9280827019695c01701dc555e60042','SUPER_ADMIN','ADMIN_RESOURCES_MANAGEMENT'),
+('SUPER_ADMIN__ADMIN_USER_ROLE_MANAGEMENT','2c9280827019695c01701dc555e60042','SUPER_ADMIN','ADMIN_USER_ROLE_MANAGEMENT'),
+('SUPER_ADMIN__IMPLEMENTATION_BATCH_EXECUTION','2c9280827019695c01701dc555e60042','SUPER_ADMIN','IMPLEMENTATION_BATCH_EXECUTION');
 
-INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('global__CORE_ADDR', NULL, 'CORE_ADDR', NULL, 'http://127.0.0.1:19090', 'global', 'system', 'active');
-INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('global__BASE_MOUNT_PATH', NULL, 'BASE_MOUNT_PATH', NULL, '/data', 'global', 'system', 'active');
-INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('global__CMDB_URL', NULL, 'CMDB_URL', NULL, 'http://127.0.0.1:19090', 'global', 'system', 'active');
-INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('global__CALLBACK_URL', NULL, 'CALLBACK_URL', NULL, '/v1/process/instances/callback', 'global', 'system', 'active');
 
-INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.0.0.7__docker__containerHost','umadmin','2020-01-21 12:36:00','10.0.0.7',1,'4QubBcQ+6jacQdWvOBr7JA==','root','containerHost','22','ss','active','docker','umadmin','2020-01-21 12:36:00');
-INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.0.0.7__mysql__mysqlHost','umadmin','2020-01-21 12:37:03','10.0.0.7',1,'iE72ePhsdMq1xETA/6IYGQ==','root','mysqlHost','3307','ss','active','mysql','umadmin','2020-01-21 12:37:03');
-INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.0.0.7__s3__s3Host','umadmin','2020-01-21 14:10:31','10.0.0.7',1,'CqXwzhKmoPOTssB6JUrEOw==','access_key','s3Host','9000','ss','active','s3','umadmin','2020-01-21 14:10:31');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_SERVER_URL', NULL, 'S3_SERVER_URL', NULL, 'http://10.128.202.3:9000', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_ACCESS_KEY', NULL, 'S3_ACCESS_KEY', NULL, 'access_key', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_SECRET_KEY', NULL, 'S3_SECRET_KEY', NULL, 'secret_key', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CORE_ADDR', NULL, 'CORE_ADDR', NULL, 'http://10.128.202.3:19090', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__BASE_MOUNT_PATH', NULL, 'BASE_MOUNT_PATH', NULL, '/data', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__ENCRYPT_SEED', NULL, 'ENCRYPT_SEED', NULL, 'seed-wecube2.1-2020', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CALLBACK_URL', NULL, 'CALLBACK_URL', NULL, '/v1/process/instances/callback', 'global', 'system', 'active');
+
+
+INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.128.202.3__docker__containerHost','umadmin','2020-01-21 12:36:00','10.128.202.3',1,'d7ApXWZWiEeijD3IdPhS/A==','root','containerHost','22','ss','active','docker','umadmin','2020-01-21 12:36:00');
+INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.128.202.3__mysql__mysqlHost','umadmin','2020-01-21 12:37:03','10.128.202.3',1,'9P+ZliiJRXLctxnDCZOzgQ==','root','mysqlHost','3307','ss','active','mysql','umadmin','2020-01-21 12:37:03');
+INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.128.202.3__s3__s3Host','umadmin','2020-01-21 14:10:31','10.128.202.3',1,'CqXwzhKmoPOTssB6JUrEOw==','access_key','s3Host','9000','ss','active','s3','umadmin','2020-01-21 14:10:31');
 
 SET FOREIGN_KEY_CHECKS = 1;
