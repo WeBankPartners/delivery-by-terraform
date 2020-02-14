@@ -34,19 +34,13 @@ insert into role_menu (id, role_name, menu_code) values
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_SERVER_URL', NULL, 'S3_SERVER_URL', NULL, 'http://10.128.202.3:9000', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_ACCESS_KEY', NULL, 'S3_ACCESS_KEY', NULL, 'access_key', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_SECRET_KEY', NULL, 'S3_SECRET_KEY', NULL, 'secret_key', 'global', 'system', 'active');
-<<<<<<< HEAD
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CORE_ADDR', NULL, 'CORE_ADDR', NULL, 'http://10.128.202.3:19090', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__BASE_MOUNT_PATH', NULL, 'BASE_MOUNT_PATH', NULL, '/data', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__ENCRYPT_SEED', NULL, 'ENCRYPT_SEED', NULL, 'seed-wecube2.1-2020', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CALLBACK_URL', NULL, 'CALLBACK_URL', NULL, '/v1/process/instances/callback', 'global', 'system', 'active');
-
-=======
-INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CORE_ADDR', NULL, 'CORE_ADDR', NULL, 'http://10.128.202.3:19090/platform', 'global', 'system', 'active');
-INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__BASE_MOUNT_PATH', NULL, 'BASE_MOUNT_PATH', NULL, '/data', 'global', 'system', 'active');
-INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__ENCRYPT_SEED', NULL, 'ENCRYPT_SEED', NULL, 'seed-wecube2.1-2020', 'global', 'system', 'active');
-INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CALLBACK_URL', NULL, 'CALLBACK_URL', NULL, '/v1/process/instances/callback', 'global', 'system', 'active');
-INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CMDB_URL', NULL, 'CMDB_URL', NULL, 'http://10.128.202.3:20000/wecmdb', 'global', 'system', 'active');
->>>>>>> eaaa5cb854012306423a2355b529bb0fc3a33809
+INSERT INTO `system_variables` (`id`, `package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_ACCESS_KEY', NULL, 'S3_ACCESS_KEY', '', 'access_key', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`, `package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_SECRET_KEY', NULL, 'S3_SECRET_KEY', '', 'secret_key', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`, `package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__S3_SERVER_URL', NULL, 'S3_SERVER_URL', '', 'localhost:20000', 'global', 'system', 'active');
 
 INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.128.202.3__docker__containerHost','umadmin','2020-01-21 12:36:00','10.128.202.3',1,'d7ApXWZWiEeijD3IdPhS/A==','root','containerHost','22','ss','active','docker','umadmin','2020-01-21 12:36:00');
 INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('10.128.202.3__mysql__mysqlHost','umadmin','2020-01-21 12:37:03','10.128.202.3',1,'9P+ZliiJRXLctxnDCZOzgQ==','root','mysqlHost','3307','ss','active','mysql','umadmin','2020-01-21 12:37:03');
