@@ -13,6 +13,9 @@ File Encoding         : 65001
 Date: 2020-02-06 16:29:24
 */
 
+CREATE DATABASE IF NOT EXISTS `auth_server` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `auth_server`;
+
 SET FOREIGN_KEY_CHECKS=0;
 SET NAMES utf8;
 -- ----------------------------
