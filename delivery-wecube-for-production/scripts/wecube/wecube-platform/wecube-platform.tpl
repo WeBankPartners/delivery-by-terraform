@@ -1,22 +1,5 @@
 version: '2'
 services:
-  wecube-minio:
-    image: ccr.ccs.tencentyun.com/webankpartners/minio
-    restart: always
-    command: [
-        'server',
-        'data'
-    ]
-    ports:
-      - 9000:9000
-    volumes:
-      - /data/minio-storage/data:/data    
-      - /data/minio-storage/config:/root
-      - /etc/localtime:/etc/localtime
-    environment:
-      - MINIO_ACCESS_KEY={{S3_ACCESS_KEY}}
-      - MINIO_SECRET_KEY={{S3_SECRET_KEY}}
-
   wecube-portal:
     image: {{PORTAL_IMAGE}}:{{PORTAL_IMAGE_VERSION}}
     restart: always
