@@ -16,7 +16,7 @@ chmod +x /root/wecube-platform-scripts/*
 yum install -y dos2unix
 dos2unix /root/wecube-platform-scripts/*
 cd /root/wecube-platform-scripts/
-bash /root/wecube-platform-scripts/install-wecube-platform.sh wecube-platform.cfg ${image_version} > install-wecube.log 2>&1
+./install-wecube-platform.sh wecube-platform.cfg ${image_version} > install-wecube.log 2>&1
 
 exit
 remoteCmd

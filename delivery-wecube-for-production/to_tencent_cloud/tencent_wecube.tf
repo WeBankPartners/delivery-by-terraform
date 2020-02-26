@@ -63,7 +63,7 @@ resource "tencentcloud_subnet" "subnet_db" {
 
 #创建安全组 - sg_group_wecube_db
 resource "tencentcloud_security_group" "sg_group_wecube_db" {
-  name        = "SG_WECUBE"
+  name        = "SG_WECUBE_DB"
   description = "Wecube Security Group"
 }
 #创建安全规则入站
@@ -201,7 +201,7 @@ resource "tencentcloud_instance" "instance_wecube_plugin_resource" {
 
 #创建安全组
 resource "tencentcloud_security_group" "sg_group_wecube_app" {
-  name        = "SG_WECUBE"
+  name        = "SG_WECUBE_APP"
   description = "Wecube Security Group"
 }
 #创建安全规则入站
@@ -347,7 +347,7 @@ resource "tencentcloud_instance" "instance_squid" {
 
 #创建安全组
 resource "tencentcloud_security_group" "sg_group_wecube_vdi" {
-  name        = "SG_WECUBE"
+  name        = "SG_WECUBE_VDI"
   description = "Wecube Security Group"
 }
 #创建安全规则入站
