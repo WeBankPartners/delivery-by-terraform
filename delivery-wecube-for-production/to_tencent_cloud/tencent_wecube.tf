@@ -229,6 +229,22 @@ resource "tencentcloud_security_group_rule" "allow_19090_tcp" {
   port_range        = "19090"
   policy            = "accept"
 }
+resource "tencentcloud_security_group_rule" "allow_3128_tcp_for_app" {
+  security_group_id = "${tencentcloud_security_group.sg_group_wecube_app.id}"
+  type              = "ingress"
+  cidr_ip           = "10.128.194.0/25"
+  ip_protocol       = "tcp"
+  port_range        = "3128"
+  policy            = "accept"
+}
+resource "tencentcloud_security_group_rule" "allow_3128_tcp_for_db" {
+  security_group_id = "${tencentcloud_security_group.sg_group_wecube_app.id}"
+  type              = "ingress"
+  cidr_ip           = "10.128.194.128/26"
+  ip_protocol       = "tcp"
+  port_range        = "3128"
+  policy            = "accept"
+}
 #创建安全规则出站
 resource "tencentcloud_security_group_rule" "allow_all_tcp_out" {
   security_group_id = "${tencentcloud_security_group.sg_group_wecube_app.id}"
