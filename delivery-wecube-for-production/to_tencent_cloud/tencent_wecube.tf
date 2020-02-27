@@ -1,11 +1,11 @@
 #全局变量
 variable "default_password" {
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_default_password'"
-  default = "Apps@123"
+  default = "Wecube@123456"
 }
 variable "wecube_version" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default = "20200212234110-08d00fc"
+  default = "v2.1.1"
 }
 variable "deploy_availability_zone" {
   description = "You can override the value by setup os env variable - 'TF_VAR_deploy_availability_zone'"
@@ -26,8 +26,11 @@ variable "plugin_resource_s3_secret_key" {
 variable "cos_name" {
   description = "You can override the value by setup os env variable - 'TF_VAR_cos_name'"
   
-  # this name should end with '-appid', 
-  default = "wecube-bucket-1253231672"
+  ####################################################################
+  #---NOTICE---NOTICE---NOTICE---NOTICE---NOTICE---NOTICE---NOTICE---#
+  #this name should end with '-appid', please use your own APP ID    #
+  default = "wecube-bucket-1234567890"
+  ####################################################################
 }
 
 #创建VPC
@@ -35,7 +38,6 @@ resource "tencentcloud_vpc" "vpc" {
   name       = "GZ_MGMT"
   cidr_block = "10.128.192.0/19"
 }
-
 
 #创建子网 - VDI Windows运行子网
 resource "tencentcloud_subnet" "subnet_vdi" {
@@ -58,8 +60,6 @@ resource "tencentcloud_subnet" "subnet_db" {
   cidr_block        = "10.128.194.128/26"
   availability_zone = "${var.deploy_availability_zone}"
 }
-
-
 
 #创建安全组 - sg_group_wecube_db
 resource "tencentcloud_security_group" "sg_group_wecube_db" {
@@ -108,7 +108,6 @@ resource "tencentcloud_security_group_rule" "allow_all_db_tcp_out" {
   port_range        = "1-65535"
   policy            = "accept"
 }
-
 
 #创建WeCube数据库mysql实例
 resource "tencentcloud_mysql_instance" "mysql_instance_wecube_core" {
@@ -174,11 +173,9 @@ resource "tencentcloud_mysql_instance" "mysql_instance_plugin" {
 
 #创建WeCube COS存储桶
 resource "tencentcloud_cos_bucket" "cos_wecube" {
-  #bucket = "wecube-bucket-1253231672"
   bucket = "${var.cos_name}"
   acl    = "private"
 }
-
 
 #创建WeCube plugin resource主机
 resource "tencentcloud_instance" "instance_wecube_plugin_resource" {
@@ -195,9 +192,6 @@ resource "tencentcloud_instance" "instance_wecube_plugin_resource" {
   internet_max_bandwidth_out = 10
   password ="${var.default_password}"
 }
-
-
-
 
 #创建安全组
 resource "tencentcloud_security_group" "sg_group_wecube_app" {
@@ -282,7 +276,6 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
   vpc_id            = "${tencentcloud_vpc.vpc.id}"
   subnet_id         = "${tencentcloud_subnet.subnet_app.id}"
   system_disk_type  = "CLOUD_PREMIUM"
-  #allocate_public_ip = true
   private_ip        ="10.128.194.3"
   internet_max_bandwidth_out = 10
   password ="${var.default_password}"
@@ -358,9 +351,6 @@ resource "tencentcloud_instance" "instance_squid" {
   }
 }
 
-
-
-
 #创建安全组
 resource "tencentcloud_security_group" "sg_group_wecube_vdi" {
   name        = "SG_WECUBE_VDI"
@@ -375,14 +365,6 @@ resource "tencentcloud_security_group_rule" "allow_3389_tcp" {
   port_range        = "3389"
   policy            = "accept"
 }
-#resource "tencentcloud_security_group_rule" "allow_3389_tcp1" {
-#  security_group_id = "${tencentcloud_security_group.sg_group_wecube_vdi.id}"
-#  type              = "ingress"
-#  cidr_ip           = "::/0"
-#  ip_protocol       = "tcp"
-#  port_range        = "3389"
-#  policy            = "accept"
-#}
 #创建安全规则出站
 resource "tencentcloud_security_group_rule" "allow_all_vdi_tcp_out" {
   security_group_id = "${tencentcloud_security_group.sg_group_wecube_vdi.id}"
@@ -407,18 +389,9 @@ resource "tencentcloud_instance" "instance_vdi" {
   allocate_public_ip = true
   private_ip        ="10.128.195.2"
   internet_max_bandwidth_out = 10
-  #password ="${var.default_password}"
-  password ="Apps@1234567"
+  password ="${var.default_password}"
 }
 
-output "wecube_website" {
-  value="http://${tencentcloud_instance.instance_wecube_platform.private_ip}:19090"
-}
-
-output "wecube_mysql" {
-  value="mysql=${tencentcloud_mysql_instance.mysql_instance_wecube_core.intranet_ip}"
-}
-
-output "wecube_cos" {
-  value="cos=${tencentcloud_cos_bucket.cos_wecube.bucket}"
+output "Outputs" {
+  value="\n Please follow below steps:\n 1.Login your Windows VDI[IP:${tencentcloud_instance.instance_vdi.public_ip}] with [User/Password：Administrator/${var.default_password}] ;\n 2.Use browser to access 'http://10.128.194.3:19090';\n \n \n Thank you in advance for your kind support and continued business.\n More Info: https://github.com/WeBankPartners/delivery-by-terraform"
 }
