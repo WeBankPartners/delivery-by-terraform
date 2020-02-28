@@ -11,10 +11,6 @@ variable "deploy_availability_zone" {
   description = "You can override the value by setup os env variable - 'TF_VAR_deploy_availability_zone'"
   default = "ap-guangzhou-4"
 }
-variable "plugin_resource_s3_port" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_plugin_resource_s3_port'"
-  default = "9001"
-}
 variable "plugin_resource_s3_access_key" {
   description = "You can override the value by setup os env variable - 'TF_VAR_plugin_resource_s3_access_key'"
   default = "s3_access"
@@ -120,8 +116,8 @@ resource "tencentcloud_mysql_instance" "mysql_instance_wecube_core" {
   slave_sync_mode   = 1
   availability_zone = "${var.deploy_availability_zone}"
   instance_name     = "WecubeDbInstance"
-  mem_size          = 1000
-  volume_size       = 25
+  mem_size          = 2000
+  volume_size       = 200
   vpc_id            = "${tencentcloud_vpc.vpc.id}"
   subnet_id         = "${tencentcloud_subnet.subnet_db.id}"
   intranet_port     = 3306
@@ -151,8 +147,8 @@ resource "tencentcloud_mysql_instance" "mysql_instance_plugin" {
   slave_sync_mode   = 1
   availability_zone = "${var.deploy_availability_zone}"
   instance_name     = "PluginDbInstance"
-  mem_size          = 1000
-  volume_size       = 25
+  mem_size          = 2000
+  volume_size       = 200
   vpc_id            = "${tencentcloud_vpc.vpc.id}"
   subnet_id         = "${tencentcloud_subnet.subnet_db.id}"
   intranet_port     = 3307
@@ -181,7 +177,6 @@ resource "tencentcloud_cos_bucket" "cos_wecube" {
 resource "tencentcloud_instance" "instance_wecube_plugin_resource" {
   availability_zone = "${var.deploy_availability_zone}"
   security_groups   = "${tencentcloud_security_group.sg_group_wecube_db.*.id}"
-  #instance_type     = "S5.LARGE16"
   instance_type     = "S5.MEDIUM4"
   image_id          = "img-oikl1tzv"
   instance_name     = "pluginResourceHost"
@@ -253,8 +248,7 @@ resource "tencentcloud_security_group_rule" "allow_all_tcp_out" {
 resource "tencentcloud_instance" "instance_plugin_docker_host" {
   availability_zone = "${var.deploy_availability_zone}"  
   security_groups   = "${tencentcloud_security_group.sg_group_wecube_app.*.id}"
-  #instance_type     = "S5.LARGE16"
-  instance_type     = "S5.MEDIUM4"
+  instance_type     = "S5.LARGE8"
   image_id          = "img-oikl1tzv"
   instance_name     = "pluginDockerHost"
   vpc_id            = "${tencentcloud_vpc.vpc.id}"
@@ -269,8 +263,7 @@ resource "tencentcloud_instance" "instance_plugin_docker_host" {
 resource "tencentcloud_instance" "instance_wecube_platform" {
   availability_zone = "${var.deploy_availability_zone}"  
   security_groups   = "${tencentcloud_security_group.sg_group_wecube_app.*.id}"
-  #instance_type     = "S5.LARGE16"
-  instance_type     = "S5.MEDIUM4"
+  instance_type     = "S5.LARGE8"
   image_id          = "img-oikl1tzv"
   instance_name     = "instance_wecube_platform"
   vpc_id            = "${tencentcloud_vpc.vpc.id}"
@@ -285,7 +278,6 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
 resource "tencentcloud_instance" "instance_squid" {
   availability_zone = "${var.deploy_availability_zone}"  
   security_groups   = "${tencentcloud_security_group.sg_group_wecube_app.*.id}"
-  #instance_type     = "S5.LARGE16"
   instance_type     = "S5.MEDIUM4"
   image_id          = "img-oikl1tzv"
   instance_name     = "instanceSquid"
@@ -322,7 +314,7 @@ resource "tencentcloud_instance" "instance_squid" {
 	  
 	  #初始化pluginResource主机
 	  "./utils-scp.sh root ${tencentcloud_instance.instance_wecube_plugin_resource.private_ip} ${var.default_password} wecube-s3.tpl /root/",
-	  "./init-plugin-resource-host.sh ${tencentcloud_instance.instance_wecube_plugin_resource.private_ip} ${var.default_password} ${var.plugin_resource_s3_port} ${var.plugin_resource_s3_access_key} ${var.plugin_resource_s3_secret_key} > init.log 2>&1",
+	  "./init-plugin-resource-host.sh ${tencentcloud_instance.instance_wecube_plugin_resource.private_ip} ${var.default_password} 9001 ${var.plugin_resource_s3_access_key} ${var.plugin_resource_s3_secret_key} > init.log 2>&1",
 
 	  #初始化pluginDocker主机
 	  "./init-plugin-docker-host.sh ${tencentcloud_instance.instance_plugin_docker_host.private_ip} ${var.default_password} >> init.log 2>&1",
@@ -379,7 +371,6 @@ resource "tencentcloud_security_group_rule" "allow_all_vdi_tcp_out" {
 resource "tencentcloud_instance" "instance_vdi" {
   availability_zone = "${var.deploy_availability_zone}"  
   security_groups   = "${tencentcloud_security_group.sg_group_wecube_vdi.*.id}"
-  #instance_type     = "S5.LARGE16"
   instance_type     = "S5.MEDIUM4"
   image_id          = "img-9id7emv7"
   instance_name     = "instanceVdi"
