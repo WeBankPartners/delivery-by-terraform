@@ -163,11 +163,11 @@ PluginDbInstance | 1核2000M，200G | subnet_db  |  sg_group_wecube_db |  插件
 
 变量名 | 默认值 |  描述  
 -|-|-
-default_password | Wecube@123456 | 云主机的root密码 |
+default_password | Wecube@123456 | 部署资源的默认密码，包括linux上root用户的密码，windows上Administrator用户的密码，mysql上的root用户密码 |
 wecube_version | v2.1.1 | wecube的版本 |
-deploy_availability_zone | ap-guangzhou-4 | mysql数据库的root密码 |
-plugin_resource_s3_access_key | s3_access | mysql数据库的root密码 |
-plugin_resource_s3_secret_key | s3_secret | mysql数据库的root密码 |
+deploy_availability_zone | ap-guangzhou-4 | 部署的可用区 |
+plugin_resource_s3_access_key | s3_access | 插件S3资源的access key |
+plugin_resource_s3_secret_key | s3_secret | 插件S3资源的secret key |
 cos_name | wecube-bucket-1234567890 | '1234567890' 必须替换成自己的[APPID](url:https://console.cloud.tencent.com/capi) |
 
 #### 6.1 配置Access Key/Secret Key
