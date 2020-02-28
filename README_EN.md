@@ -71,7 +71,7 @@ $terraform init    -- Install tencent cloud terraform plugins
 ##### The remaining steps as same as deliverying Ali Cloud above.
 
 ### 6. Production
-The production version is the persistent storage provided by cloud services, which can meet the base production requirements. At present, we prepare solution for Tencent cloud.
+The production version is using cloud services for persistent storage, which can meet the base production requirements. For now, we prepare solution for Tencent cloud.
 
 deploy plan as below：  
 1.All resources deploy in a VPC    
