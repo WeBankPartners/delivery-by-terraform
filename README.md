@@ -148,7 +148,7 @@ PluginDbInstance | 1核2000M，200G | subnet_db  |  sg_group_wecube_db |  插件
 5.对象存储COS
 申请COS存储桶（名字为terraform变量名cos_name所配置的值）作为WeCube的S3存储。
 
-5.主机部署规划如下：  
+6.主机部署规划如下：  
 
 云主机内网IP | 默认规格 |  所属子网 |  绑定安全组 |  部署组件      
 -|-|-|-|-  
@@ -158,6 +158,7 @@ PluginDbInstance | 1核2000M，200G | subnet_db  |  sg_group_wecube_db |  插件
 10.128.194.2 | 2C4G | subnet_app  |  sg_group_wecube_app |  Squid  |  
 10.128.195.2 | 2C4G | subnet_vdi  |  sg_group_wecube_vdi |  Windows VDI主机 |  
 
+7.变量配置
 部署之前，可以修改下面terraform变量值，否则会使用默认值；
 
 变量名 | 默认值 |  描述  
