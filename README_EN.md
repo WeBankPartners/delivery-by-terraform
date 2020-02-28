@@ -24,17 +24,20 @@ $cd d:\dev
 $git clone https://github.com/jordanzhangsz/delivery-by-terraform.git
 ```
 
-### 4. Deploy App
-#### 4.1 Steps for delivering Wecube to AliCloud
-##### 4.1.1 Config Ali Cloud Access Key/Secret Key 
+### 4. Deploy WeCube
+For users' convenience, we provide two deployment version: stand-alone and production.
+
+### 5. Stand-alone
+#### 5.1 Steps for delivering Wecube to AliCloud
+##### 5.1.1 Config Ali Cloud Access Key/Secret Key 
 ![terraform ali cloud key](docs/images/terraform_ali_cloud_key.png)
 >Warn: AccessKey and SecretKey keep in local as env variable is more safty then config in *.tf file. 
-##### 4.1.2 Terraform init
+##### 5.1.2 Terraform init
 ```
 $cd d:\dev\delivery-by-terraform\delivery-wecube\to_ali_cloud
 $terraform init    -- Install ali cloud terraform plugins
 ```
-##### 4.1.3 Terraform apply (One Click Deploy)
+##### 5.1.3 Terraform apply (One Click Deploy)
 ```
 $cd d:\dev\delivery-by-terraform\delivery-wecube\to_ali_cloud
 $terraform apply   -- Deploy wecube to alicloud
@@ -47,22 +50,35 @@ $.....
 ![wecube ](docs/images/wecube.png)
 
 
-##### 4.1.4 Terraform destroy (One Click Destroy)
+##### 5.1.4 Terraform destroy (One Click Destroy)
 ```
 $cd d:\dev\delivery-by-terraform\delivery-wecube\to_ali_cloud
 $terraform destroy   -- Destroy wecube if no need
 ```
 ![terraform deploy   ](docs/images/terraform_ali_cloud_destroy.png)
 
-#### 4.2 Steps for delivering to Tencent Cloud
-##### 4.2.1 Config Tencent Cloud Access Key/Secret Key 
+#### 5.2 Steps for delivering to Tencent Cloud
+##### 5.2.1 Config Tencent Cloud Access Key/Secret Key 
 ![terraform tencent cloud key](docs/images/terraform_tencent_cloud_key.png)
 >Warn: AccessKey and SecretKey keep in local as env variable is more safty then config in *.tf file. 
 
-##### 4.2.2 Terraform init
+##### 5.2.2 Terraform init
 ```
 $cd d:\dev\delivery-by-terraform\delivery-wecube\to_tencent_cloud
 $terraform init    -- Install tencent cloud terraform plugins
 ```
 
 ##### The remaining steps as same as deliverying Ali Cloud above.
+
+### 6. Production
+The production version is the persistent storage provided by cloud services, which can meet the base production requirements. At present, we prepare solution for Tencent cloud.
+
+##### 6.1 Config Ali Cloud Access Key/Secret Key 
+Reference 5.1.1  
+##### 6.2 Terraform init 
+Reference 5.1.2  
+##### 6.3 Terraform apply (One Click Deploy) 
+Reference 5.1.3  
+##### 6.4 Terraform destroy (One Click Destroy) 
+Reference 5.1.4    
+
