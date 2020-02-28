@@ -32,6 +32,7 @@ $git clone https://github.com/WeBankPartners/delivery-by-terraform.git
 顾名思义，单机版只需要一台云服务器即可部署WeCube。
 
 部署之前，可以修改下面terraform变量值，否则会使用默认值；
+
 变量名 | 默认值 |  描述  
 -|-|-
 instance_root_password | WeCube1qazXSW@ | 云主机的root密码 |
@@ -100,17 +101,18 @@ $terraform init    -- 安装腾讯云的插件, 需要点时间，因国内网�
 
 ### 6. 生产版
 生产版是使用云服务提供的持久化存储，可满足一般的生产需求。
-目前提供了腾讯云的版本。
+目前提供了腾讯云的版本。  
 
-此版本规划如下：
-1.所有资源都部署在一个vpc中
-2.在vpc中划分三个子网
+此版本规划如下：  
+1.所有资源都部署在一个vpc中  
+2.在vpc中划分三个子网  
     - 10.128.195.0/24 subnet_vdi
     - 10.128.194.0/25 subnet_app
     - 10.128.194.128/26 subnet_db
-3.每个子网建立一个安全组
+3.每个子网建立一个安全组  
 sg_group_wecube_db  
-入站/出站 |  规则协议 | 端口 |  来源  |  策略   
+
+入站/出站 |  规则协议 | 端口 |  来源  |  策略     
 -|-|-|-|-  
 入站|TCP|3306|0.0.0.0/0|允许  
 入站|TCP|3307|0.0.0.0/0|允许  
@@ -118,8 +120,9 @@ sg_group_wecube_db
 入站|TCP|22|0.0.0.0/0|允许  
 出站|TCP|1-65535|0.0.0.0/0|允许  
 
-sg_group_wecube_app
-入站/出站 |  规则协议 | 端口 |  来源  |  策略 
+sg_group_wecube_app  
+
+入站/出站 |  规则协议 | 端口 |  来源  |  策略    
 -|-|-|-|-
 入站|TCP|2375|0.0.0.0/0|允许
 入站|TCP|22|0.0.0.0/0|允许
@@ -128,14 +131,16 @@ sg_group_wecube_app
 入站|TCP|3128|10.128.194.128/26|允许
 出站|TCP|1-65535|0.0.0.0/0|允许
 
-sg_group_wecube_vdi
-入站/出站 |  规则协议 | 端口 |  来源  |  策略 
+sg_group_wecube_vdi  
+
+入站/出站 |  规则协议 | 端口 |  来源  |  策略    
 -|-|-|-|-
 入站|TCP|3389|0.0.0.0/0|允许
 出站|TCP|1-65535|0.0.0.0/0|允许  
  
 4.云数据库MySQL：  
-实例名 | 默认规格 |  所属子网 |  绑定安全组 |  部署组件  
+
+实例名 | 默认规格 |  所属子网 |  绑定安全组 |  部署组件      
 -|-|-|-|-
 WecubeDbInstance | 1核2000M，200G | subnet_db  |  sg_group_wecube_db |  WeCube数据库  |
 PluginDbInstance | 1核2000M，200G | subnet_db  |  sg_group_wecube_db |  插件数据库  |
@@ -144,7 +149,8 @@ PluginDbInstance | 1核2000M，200G | subnet_db  |  sg_group_wecube_db |  插件
 申请COS存储桶（名字为terraform变量名cos_name所配置的值）作为WeCube的S3存储。
 
 5.主机部署规划如下：  
-云主机内网IP | 默认规格 |  所属子网 |  绑定安全组 |  部署组件    
+
+云主机内网IP | 默认规格 |  所属子网 |  绑定安全组 |  部署组件      
 -|-|-|-|-  
 10.128.194.130 | 2C4G | subnet_db  |  sg_group_wecube_db |  插件资源（S3对象存储）  |  
 10.128.194.4 | 4C8G | subnet_app  |  sg_group_wecube_app |  插件容器  |  
@@ -153,6 +159,7 @@ PluginDbInstance | 1核2000M，200G | subnet_db  |  sg_group_wecube_db |  插件
 10.128.195.2 | 2C4G | subnet_vdi  |  sg_group_wecube_vdi |  Windows VDI主机 |  
 
 部署之前，可以修改下面terraform变量值，否则会使用默认值；
+
 变量名 | 默认值 |  描述  
 -|-|-
 default_password | Wecube@123456 | 云主机的root密码 |
