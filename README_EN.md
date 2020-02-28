@@ -102,6 +102,7 @@ ingress|TCP|3128|10.128.194.128/26|allow
 egress|TCP|1-65535|0.0.0.0/0|allow
 
 sg_group_wecube_vdi  
+
 ingress/egress |  protocol | port |  source CIDR  |  policy    
 -|-|-|-|-
 ingress|TCP|3389|0.0.0.0/0|allow
