@@ -73,6 +73,72 @@ $terraform init    -- Install tencent cloud terraform plugins
 ### 6. Production
 The production version is the persistent storage provided by cloud services, which can meet the base production requirements. At present, we prepare solution for Tencent cloud.
 
+deploy plan as below：  
+1.All resources deploy in a VPC    
+2.Divide 3 subnet in the VPC: 
+    - 10.128.195.0/24 subnet_vdi
+    - 10.128.194.0/25 subnet_app
+    - 10.128.194.128/26 subnet_db
+3.create a security group for each subnet  
+sg_group_wecube_db  
+
+ingress/egress |  protocol | port |  source CIDR |  policy     
+-|-|-|-|-  
+ingress|TCP|3306|0.0.0.0/0|allow  
+ingress|TCP|3307|0.0.0.0/0|allow  
+ingress|TCP|9001|0.0.0.0/0|allow  
+ingress|TCP|22|0.0.0.0/0|allow  
+egress|TCP|1-65535|0.0.0.0/0|allow  
+
+sg_group_wecube_app  
+
+ingress/egress |  protocol | port |  source CIDR  |  policy    
+-|-|-|-|-
+ingress|TCP|2375|0.0.0.0/0|allow
+ingress|TCP|22|0.0.0.0/0|allow
+ingress|TCP|19090|0.0.0.0/0|allow
+ingress|TCP|3128|10.128.194.0/25|allow
+ingress|TCP|3128|10.128.194.128/26|allow
+egress|TCP|1-65535|0.0.0.0/0|allow
+
+sg_group_wecube_vdi  
+ingress/egress |  protocol | port |  source CIDR  |  policy    
+-|-|-|-|-
+ingress|TCP|3389|0.0.0.0/0|allow
+egress|TCP|1-65535|0.0.0.0/0|allow  
+ 
+4.Create Tencent Cloud MySQL：  
+
+Name | Type |  Subnet |  Security group |  porpose      
+-|-|-|-|-
+WecubeDbInstance | 1C2000M，200G | subnet_db  |  sg_group_wecube_db |  WeCube database  |
+PluginDbInstance | 1C2000M，200G | subnet_db  |  sg_group_wecube_db |  plugin database  |
+
+5.Tencent Cloud Object Storage(COS)
+Apply COS bucket(use value of terraform var ${cos_name} as bucket name) for WeCube S3 storage。
+
+6.Hosts deploy plan  
+
+Intranet IP | Default instance type |  Subnet |  Security group |  module      
+-|-|-|-|-  
+10.128.194.130 | 2C4G | subnet_db  |  sg_group_wecube_db |  plugin S3 resource  |  
+10.128.194.4 | 4C8G | subnet_app  |  sg_group_wecube_app |  plugin container  |  
+10.128.194.3 | 4C8G | subnet_app  |  sg_group_wecube_app |  WeCube（platform-core、platform-gateway、wecube-portal、auth-server）  |  
+10.128.194.2 | 2C4G | subnet_app  |  sg_group_wecube_app |  Squid  |  
+10.128.195.2 | 2C4G | subnet_vdi  |  sg_group_wecube_vdi |  Windows VDI |  
+
+7.Configure variables
+Modify below variables' value before deploy, or it will use default value.
+
+Variable | Default value |  description  
+-|-|-
+default_password | Wecube@123456 | default password for all resources |
+wecube_version | v2.1.1 | the image tag of WeCube |
+deploy_availability_zone | ap-guangzhou-4 | availability zone |
+plugin_resource_s3_access_key | s3_access | plugin S3 resource access key |
+plugin_resource_s3_secret_key | s3_secret | plugin S3 resource secret key |
+cos_name | wecube-bucket-1234567890 | '1234567890' must replace to your [APPID](url:https://console.cloud.tencent.com/capi) |
+
 ##### 6.1 Config Ali Cloud Access Key/Secret Key 
 Reference 5.1.1  
 ##### 6.2 Terraform init 
