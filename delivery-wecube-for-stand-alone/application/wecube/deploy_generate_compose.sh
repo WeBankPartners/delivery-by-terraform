@@ -14,8 +14,9 @@ gateway_image_version=$2
 auth_server_image_version=$2
 
 build_path=$(dirname $0)
+cp ${build_path}/docker-compose.tpl docker-compose.yml
 
-sed  "s~{{WECUBE_IMAGE_NAME}}~$wecube_image_name~g" ${build_path}/docker-compose.tpl >  docker-compose.yml
+sed -i "s~{{WECUBE_IMAGE_NAME}}~$wecube_image_name~g" docker-compose.yml
 sed -i "s~{{WECUBE_HOME}}~$wecube_home~g" docker-compose.yml 
 sed -i "s~{{WECUBE_SERVER_PORT}}~$wecube_server_port~g" docker-compose.yml 
 sed -i "s~{{MYSQL_USER_PASSWORD}}~$mysql_user_password~g" docker-compose.yml 
