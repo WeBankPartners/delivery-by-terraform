@@ -13,7 +13,8 @@ services:
       ]
     volumes:
       - /etc/localtime:/etc/localtime
-      - "/root/application/wecube/database/platform-core/:/docker-entrypoint-initdb.d/"
+      - {{WECUBE_HOME}}/installer/wecube/database/platform-core:/docker-entrypoint-initdb.d
+      - {{WECUBE_HOME}}/mysql-wecube/data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD={{MYSQL_USER_PASSWORD}}
       - MYSQL_DATABASE=wecube
@@ -33,7 +34,8 @@ services:
       ]
     volumes:
       - /etc/localtime:/etc/localtime
-      - "/root/application/wecube/database/auth-server/:/docker-entrypoint-initdb.d/"
+      - {{WECUBE_HOME}}/installer/wecube/database/auth-server:/docker-entrypoint-initdb.d
+      - {{WECUBE_HOME}}/mysql-auth-server/data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD={{MYSQL_USER_PASSWORD}}
       - MYSQL_DATABASE=auth_server

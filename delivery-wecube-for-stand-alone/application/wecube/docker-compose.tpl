@@ -10,8 +10,8 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - /data/minio-storage/data:/data    
-      - /data/minio-storage/config:/root
+      - {{WECUBE_HOME}}/wecube-minio/data:/data    
+      - {{WECUBE_HOME}}/wecube-minio/config:/root
       - /etc/localtime:/etc/localtime
     environment:
       - MINIO_ACCESS_KEY={{S3_ACCESS_KEY}}
@@ -24,9 +24,9 @@ services:
       - platform-gateway
       - platform-core
     volumes:
-      - /data/wecube-portal/log:/var/log/nginx/
+      - {{WECUBE_HOME}}/wecube-portal/log:/var/log/nginx
+      - {{WECUBE_HOME}}/wecube-portal/data/ui-resources:/root/app/ui-resources
       - /etc/localtime:/etc/localtime
-      - /data/wecube-portal/data/ui-resources:/root/app/ui-resources
     ports:
       - {{PORTAL_PORT}}:8080
     environment:
@@ -42,7 +42,7 @@ services:
     depends_on:
       - platform-core
     volumes:
-      - /data/wecube-gateway/log:/log/ 
+      - {{WECUBE_HOME}}/platform-gateway/log:/log
       - /etc/localtime:/etc/localtime
     ports:
       - {{GATEWAY_PORT}}:8080
@@ -58,7 +58,7 @@ services:
     image: {{WECUBE_IMAGE_NAME}}:{{WECUBE_IMAGE_VERSION}}
     restart: always
     volumes:
-      - /data/wecube/log:/log/ 
+      - {{WECUBE_HOME}}/platform-core/log:/log
       - /etc/localtime:/etc/localtime
     ports:
       - {{WECUBE_SERVER_PORT}}:8080
@@ -92,7 +92,7 @@ services:
     image: {{AUTH_SERVER_IMAGE_NAME}}:{{AUTH_SERVER_IMAGE_VERSION}}
     restart: always
     volumes:
-      - /data/auth_server/log:/log/ 
+      - {{WECUBE_HOME}}/auth_server/log:/log
       - /etc/localtime:/etc/localtime
     ports:
       - {{AUTH_SERVER_PORT}}:8080
