@@ -5,9 +5,10 @@ wecube_home=${4:-/data/wecube}
 
 mkdir -p $wecube_home/plugin
 
-sed "s~{{WECUBE_HOME}}~$wecube_home~g" wecube-db.tpl > wecube-db.yml
-sed "s~{{MYSQL_USER_PASSWORD}}~$mysql_password~g" wecube-db.tpl > wecube-db.yml
 echo "Starting wecube database ..."
+cp wecube-db.tpl wecube-db.yml
+sed -i "s~{{WECUBE_HOME}}~$wecube_home~g" wecube-db.yml
+sed -i "s~{{MYSQL_USER_PASSWORD}}~$mysql_password~g" wecube-db.yml
 docker-compose -f wecube-db.yml up -d
 sleep 120
 
