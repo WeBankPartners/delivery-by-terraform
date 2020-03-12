@@ -1,8 +1,8 @@
 #!/bin/bash
 
 CONFIG_FILE=$1
-SQL_FILE_TEMPLATE="wecube-platform/database/platform-core/04.update_sys_var_for_deployment.sql.tpl"
-SQL_FILE="wecube-platform/database/platform-core/04.update_sys_var_for_deployment.sql"
+SQL_FILE_TEMPLATE="database/platform-core/04.update_sys_var_for_deployment.sql.tpl"
+SQL_FILE="database/platform-core/04.update_sys_var_for_deployment.sql"
 
 source $CONFIG_FILE
 
