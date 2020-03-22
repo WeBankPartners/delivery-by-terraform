@@ -430,7 +430,7 @@ CREATE TABLE `plugin_config_interfaces` (
   `http_method` varchar(10) NOT NULL,
   `is_async_processing` varchar(1) DEFAULT 'N',
   `type` varchar(16) DEFAULT 'EXECUTION',
-  `filter_rule` VARCHAR(1024) DEFAULT NULL
+  `filter_rule` VARCHAR(1024) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK6rev06d32q4yhjn77cv2bsy1u` (`plugin_config_id`),
   CONSTRAINT `FK6rev06d32q4yhjn77cv2bsy1u` FOREIGN KEY (`plugin_config_id`) REFERENCES `plugin_configs` (`id`)
