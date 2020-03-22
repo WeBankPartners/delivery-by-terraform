@@ -64,5 +64,4 @@ sed -i "s~{{JWT_SSO_TOKEN_URI}}~$jwt_sso_token_uri~g" docker-compose.yml
 sed -i "s~{{WECUBE_PLUGIN_DEPLOY_PATH}}~$wecube_plugin_deploy_path~g" docker-compose.yml
 sed -i "s~{{WECUBE_CORE_HOST}}~$wecube_core_host~g" docker-compose.yml
 sed -i "s~{{AUTH_SERVER_HOST}}~$auth_server_host~g" docker-compose.yml
-sed -i "s~{{WECUBE_SERVER_JMX_PORT}}~$wecube_server_jmx_port~g" docker-compose.yml
 sed -i "s~{{WECUBE_BUCKET}}~$wecube_bucket~g" docker-compose.yml
