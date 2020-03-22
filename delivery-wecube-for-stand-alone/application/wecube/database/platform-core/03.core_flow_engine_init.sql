@@ -1511,22 +1511,4 @@ CREATE TABLE `act_ru_variable` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-drop table if exists `core_ru_proc_exec_binding_tmp`;
-CREATE TABLE `core_ru_proc_exec_binding_tmp` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `created_by` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `created_time` datetime DEFAULT NULL,
-  `updated_by` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `updated_time` datetime DEFAULT NULL,
-  `bind_type` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `is_bound` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `entity_data_id` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `entity_type_id` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `node_def_id` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `ordered_no` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `proc_def_id` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `proc_session_id` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 SET FOREIGN_KEY_CHECKS = 1;

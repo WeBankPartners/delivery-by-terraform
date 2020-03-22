@@ -45,7 +45,6 @@ services:
       - /etc/localtime:/etc/localtime
     ports:
       - {{WECUBE_SERVER_PORT}}:8080
-	  - {{WECUBE_SERVER_JMX_PORT}}:{{WECUBE_SERVER_JMX_PORT}}
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_SERVER_ADDR={{MYSQL_SERVER_ADDR}}
@@ -71,10 +70,7 @@ services:
       - JWT_SSO_AUTH_URI={{JWT_SSO_AUTH_URI}}
       - JWT_SSO_TOKEN_URI={{JWT_SSO_TOKEN_URI}}
       - WECUBE_PLUGIN_DEPLOY_PATH={{WECUBE_PLUGIN_DEPLOY_PATH}}
-      - WECUBE_SERVER_JMX_PORT={{WECUBE_SERVER_JMX_PORT}}
       - WECUBE_BUCKET={{WECUBE_BUCKET}}
-      - WECUBE_CORE_HOST={{WECUBE_CORE_HOST}}
-      - WECUBE_CUSTOM_PARAM={{WECUBE_CUSTOM_PARAM}}
   
   auth-server:
     image: {{AUTH_SERVER_IMAGE_NAME}}:{{AUTH_SERVER_IMAGE_VERSION}}

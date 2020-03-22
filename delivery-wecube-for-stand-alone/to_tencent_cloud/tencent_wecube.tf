@@ -14,11 +14,6 @@ variable "wecube_version" {
   default = "v2.1.1"
 }
 
-variable "wecube_install_folder" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default = "/data/wecube/installer"
-}
-
 #创建VPC
 resource "tencentcloud_vpc" "vpc" {
   name       = "GZ_MGMT"
@@ -107,13 +102,11 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
 
   provisioner "remote-exec" {
     inline = [
-	  "mkdir -p ${var.wecube_install_folder}",
-	  "cp -r /root/application/* ${var.wecube_install_folder}",
-      "chmod +x ${var.wecube_install_folder}/wecube/*.sh",
+      "chmod +x /root/application/wecube/*.sh",
 	  "yum install dos2unix -y",
-      "dos2unix ${var.wecube_install_folder}/wecube/*",
-	  "cd ${var.wecube_install_folder}/wecube",
-	  "./install-wecube.sh ${tencentcloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_install_folder} > /root/install.log"
+      "dos2unix /root/application/wecube/*",
+	  "cd /root/application/wecube",
+	  "./install-wecube.sh ${tencentcloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version}"
     ]
   }
 }
