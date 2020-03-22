@@ -430,6 +430,7 @@ CREATE TABLE `plugin_config_interfaces` (
   `http_method` varchar(10) NOT NULL,
   `is_async_processing` varchar(1) DEFAULT 'N',
   `type` varchar(16) DEFAULT 'EXECUTION',
+  `filter_rule` VARCHAR(1024) DEFAULT NULL
   PRIMARY KEY (`id`),
   KEY `FK6rev06d32q4yhjn77cv2bsy1u` (`plugin_config_id`),
   CONSTRAINT `FK6rev06d32q4yhjn77cv2bsy1u` FOREIGN KEY (`plugin_config_id`) REFERENCES `plugin_configs` (`id`)
@@ -449,6 +450,7 @@ CREATE TABLE `plugin_configs` (
   `name` varchar(100) NOT NULL,
   `target_package` varchar(63) DEFAULT NULL,
   `target_entity` varchar(100) DEFAULT NULL,
+  `target_entity_filter_rule` VARCHAR(1024) NULL,
   `register_name` varchar(100) DEFAULT NULL,
   `status` varchar(20) NOT NULL DEFAULT 'DISABLED',
   PRIMARY KEY (`id`),
@@ -815,5 +817,26 @@ CREATE TABLE `system_variables` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+DROP TABLE IF EXISTS `favorites`;
+CREATE TABLE `favorites` (
+  `favorites_id` varchar(255) NOT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `collection_name` varchar(255) NOT NULL,
+  `data` blob,
+  PRIMARY KEY (`favorites_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `favorites_role`;
+CREATE TABLE `favorites_role` (
+  `id` varchar(255) NOT NULL,
+  `favorites_id` varchar(255) DEFAULT NULL,
+  `permission` varchar(255) DEFAULT NULL,
+  `role_id` varchar(255) DEFAULT NULL,
+  `role_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
