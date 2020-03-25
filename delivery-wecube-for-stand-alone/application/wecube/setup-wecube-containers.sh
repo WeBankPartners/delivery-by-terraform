@@ -3,7 +3,7 @@
 install_target_host=$1
 mysql_password=$2
 wecube_version=$3
-wecube_home=${4:-/data/wecube}
+wecube_home=${4:-/data/wecube/installer}
 
 mkdir -p $wecube_home/plugin
 
