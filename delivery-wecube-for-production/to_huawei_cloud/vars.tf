@@ -1,8 +1,10 @@
 variable "hw_access_key" {
   default = "hw_access_key"
+  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_access_key'"
 }
 variable "hw_secret_key" {
   default = "hw_secret_key"
+  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_secret_key'"
 }
 variable "hw_region" {
   default     = "ap-southeast-1"
@@ -18,24 +20,15 @@ variable "hw_dns2" {
 }
 variable "hw_az_master" {
   default     = "ap-southeast-1a"
-  description = "The availability zone name where the resource will be created"
+  description = "Specified master availability zone for resource creation"
 }
 variable "hw_az_slave" {
   default     = "ap-southeast-1b"
-  description = "The availability zone name where the resource will be created"
+  description = "Specified slave availability zone for resource creation"
 }
 variable "hw_tenant_name" {
   default     = "ap-southeast-1"
-  description = "The availability zone name where the resource will be created"
-}
-variable "s3_name" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_cos_name'"
-
-  ####################################################################
-  #---NOTICE---NOTICE---NOTICE---NOTICE---NOTICE---NOTICE---NOTICE---#
-  #this name should end with '-appid', please use your own APP ID    #
-  default = "wecube-bucket-1234567890"
-  ####################################################################
+  description = "Specified tenant name"
 }
 variable "default_password" {
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_default_password'"
