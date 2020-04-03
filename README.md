@@ -25,7 +25,11 @@ $git clone https://github.com/WeBankPartners/delivery-by-terraform.git
 ```
 
 ### 4. 运行Terraform部署WeCube
-为方便用户体验，我们提供了单机版和生产版两种部署方案。
+为方便用户体验，我们提供了单机版和生产基础版两种部署方案。
+
+[单机版](https://github.com/WeBankPartners/delivery-by-terraform#5-%E5%8D%95%E6%9C%BA%E7%89%88)
+
+[生产基础版](https://github.com/WeBankPartners/delivery-by-terraform#6-%E7%94%9F%E4%BA%A7%E7%89%88)
 
 ### 5. 单机版
 单机版目前提供了阿里云和腾讯云两个云服务商的版本。
@@ -100,9 +104,10 @@ $terraform init    -- 安装腾讯云的插件, 需要点时间，因国内网�
 
 
 ### 6. 生产版
-生产版是使用云服务提供的持久化存储，可满足一般的生产需求。
-目前提供了腾讯云的版本。  
+生产版是使用云服务提供的持久化存储，可满足生产环境的基础需求。
+目前提供了[腾讯云]()和[华为云]()的版本。  
 
+#### 6.1 腾讯云（生产环境基础版）
 此版本规划如下：  
 1.所有资源都部署在一个vpc中  
 2.在vpc中划分三个子网  
@@ -170,13 +175,13 @@ plugin_resource_s3_access_key | s3_access | 插件S3资源的access key |
 plugin_resource_s3_secret_key | s3_secret | 插件S3资源的secret key |
 cos_name | wecube-bucket-1234567890 | '1234567890' 必须替换成自己的[APPID](url:https://console.cloud.tencent.com/capi) |
 
-#### 6.1 配置Access Key/Secret Key
+##### 6.1.1 配置Access Key/Secret Key
 参考5.2.1 配置Access Key/Secret Key至本地环境变量，不配置的话也可以在执行terraform apply命令的时候输入。
 
-#### 6.2 初始化Terraform
+##### 6.1.2 初始化Terraform
 参考5.2.2 初始化Terraform。
  
-#### 6.3 执行部署(一键部署)
+##### 6.1.3 执行部署(一键部署)
 ```
 $cd d:\dev\delivery-by-terraform\delivery-wecube-for-production\to_tencent_cloud
 $terraform apply   -- 执行部署
@@ -189,5 +194,132 @@ $.....
 ![wecube ](docs/images/wecube.png)
 
 
-#### 6.4 销毁部署 (一键销毁)
+##### 6.1.4 销毁部署 (一键销毁)
 参考5.1.4 销毁部署。
+  
+    
+#### 6.2 华为云（生产环境基础版）
+此版本应用部署图如下：  
+
+![HuaweiCloudDeployment](docs/images/HuaweiCloudDeployment.jpg)
+
+1.所有资源都部署在一个vpc [10.128.192.0/19]  
+  
+2.在vpc中划分三个子网  
+    - 10.128.195.0/24 subnet_vdi
+    - 10.128.194.0/25 subnet_app
+    - 10.128.194.128/26 subnet_db
+  
+3.每个子网建立一个安全组  
+  
+sg_group_wecube_vdi  
+入站/出站 |  规则协议 | 端口 |  来源  |  策略    
+-|-|-|-|-
+入站|TCP|1-65535|10.128.192.0/19|允许  
+入站|TCP|3389|0.0.0.0/0|允许
+出站|TCP|1-65535|0.0.0.0/0|允许  
+  
+sg_group_wecube_db  
+入站/出站 |  规则协议 | 端口 |  来源  |  策略     
+-|-|-|-|-  
+入站|TCP|1-65535|10.128.192.0/19|允许  
+入站|TCP|3306-3307|0.0.0.0/0|允许   
+入站|TCP|9001|0.0.0.0/0|允许  
+入站|TCP|22|0.0.0.0/0|允许  
+出站|TCP|1-65535|0.0.0.0/0|允许  
+   
+sg_group_wecube_app  
+入站/出站 |  规则协议 | 端口 |  来源  |  策略    
+-|-|-|-|-  
+入站|TCP|1-65535|10.128.192.0/19|允许  
+入站|TCP|2375|0.0.0.0/0|允许
+入站|TCP|22|0.0.0.0/0|允许
+入站|TCP|19090|0.0.0.0/0|允许
+入站|TCP|3128|10.128.192.0/19|允许
+出站|TCP|1-65535|0.0.0.0/0|允许
+ 
+4.RDS云数据库MySQL：  
+
+实例名 | 默认规格 | 存储空间 |  所属子网 |  绑定安全组 |  部署组件      
+-|-|-|-|-|-
+WecubeDbInstance | rds.mysql.c2.large.ha（2核4GB）  | 40GB | subnet_db  |  sg_group_wecube_db |  WeCube数据库  |
+PluginDbInstance | rds.mysql.c2.large.ha（2核4GB） | 40GB | subnet_db  |  sg_group_wecube_db |  插件数据库  |
+
+5.对象存储OBS
+申请OBS存储桶（默认名字为s3-wecube）作为WeCube的S3存储。
+
+6.主机部署规划如下：  
+
+云主机内网IP | 默认规格 |  所属子网 |  绑定安全组 |  部署组件      
+-|-|-|-|-  
+10.128.194.130 | 4C8G | subnet_db  |  sg_group_wecube_db |  插件资源（S3对象存储）  |  
+10.128.194.4 | 4C8G | subnet_app  |  sg_group_wecube_app |  插件容器母机A  |  
+10.128.194.5 | 4C8G | subnet_app  |  sg_group_wecube_app |  插件容器母机B  |  
+10.128.194.3 | 4C8G | subnet_app  |  sg_group_wecube_app |  WeCube（含platform-core、platform-gateway、wecube-portal、auth-server）  |  
+10.128.194.2 | 4C8G | subnet_app  |  sg_group_wecube_app |  Squid  |  
+10.128.195.2 | 4C8G | subnet_vdi  |  sg_group_wecube_vdi |  Windows VDI主机 |  
+
+
+以下是华为云的变量配置：
+**部署之前，可以修改下面terraform变量值，否则会使用默认值**
+
+变量名 | 默认值 |  描述  
+-|-|-
+hw_access_key | hw_access_key | **必须修改为自己的AK** |
+hw_secret_key | hw_secret_key | **必须修改为自己的SK** |
+hw_region | hw_secret_key | 指定部署WeCube的region |
+hw_tenant_name | hw_secret_key | 账户内的租户名，一般和region一致 |
+hw_dns1 | hw_secret_key | 首选DNS，根据指定的region选择华为云提供的[内网DNS地址](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) |
+hw_dns2 | hw_secret_key | 备选DNS，根据指定的region选择华为云提供的[内网DNS地址](https://support.huaweicloud.com/dns_faq/dns_faq_002.html) |
+hw_az_master | hw_secret_key | 首选Available Zone |
+hw_az_slave | hw_secret_key | 备选Available Zone |
+default_password | Wecube@123456 | 部署资源的默认密码，包括linux上root用户的密码，windows上Administrator用户的密码，mysql上的root用户密码 |
+wecube_version | v2.2.0 | wecube的版本 |(url:https://console.cloud.tencent.com/capi) |
+
+##### 6.2.1 使用步骤
+
+##### 6.2.1.1 以命令行方式进入到华为云生产基础版的主目录
+进入华为云生产基础版目录
+```
+$cd d:\dev\delivery-by-terraform\delivery-wecube-for-production\to_huawei_cloud
+```  
+
+##### 6.2.1.2 配置Access Key/Secret Key
+配置方式有两种：
+ * 编辑vars.tf中的hw_access_key和hw_secret_key的default值；
+ * 在步骤6.2.1.3在执行terraform apply命令的时候以参数形式传入，命令如下：
+ ```
+ terraform apply -var 'hw_access_key=your_ak' -var 'hw_secret_key=your_sk'
+```
+**注意：若以此种方式，则销毁时也需要传入AK/SK**
+
+##### 6.2.1.2 初始化Terraform
+ ```
+ terraform init
+```
+ 
+##### 6.2.1.3 执行部署(一键部署)
+```
+$terraform apply   -- 执行部署
+$.....
+$Enter a value: yes  -- 确认执行
+$.....
+```
+![terraform apply ](docs/images/huawei_successful.png)
+
+##### 6.2.1.4 使用WeCube
+ * 根据步骤6.2.1.3 输出的步骤，需要先登录windows VDI，登录方式请参考[华为云Windows弹性云服务器登录方式](https://support.huaweicloud.com/usermanual-ecs/zh-cn_topic_0092494943.html?utm_source=ecs_Growth_map&utm_medium=display&utm_campaign=help_center&utm_content=Growth_map)
+ * 然后在Windows VDI安装Chrome浏览器（目前WeCube已完整适配Chrome,为了您的使用方便，请勿使用其他未适配的浏览器）
+ * 使用Chrom浏览器打开 *http://10.128.194.3:19090* ，如果你看到以下页面，说明你的WeCube已经部署成功了
+![wecube ](docs/images/wecube.png)
+
+ **附：官方插件包[下载地址](https://github.com/WeBankPartners/wecube-platform/releases)**
+
+
+##### 6.2.1.5 销毁部署 (一键销毁)
+```
+$terraform destroy   -- 执行部署
+$.....
+$Enter a value: yes  -- 确认执行
+$.....
+```
