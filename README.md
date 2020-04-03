@@ -257,12 +257,10 @@ PluginDbInstance | rds.mysql.c2.large.ha（2核4GB） | 40GB | subnet_db  |  sg_
 10.128.194.5 | 4C8G | subnet_app  |  sg_group_wecube_app |  插件容器母机B  |  
 10.128.194.3 | 4C8G | subnet_app  |  sg_group_wecube_app |  WeCube（含platform-core、platform-gateway、wecube-portal、auth-server）  |  
 10.128.194.2 | 4C8G | subnet_app  |  sg_group_wecube_app |  Squid  |  
-10.128.195.2 | 4C8G | subnet_vdi  |  sg_group_wecube_vdi |  Windows VDI主机 |  
-
-
-以下是华为云的变量配置：
-**部署之前，可以修改下面terraform变量值，否则会使用默认值**
-
+10.128.195.2 | 4C8G | subnet_vdi  |  sg_group_wecube_vdi |  Windows VDI主机 |    
+    
+7.变量配置：   
+**部署之前，可以修改下面terraform变量值，否则会使用默认值**   
 变量名 | 默认值 |  描述  
 -|-|-
 hw_access_key | hw_access_key | **必须修改为自己的AK** |
