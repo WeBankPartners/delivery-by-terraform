@@ -27,10 +27,10 @@ $git clone https://github.com/WeBankPartners/delivery-by-terraform.git
 ### 4. 运行Terraform部署WeCube
 为方便用户体验，我们提供了单机版和生产基础版两种部署方案。
 
-<a href="jump-stand-alone">单机版
-<a href="jump-production">生产基础版
+[单机版](#5-单机版)  
+[生产版](#6-生产版)
 
-### 5. [单机版](#jump-stand-alone)
+### 5. 单机版
 单机版目前提供了阿里云和腾讯云两个云服务商的版本。
 顾名思义，单机版只需要一台云服务器即可部署WeCube。
 
@@ -102,11 +102,11 @@ $terraform init    -- 安装腾讯云的插件, 需要点时间，因国内网�
 ##### 剩余的步骤跟上面的阿里云部署的步骤5.1.3， 5.1.4类似。
 
 
-### 6. [生产版](#jump-production)
+### 6. 生产版
 生产版是使用云服务提供的持久化存储，可满足生产环境的基础需求。
-目前提供了[腾讯云](#tencent-production)和[华为云](#huawei-production)的版本。  
+目前提供了[腾讯云](#61-腾讯云-生产环境基础版)和[华为云](#62-华为云-生产环境基础版)的版本。  
 
-#### 6.1 <span id="tencent-production">腾讯云（生产环境基础版）<span>
+#### 6.1 腾讯云-生产环境基础版
 此版本规划如下：  
 1.所有资源都部署在一个vpc中  
 2.在vpc中划分三个子网  
@@ -197,7 +197,7 @@ $.....
 参考5.1.4 销毁部署。
   
     
-#### 6.2 <span id="huawei-production">华为云（生产环境基础版）<span>
+#### 6.2 华为云-生产环境基础版
 此版本应用部署图如下：  
 
 ![HuaweiCloudDeployment](docs/images/HuaweiCloudDeployment.jpg)
