@@ -1,3 +1,3 @@
-output "Output" {
+output "Tips" {
   value="\n Please follow below steps:\n 1.Login your Windows VDI[IP:${huaweicloud_networking_floatingip_v2.vdi_public_ip.address}] with [User/Password：Administrator/${var.default_password}];\n 2.Install Chrome browser;\n 3.Use Chrome browser to access 'http://10.128.194.3:19090';\n \n \n Thank you in advance for your kind support and continued business.\n More Info: https://github.com/WeBankPartners/delivery-by-terraform"
 }
