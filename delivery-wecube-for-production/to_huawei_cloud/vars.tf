@@ -7,7 +7,7 @@ variable "hw_secret_key" {
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_secret_key'"
 }
 variable "hw_region" {
-  default     = "ap-southeast-1"
+  default     = "ap-southeast-3"
   description = "The region name where the resource will be created"
 }
 variable "hw_dns1" {
@@ -19,15 +19,15 @@ variable "hw_dns2" {
   description = "This DNS is ref from https://support.huaweicloud.com/dns_faq/dns_faq_002.html by the region"
 }
 variable "hw_az_master" {
-  default     = "ap-southeast-1a"
+  default     = "ap-southeast-3a"
   description = "Specified master availability zone for resource creation"
 }
 variable "hw_az_slave" {
-  default     = "ap-southeast-1b"
+  default     = "ap-southeast-3b"
   description = "Specified slave availability zone for resource creation"
 }
 variable "hw_tenant_name" {
-  default     = "ap-southeast-1"
+  default     = "ap-southeast-3"
   description = "Specified tenant name"
 }
 variable "default_password" {
@@ -36,5 +36,5 @@ variable "default_password" {
 }
 variable "wecube_version" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default     = "v2.2.0"
+  default     = "20200408103508-3155567"
 }
