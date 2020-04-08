@@ -33,7 +33,7 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_wecube_core" {
   # 4C16G 
   #flavor = "rds.mysql.s1.xlarge.ha"
   # 2C4G 
-  flavor = "rds.mysql.c2.large.ha"
+  flavor = "rds.mysql.c6.large.2.ha"
   # “async”为异步模式。“semisync”为半同步模式。
   ha_replication_mode = "async"
   backup_strategy {
@@ -65,7 +65,7 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_plugin" {
   # 4C16G 
   #flavor = "rds.mysql.s1.xlarge.ha"
   # 2C4G 
-  flavor = "rds.mysql.c2.large.ha"
+  flavor = "rds.mysql.c6.large.2.ha"
   # “async”为异步模式。“semisync”为半同步模式。
   ha_replication_mode = "async"
   backup_strategy {
@@ -78,7 +78,7 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_plugin" {
 
 #创建WeCube S3存储桶
 resource "huaweicloud_s3_bucket" "s3-wecube" {
-  bucket = "s3-wecube"
+  bucket = "sg-s3-wecube"
   acl    = "private"
   force_destroy = true
 }
@@ -87,7 +87,7 @@ resource "huaweicloud_s3_bucket" "s3-wecube" {
 #创建WeCube plugin resource主机
 resource "huaweicloud_ecs_instance_v1" "instance_wecube_plugin_s3" {
   name     = "pluginResourceHost"
-  image_id = "63d5ec5c-c16e-4d6a-b6cc-03f67a575dfb"
+  image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
   vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
@@ -106,7 +106,7 @@ resource "huaweicloud_ecs_instance_v1" "instance_wecube_plugin_s3" {
 #创建WeCube plugin docker A主机
 resource "huaweicloud_ecs_instance_v1" "instance_plugin_docker_host_a" {
   name     = "pluginDockerHost"
-  image_id = "63d5ec5c-c16e-4d6a-b6cc-03f67a575dfb"
+  image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
   vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
@@ -123,7 +123,7 @@ resource "huaweicloud_ecs_instance_v1" "instance_plugin_docker_host_a" {
 #创建WeCube plugin docker B主机
 resource "huaweicloud_ecs_instance_v1" "instance_plugin_docker_host_b" {
   name     = "pluginDockerHost"
-  image_id = "63d5ec5c-c16e-4d6a-b6cc-03f67a575dfb"
+  image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
   vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
@@ -141,7 +141,7 @@ resource "huaweicloud_ecs_instance_v1" "instance_plugin_docker_host_b" {
 #创建WeCube Platform主机
 resource "huaweicloud_ecs_instance_v1" "instance_wecube_platform" {
   name     = "wecubePlatformHost"
-  image_id = "63d5ec5c-c16e-4d6a-b6cc-03f67a575dfb"
+  image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
   vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
@@ -159,7 +159,7 @@ resource "huaweicloud_ecs_instance_v1" "instance_wecube_platform" {
 #创建Squid主机
 resource "huaweicloud_compute_instance_v2" "instance_squid" {
   name     = "squidHost"
-  image_id = "63d5ec5c-c16e-4d6a-b6cc-03f67a575dfb"
+  image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor_name = "c3.xlarge.2"
   #vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
@@ -188,7 +188,7 @@ resource "huaweicloud_compute_floatingip_associate_v2" "squid_public_ip" {
 #创建VDI-windows主机
 resource "huaweicloud_ecs_instance_v1" "instance_vdi" {
   name     = "instanceVdi"
-  image_id = "f9310d06-7650-4390-84cf-3c0ea0538375"
+  image_id = "921808eb-6cde-46cc-8e22-87df97b099a0"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
   vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
