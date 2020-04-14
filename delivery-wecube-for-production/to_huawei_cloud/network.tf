@@ -1,12 +1,12 @@
 #创建VPC
 resource "huaweicloud_vpc_v1" "wecube_vpc" {
-  name = "PRD1"
+  name = "PRD_MG"
   cidr = "10.128.192.0/19"
 }
 
 #创建子网 - VDI Windows运行子网
 resource "huaweicloud_vpc_subnet_v1" "subnet_vdi" {
-  name       = "MG_VDI"
+  name       = "PRD1_MG_VDI"
   cidr       = "10.128.192.0/24"
   gateway_ip = "10.128.192.1"
   vpc_id     = "${huaweicloud_vpc_v1.wecube_vpc.id}"
@@ -15,7 +15,7 @@ resource "huaweicloud_vpc_subnet_v1" "subnet_vdi" {
 }
 #创建子网- Wecube Platform组件运行的实例
 resource "huaweicloud_vpc_subnet_v1" "subnet_app" {
-  name       = "MG_APP"
+  name       = "PRD1_MG_APP"
   vpc_id     = "${huaweicloud_vpc_v1.wecube_vpc.id}"
   cidr       = "10.128.202.0/24"
   gateway_ip = "10.128.202.1"
@@ -24,7 +24,7 @@ resource "huaweicloud_vpc_subnet_v1" "subnet_app" {
 }
 #创建子网 - WeCube持久化存储的子网
 resource "huaweicloud_vpc_subnet_v1" "subnet_db" {
-  name       = "MG_RDB"
+  name       = "PRD1_MG_RDB"
   vpc_id     = "${huaweicloud_vpc_v1.wecube_vpc.id}"
   cidr       = "10.128.206.0/24"
   gateway_ip = "10.128.206.1"
@@ -33,7 +33,7 @@ resource "huaweicloud_vpc_subnet_v1" "subnet_db" {
 }
 #创建子网 - 
 resource "huaweicloud_vpc_subnet_v1" "subnet_proxy" {
-  name       = "MG_PROXY"
+  name       = "PRD1_MG_PROXY"
   vpc_id     = "${huaweicloud_vpc_v1.wecube_vpc.id}"
   cidr       = "10.128.199.0/24"
   gateway_ip = "10.128.199.1"
