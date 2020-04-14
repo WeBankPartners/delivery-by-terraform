@@ -184,6 +184,7 @@ INSERT INTO `auth_sys_role` VALUES ('2c9280836f78a84b016f794e9b170004', 'system'
 INSERT INTO `auth_sys_role` VALUES ('2c9280836f78a84b016f794f20440005', 'system', '2020-01-06 13:23:46', null, null, '', '\0', '基础架构师', '基础架构师', null, 'IFA_ARC');
 INSERT INTO `auth_sys_role` VALUES ('2c9280836f78a84b016f794ff45e0006', 'system', '2020-01-06 13:24:40', null, null, '', '\0', '应用开发人员', '应用开发人员', null, 'APP_DEV');
 INSERT INTO `auth_sys_role` VALUES ('2c9280836f78a84b016f795068870007', 'system', '2020-01-06 13:25:10', null, null, '', '\0', '基础架构运维人员', '基础架构运维人员', null, 'IFA_OPS');
+INSERT INTO `auth_sys_role` VALUES ('2c9280827019695c01701dc555e60008', 'system', '2020-02-07 11:50:36', null, null, '', '\0', 'admin', 'admin', null, 'admin');
 
 -- ----------------------------
 -- Records of auth_sys_authority
