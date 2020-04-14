@@ -36,5 +36,5 @@ variable "default_password" {
 }
 variable "wecube_version" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default     = "20200408103508-3155567"
+  default     = "20200413192927-d6227ce"
 }

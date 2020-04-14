@@ -7,8 +7,8 @@ echo `pwd`
 remoteHost=$1
 password=$2
 s3_port=9001
-s3_access_key="s3_access_key"
-s3_secret_key="s3_secret_key"
+s3_access_key="access_key"
+s3_secret_key="secret_key"
 
 #echo "sshpass -p ${password} scp /root/scripts/wecube-s3.tpl /root/scripts/init-host.sh root@${remoteHost}:/root/"
 
