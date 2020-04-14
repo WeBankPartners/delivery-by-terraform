@@ -204,7 +204,7 @@ resource "null_resource" "null_instance" {
       "dos2unix /root/scripts/*",
       "dos2unix /root/scripts/wecube-platform/*",
       "cd /root/scripts",
-	  "./utils-sed.sh '{{HW-DNS}}' ${var.hw_dns1} /root/scripts/init-host.sh",
+	  "./utils-sed.sh '{{HW_DNS}}' ${var.hw_dns1} /root/scripts/init-host.sh",
 	  
       #初始化pluginDocker主机，并且安装S3
       "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} wecube-s3.tpl /root/",
