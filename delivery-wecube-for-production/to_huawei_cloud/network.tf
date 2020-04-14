@@ -60,7 +60,7 @@ resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_for_db" {
 resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_db_tcp_out" {
   security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_db.id}"
   direction         = "egress"
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = "10.128.192.0/19"
   protocol          = "tcp"
   ethertype         = "IPv4"
   port_range_min    = 1
@@ -82,19 +82,10 @@ resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_for_app" {
   port_range_min    = 1
   port_range_max    = 65535
 }
-resource "huaweicloud_networking_secgroup_rule_v2" "allow_tcp_22_for_app" {
-  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"
-  direction         = "ingress"
-  remote_ip_prefix  = "0.0.0.0/0"
-  protocol          = "tcp"
-  ethertype         = "IPv4"
-  port_range_min    = 22
-  port_range_max    = 22
-}
 resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_out" {
   security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"
   direction         = "egress"
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = "10.128.192.0/19"
   protocol          = "tcp"
   port_range_min    = 1
   port_range_max    = 65535
@@ -124,6 +115,15 @@ resource "huaweicloud_networking_secgroup_rule_v2" "allow_3389_tcp" {
   port_range_min    = 3389
   port_range_max    = 3389
   ethertype         = "IPv4"
+}
+resource "huaweicloud_networking_secgroup_rule_v2" "allow_tcp_22_for_app" {
+  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"
+  direction         = "ingress"
+  remote_ip_prefix  = "0.0.0.0/0"
+  protocol          = "tcp"
+  ethertype         = "IPv4"
+  port_range_min    = 22
+  port_range_max    = 22
 }
 resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_vdi_tcp_out" {
   security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"

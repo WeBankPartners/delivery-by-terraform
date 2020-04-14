@@ -129,7 +129,7 @@ resource "huaweicloud_compute_instance_v2" "instance_squid" {
     access_network = true
   }
   availability_zone = "${var.hw_az_master}"
-  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"]
+  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"]
   admin_pass = "${var.default_password}"
 }
 
