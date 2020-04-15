@@ -13,6 +13,4 @@ yum clean metadata
 yum makecache
 yum install epel-release -y >/dev/null 2>&1
 
-echo 'nameserver {{HW_DNS}}'>>/etc/resolv.conf
-
 echo "Starting init host success..."
