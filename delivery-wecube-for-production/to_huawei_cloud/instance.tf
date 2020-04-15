@@ -85,7 +85,7 @@ resource "huaweicloud_s3_bucket" "s3-wecube" {
 
 #创建WeCube plugin docker 主机
 resource "huaweicloud_ecs_instance_v1" "instance_plugin_docker_host_a" {
-  name     = "PRD1_MG_APP_10.128.202.2_wecubeplugin"
+  name     = "PRD1_MG_APP_wecubeplugin"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
@@ -102,7 +102,7 @@ resource "huaweicloud_ecs_instance_v1" "instance_plugin_docker_host_a" {
 
 #创建WeCube Platform主机
 resource "huaweicloud_ecs_instance_v1" "instance_wecube_platform" {
-  name     = "PRD1_MG_APP_10.128.202.3_wecubecore"
+  name     = "PRD1_MG_APP_wecubecore"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
@@ -119,7 +119,7 @@ resource "huaweicloud_ecs_instance_v1" "instance_wecube_platform" {
 
 #创建Squid主机
 resource "huaweicloud_compute_instance_v2" "instance_squid" {
-  name     = "PRD1_MG_PROXY_10.128.199.3_wecubesquid"
+  name     = "PRD1_MG_PROXY_wecubesquid"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor_name = "c3.xlarge.2"
@@ -144,7 +144,7 @@ resource "huaweicloud_compute_floatingip_associate_v2" "squid_public_ip" {
 
 #创建VDI-windows主机
 resource "huaweicloud_ecs_instance_v1" "instance_vdi" {
-  name     = "PRD1_MG_VDI_10.128.192.3_wecubevdi"
+  name     = "PRD1_MG_VDI_wecubevdi"
   image_id = "921808eb-6cde-46cc-8e22-87df97b099a0"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
