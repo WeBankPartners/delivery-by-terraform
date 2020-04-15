@@ -6,6 +6,14 @@ variable "hw_secret_key" {
   default = "hw_secret_key"
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_secret_key'"
 }
+variable "hw_domain_id" {
+  default = "hw_domain_id"
+  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_secret_key'"
+}
+variable "hw_project_id" {
+  default = "hw_project_id"
+  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_secret_key'"
+}
 variable "hw_region" {
   default     = "ap-southeast-3"
   description = "The region name where the resource will be created"
@@ -15,7 +23,7 @@ variable "hw_dns1" {
   description = "This DNS is ref from https://support.huaweicloud.com/dns_faq/dns_faq_002.html by the region"
 }
 variable "hw_dns2" {
-  default     = "100.125.3.250"
+  default     = "100.125.128.250"
   description = "This DNS is ref from https://support.huaweicloud.com/dns_faq/dns_faq_002.html by the region"
 }
 variable "hw_az_master" {

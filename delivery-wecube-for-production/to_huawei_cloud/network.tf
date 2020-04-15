@@ -12,6 +12,7 @@ resource "huaweicloud_vpc_subnet_v1" "subnet_vdi" {
   vpc_id     = "${huaweicloud_vpc_v1.wecube_vpc.id}"
   primary_dns = "${var.hw_dns1}"
   secondary_dns = "${var.hw_dns2}"
+  availability_zone="${var.hw_az_master}"
 }
 #创建子网- Wecube Platform组件运行的实例
 resource "huaweicloud_vpc_subnet_v1" "subnet_app" {
@@ -21,6 +22,7 @@ resource "huaweicloud_vpc_subnet_v1" "subnet_app" {
   gateway_ip = "10.128.202.1"
   primary_dns = "${var.hw_dns1}"
   secondary_dns = "${var.hw_dns2}"
+  availability_zone="${var.hw_az_master}"
 }
 #创建子网 - WeCube持久化存储的子网
 resource "huaweicloud_vpc_subnet_v1" "subnet_db" {
@@ -30,6 +32,7 @@ resource "huaweicloud_vpc_subnet_v1" "subnet_db" {
   gateway_ip = "10.128.206.1"
   primary_dns = "${var.hw_dns1}"
   secondary_dns = "${var.hw_dns2}"
+  availability_zone="${var.hw_az_master}"
 }
 #创建子网 - 
 resource "huaweicloud_vpc_subnet_v1" "subnet_proxy" {
@@ -39,6 +42,7 @@ resource "huaweicloud_vpc_subnet_v1" "subnet_proxy" {
   gateway_ip = "10.128.199.1"
   primary_dns = "${var.hw_dns1}"
   secondary_dns = "${var.hw_dns2}"
+  availability_zone="${var.hw_az_master}"
 }
 
 
