@@ -1,5 +1,5 @@
-secret_id           = "AKID1xmQBq1pXc1HLJbe5qSwFOL5e1GJttki"
-secret_key          = "8KY2QfiFbllljkgR1TSM5e1CF9sPkrnm"
+secret_id           = "xxxx"
+secret_key          = "xxxx"
 region              = "ap-hongkong"
 availability_zone_1 = "ap-hongkong-1"
 availability_zone_2 = "ap-hongkong-2"
