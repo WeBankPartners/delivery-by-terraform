@@ -8,21 +8,16 @@ echo `pwd`
 remoteHost=$1
 password=$2
 image_version=$3
+config_file=$4
+s3_port=$5
 
 sshpass -p ${password} ssh -o "StrictHostKeyChecking no" root@${remoteHost}  > /dev/null 2>&1 << remoteCmd
-
 
 chmod +x /root/wecube-platform-scripts/*
 yum install -y dos2unix
 dos2unix /root/wecube-platform-scripts/*
 cd /root/wecube-platform-scripts/
-./install-wecube-platform.sh wecube-platform.cfg ${image_version} > install-wecube.log 2>&1
-
-
-echo "export http_proxy='http://10.128.194.2:3128'" >> /etc/profile
-echo "export https_proxy='http://10.128.194.2:3128'" >> /etc/profile
-
-source /etc/profile
+./install-wecube-platform.sh $config_file ${image_version} $s3_port > install-wecube.log 2>&1
 
 exit
 remoteCmd
