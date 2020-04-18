@@ -20,8 +20,8 @@ cd /root/wecube-platform-scripts/
 ./install-wecube-platform.sh wecube-platform.cfg ${image_version} > install-wecube.log 2>&1
 
 
-echo "export http_proxy='http://10.128.194.2:3128'" >> /etc/profile
-echo "export https_proxy='http://10.128.194.2:3128'" >> /etc/profile
+echo "export http_proxy='http://10.128.199.3:3128'" >> /etc/profile
+echo "export https_proxy='http://10.128.199.3:3128'" >> /etc/profile
 
 source /etc/profile
 

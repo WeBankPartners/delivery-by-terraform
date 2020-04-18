@@ -22,8 +22,11 @@ echo "OPTIONS='-H unix://var/run/docker.sock -H tcp://0.0.0.0:2375'" >> /etc/sys
 systemctl start docker.service
 systemctl enable docker.service
 
-echo "export http_proxy='http://10.128.194.2:3128'" >> /etc/profile
-echo "export https_proxy='http://10.128.194.2:3128'" >> /etc/profile
+sudo systemctl daemon-reload
+sudo service docker restart
+
+echo "export http_proxy='http://10.128.199.3:3128'" >> /etc/profile
+echo "export https_proxy='http://10.128.199.3:3128'" >> /etc/profile
 
 source /etc/profile
 
