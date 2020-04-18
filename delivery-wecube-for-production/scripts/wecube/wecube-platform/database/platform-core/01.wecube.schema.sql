@@ -739,7 +739,7 @@ DROP TABLE IF EXISTS `resource_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `resource_item` (
-  `id` varchar(64) NOT NULL,
+  `id` varchar(255) NOT NULL,
   `additional_properties` varchar(2048) DEFAULT NULL,
   `created_by` varchar(255) DEFAULT NULL,
   `created_date` datetime DEFAULT NULL,

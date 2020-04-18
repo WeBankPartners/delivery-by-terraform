@@ -21,7 +21,7 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_wecube_core" {
     version  = "5.6"
     port     = "3306"
   }
-  name              = "WecubeDbInstance"
+  name              = "PRD1_MG_RDB_wecubecore"
   security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_db.id}"
   subnet_id         = "${huaweicloud_vpc_subnet_v1.subnet_db.id}"
   vpc_id            = "${huaweicloud_vpc_v1.wecube_vpc.id}"
@@ -51,9 +51,9 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_plugin" {
     password = "${var.default_password}"
     type     = "MySQL"
     version  = "5.6"
-    port     = "3307"
+    port     = "3306"
   }
-  name              = "PluginDbInstance"
+  name              = "PRD1_MG_RDB_wecubeplugin"
   security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_db.id}"
   subnet_id         = "${huaweicloud_vpc_subnet_v1.subnet_db.id}"
   vpc_id            = "${huaweicloud_vpc_v1.wecube_vpc.id}"
@@ -83,97 +83,54 @@ resource "huaweicloud_s3_bucket" "s3-wecube" {
   force_destroy = true
 }
 
-
-#创建WeCube plugin resource主机
-resource "huaweicloud_ecs_instance_v1" "instance_wecube_plugin_s3" {
-  name     = "pluginResourceHost"
-  image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
-  # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
-  flavor = "c3.xlarge.2"
-  vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
-  nics {
-    network_id = "${huaweicloud_vpc_subnet_v1.subnet_db.id}"
-    ip_address = "10.128.194.130"
-  }
-  availability_zone = "${var.hw_az_master}"
-  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_db.id}"]
-  #system_disk_type  = "co-p1"
-  system_disk_size = 40
-  password         = "${var.default_password}"
-  charging_mode    = "postPaid"
-}
-
-#创建WeCube plugin docker A主机
+#创建WeCube plugin docker 主机
 resource "huaweicloud_ecs_instance_v1" "instance_plugin_docker_host_a" {
-  name     = "pluginDockerHost"
+  name     = "PRD1_MG_APP_wecubeplugin"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
   vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
   nics {
     network_id = "${huaweicloud_vpc_subnet_v1.subnet_app.id}"
-    ip_address = "10.128.194.4"
+    ip_address = "10.128.202.3"
   }
   availability_zone = "${var.hw_az_master}"
   security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"]
-  #system_disk_type  = "co-p1"
-  system_disk_size = 40
-  password         = "${var.default_password}"
-}
-#创建WeCube plugin docker B主机
-resource "huaweicloud_ecs_instance_v1" "instance_plugin_docker_host_b" {
-  name     = "pluginDockerHost"
-  image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
-  # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
-  flavor = "c3.xlarge.2"
-  vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
-  nics {
-    network_id = "${huaweicloud_vpc_subnet_v1.subnet_app.id}"
-    ip_address = "10.128.194.5"
-  }
-  availability_zone = "${var.hw_az_master}"
-  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"]
-  #system_disk_type  = "co-p1"
   system_disk_size = 40
   password         = "${var.default_password}"
 }
 
 #创建WeCube Platform主机
 resource "huaweicloud_ecs_instance_v1" "instance_wecube_platform" {
-  name     = "wecubePlatformHost"
+  name     = "PRD1_MG_APP_wecubecore"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
   vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
   nics {
     network_id = "${huaweicloud_vpc_subnet_v1.subnet_app.id}"
-    ip_address = "10.128.194.3"
+    ip_address = "10.128.202.2"
   }
   availability_zone = "${var.hw_az_master}"
   security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"]
-  #system_disk_type  = "co-p1"
   system_disk_size = 40
   password         = "${var.default_password}"
 }
 
 #创建Squid主机
 resource "huaweicloud_compute_instance_v2" "instance_squid" {
-  name     = "squidHost"
+  name     = "PRD1_MG_PROXY_wecubesquid"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor_name = "c3.xlarge.2"
-  #vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
   network {
-    uuid           = "${huaweicloud_vpc_subnet_v1.subnet_app.id}"
-    fixed_ip_v4    = "10.128.194.2"
+    uuid           = "${huaweicloud_vpc_subnet_v1.subnet_proxy.id}"
+    fixed_ip_v4    = "10.128.199.3"
     access_network = true
   }
   availability_zone = "${var.hw_az_master}"
-  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"]
-  #system_disk_type  = "co-p1"
-  #system_disk_size  = 40
+  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"]
   admin_pass = "${var.default_password}"
-
 }
 
 resource "huaweicloud_networking_floatingip_v2" "squid_public_ip" {
@@ -187,14 +144,14 @@ resource "huaweicloud_compute_floatingip_associate_v2" "squid_public_ip" {
 
 #创建VDI-windows主机
 resource "huaweicloud_ecs_instance_v1" "instance_vdi" {
-  name     = "instanceVdi"
+  name     = "PRD1_MG_VDI_wecubevdi"
   image_id = "921808eb-6cde-46cc-8e22-87df97b099a0"
   # for 4C8G, use 'c3.2xlarge.2' if need 8C16G. 
   flavor = "c3.xlarge.2"
   vpc_id = "${huaweicloud_vpc_v1.wecube_vpc.id}"
   nics {
     network_id = "${huaweicloud_vpc_subnet_v1.subnet_vdi.id}"
-    ip_address = "10.128.195.2"
+    ip_address = "10.128.192.3"
   }
   availability_zone = "${var.hw_az_master}"
   security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"]
@@ -247,18 +204,14 @@ resource "null_resource" "null_instance" {
       "dos2unix /root/scripts/*",
       "dos2unix /root/scripts/wecube-platform/*",
       "cd /root/scripts",
-	  "./utils-sed.sh '{{HW-DNS}}' ${var.hw_dns1} /root/scripts/init-host.sh",
 	  
-      #初始化pluginResource主机
-      "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_wecube_plugin_s3.nics.0.ip_address} ${var.default_password} wecube-s3.tpl /root/",
-	  "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_wecube_plugin_s3.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
-      "./init-plugin-resource-host.sh ${huaweicloud_ecs_instance_v1.instance_wecube_plugin_s3.nics.0.ip_address} ${var.default_password} > init.log 2>&1",
-
-      #初始化pluginDocker主机
+      #初始化pluginDocker主机，并且安装S3
+      "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} wecube-s3.tpl /root/",
 	  "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
-	  "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_b.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
+      "./init-plugin-resource-host.sh ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} > init.log 2>&1",
+
+	  "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
       "./init-plugin-docker-host.sh ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} /root/scripts/wecube-platform/wecube-platform.cfg >> init.log 2>&1",
-      "./init-plugin-docker-host.sh ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_b.nics.0.ip_address} ${var.default_password} /root/scripts/wecube-platform/wecube-platform.cfg >> init.log 2>&1",
 
       #初始化WeCube主机
 	  "./utils-sed.sh '{{MYSQL_RESOURCE_SERVER_IP}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} /root/scripts/wecube-platform/database/platform-core/02.wecube.system.data.sql",

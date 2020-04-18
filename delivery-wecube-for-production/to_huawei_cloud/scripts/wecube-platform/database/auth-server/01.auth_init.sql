@@ -176,6 +176,7 @@ CREATE TABLE `auth_sys_user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `auth_sys_role` VALUES ('2c9280827019695c01701dc555e60042', 'system', '2020-02-07 11:50:36', null, null, '', '\0', '系统管理员', '系统管理员', null, 'SUPER_ADMIN');
+INSERT INTO `auth_sys_role` VALUES ('2c9280827019695c01701dc552ef0000', 'system', '2020-02-07 11:50:36', null, null, '', '\0', 'admin', 'admin', null, 'admin');
 INSERT INTO `auth_sys_role` VALUES ('2c9280836f78a84b016f794c3a270000', 'system', '2020-01-06 13:20:36', null, null, '', '\0', 'CMDB管理员', 'CMDB管理员', null, 'CMDB_ADMIN');
 INSERT INTO `auth_sys_role` VALUES ('2c9280836f78a84b016f794cd6dd0001', 'system', '2020-01-06 13:21:16', null, null, '', '\0', '监控管理员', '监控管理员', null, 'MONITOR_ADMIN');
 INSERT INTO `auth_sys_role` VALUES ('2c9280836f78a84b016f794d6bb50002', 'system', '2020-01-06 13:21:54', null, null, '', '\0', '生产运维', '生产运维', null, 'PRD_OPS');

@@ -1,7 +1,7 @@
 version: "2"
 services:
   wecube-s3:
-    image: swr.ap-southeast-1.myhuaweicloud.com/webankpartners/minio
+    image: swr.ap-southeast-3.myhuaweicloud.com/webankpartners/minio
     restart: always
     command: [
         'server',
