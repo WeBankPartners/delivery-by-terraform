@@ -1,5 +1,5 @@
-secret_id           = "secret_id"
-secret_key          = "secret_key"
+secret_id           = "xxxx"
+secret_key          = "xxxx"
 region              = "ap-hongkong"
 availability_zone_1 = "ap-hongkong-1"
 availability_zone_2 = "ap-hongkong-2"
