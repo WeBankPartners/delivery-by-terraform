@@ -24,15 +24,6 @@ variable "availability_zone_2" {
   description = "You can override the value by setup os env variable - 'TF_VAR_availability_zone_2'"
   default     = "ap-guangzhou-3"
 }
-variable "cos_name" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_cos_name'"
-
-  ####################################################################
-  #---NOTICE---NOTICE---NOTICE---NOTICE---NOTICE---NOTICE---NOTICE---#
-  #this name should end with '-appid', please use your own APP ID    #
-  default = "wecube-bucket-1234567890"
-  ####################################################################
-}
 
 provider "tencentcloud" {
   secret_id  = var.secret_id
@@ -336,12 +327,6 @@ resource "tencentcloud_mysql_instance" "PRD1_MG_RDB_wecubeplugin" {
     character_set_server   = "UTF8MB4"
     #time_zone = "+8:00"
   }
-}
-
-#创建WeCube COS存储桶
-resource "tencentcloud_cos_bucket" "cos_wecube" {
-  bucket = "${var.cos_name}"
-  acl    = "private"
 }
 
 #创建WeCube plugin docker主机
