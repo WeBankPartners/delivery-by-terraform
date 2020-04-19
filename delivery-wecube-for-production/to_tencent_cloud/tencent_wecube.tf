@@ -130,7 +130,7 @@ resource "tencentcloud_security_group_rule" "allow_3389_tcp_internet" {
 resource "tencentcloud_security_group_rule" "allow_22_tcp_internet" {
   security_group_id = "${tencentcloud_security_group.PRD_MG.id}"
   type              = "ingress"
-  cidr_ip           = "218.17.197.195"
+  cidr_ip           = "0.0.0.0/0"
   ip_protocol       = "tcp"
   port_range        = "22"
   policy            = "accept"
