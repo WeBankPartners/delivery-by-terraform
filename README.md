@@ -182,9 +182,9 @@ secret_id | 空 | 必输，腾讯云账号生成secret_id
 secret_key | 空 | 必输，腾讯云账号生成secret_key
 region | ap-hongkong | 部署资源的地域
 default_password | Wecube@123456 | 部署资源的默认密码，包括linux上root用户的密码，windows上Administrator用户的密码，mysql上的root用户密码 |
-wecube_version | v2.1.1 | wecube的版本 |
-availability_zone_1 | ap-guangzhou-3 | 部署的主可用区 |
-availability_zone_2 | ap-guangzhou-4 | 部署的副可用区 |
+wecube_version | v2.3.0 | wecube的版本 |
+availability_zone_1 | ap-hongkong-1 | 部署的主可用区 |
+availability_zone_2 | ap-hongkong-2 | 部署的副可用区 |
 cos_name | wecube-bucket-1234567890 | '1234567890' 必须替换成自己的[APPID](url:https://console.cloud.tencent.com/capi) |  
   
 ##### 6.1.1 配置参数  
