@@ -1,94 +1,116 @@
-中文 / [English](README_EN.md)
-# 公有云软件系统一键交付 (Delivery By Terraform)
+中文 / [English](README_EN.md)
+
+# 公有云软件系统一键交付 (Delivery By Terraform)
 使用Terraform一键交付公有云软件系统
-## 使用方法:
-### 1. 下载 Terraform
+
+## 使用方法:
+### 1. 下载 Terraform
 官方下载地址:
 [https://www.terraform.io/downloads.html](https://www.terraform.io/downloads.html)
 >根据操作系统类型下载
-e.g.  
-Windows 64: [https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_windows_amd64.zip](https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_windows_amd64.zip)  
-Linux 64: [https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_linux_amd64.zip](https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_linux_amd64.zip)
-### 2. 配置 Terraform (以Windows为例)
-#### 2.1 下载后解压至任一目录（如d:\terraform)
-![terraform location](docs/images/terraform_location.png) 
-#### 2.2 配置Path，可在任何目录执行terraform
-![terraform env path](docs/images/terraform_env_path.png)
-### 3. 下载本仓库
+e.g.  
+Windows 64: [https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_windows_amd64.zip](https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_windows_amd64.zip)  
+Linux 64: [https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_linux_amd64.zip](https://releases.hashicorp.com/terraform/0.12.19/terraform_0.12.19_linux_amd64.zip)
+
+### 2. 配置 Terraform (以Windows为例)
+#### 2.1 下载后解压至任一目录（如d:\terraform)
+![terraform location](docs/images/terraform_location.png) 
+#### 2.2 配置Path，可在任何目录执行terraform
+![terraform env path](docs/images/terraform_env_path.png)
+
+### 3. 下载本仓库
 ```
-$cd d:\dev
-$git clone https://github.com/WeBankPartners/delivery-by-terraform.git
+$cd d:\dev
+$git clone https://github.com/WeBankPartners/delivery-by-terraform.git
 ```
-### 4. 运行Terraform部署WeCube
+
+### 4. 运行Terraform部署WeCube
 为方便用户体验，我们提供了单机版和生产基础版两种部署方案。
-[单机版](#5-单机版)  
+
+[单机版](#5-单机版)  
 [生产版](#6-生产版)
-### 5. 单机版
+
+### 5. 单机版
 单机版目前提供了阿里云和腾讯云两个云服务商的版本。
 顾名思义，单机版只需要一台云服务器即可部署WeCube。
-部署之前，可以修改下面terraform变量值，否则会使用默认值；
-变量名 | 默认值 |  描述  
--|-|-
-instance_root_password | WeCube1qazXSW@ | 云主机的root密码 |
-mysql_root_password | WeCube1qazXSW@ | mysql数据库的root密码 |
-wecube_version | v2.1.1 | wecube的版本 |  
 
-也可以通过修改环境变量的方式来设置terraform变量    
-WeCube主机的密码至环境变量（不改默认为WeCube1qazXSW@）：    
-![terraform app password](docs/images/instance_root_password.png)    
-配置mysql的root密码（不改默认为WeCube1qazXSW@）：    
-![terraform app password](docs/images/mysql_root_password.png)    
-配置wecube的version，即镜像tag（不改默认为v2.1.1）：    
-![terraform app password](docs/images/wecube_version.png)    
-  
-#### 5.1 部署阿里云  
-##### 5.1.1 配置Access Key/Secret Key至本地环境变量（默认使用region为cn-hangzhou）   
-![terraform ali cloud key](docs/images/terraform_ali_cloud_key.png)  
->注意: Access Key/Secret Key是敏感信息，建议配置到本地环境变量，不要配置在Terraform的模板文件*.tf里  
->注意: 若配置的region不为"cn-hangzhou"，则需要相应的修改delivery-by-terraform\delivery-wecube-for-stand-alone\to_ali_cloud\aliyun_wecube.standalone.tf中出现的所有"availability_zone"的值。例如region配置为"cn-shenzhen",availability_zone则需要修改为"cn-shenzhen-a"或者深圳地域下的其他可用区。  
-##### 5.1.2 初始化Terraform    
+部署之前，可以修改下面terraform变量值，否则会使用默认值；
+
+变量名 | 默认值 |  描述  
+-|-|-
+instance_root_password | WeCube1qazXSW@ | 云主机的root密码 |
+mysql_root_password | WeCube1qazXSW@ | mysql数据库的root密码 |
+wecube_version | v2.1.1 | wecube的版本 |
+
+也可以通过修改环境变量的方式来设置terraform变量
+WeCube主机的密码至环境变量（不改默认为WeCube1qazXSW@）：  
+![terraform app password](docs/images/instance_root_password.png) 
+
+配置mysql的root密码（不改默认为WeCube1qazXSW@）：  
+![terraform app password](docs/images/mysql_root_password.png) 
+
+配置wecube的version，即镜像tag（不改默认为v2.1.1）：  
+![terraform app password](docs/images/wecube_version.png) 
+
+#### 5.1 部署阿里云
+##### 5.1.1 配置Access Key/Secret Key至本地环境变量（默认使用region为cn-hangzhou） 
+![terraform ali cloud key](docs/images/terraform_ali_cloud_key.png)
+>注意: Access Key/Secret Key是敏感信息，建议配置到本地环境变量，不要配置在Terraform的模板文件*.tf里
+
+>注意: 若配置的region不为"cn-hangzhou"，则需要相应的修改delivery-by-terraform\delivery-wecube-for-stand-alone\to_ali_cloud\aliyun_wecube.standalone.tf中出现的所有"availability_zone"的值。例如region配置为"cn-shenzhen",availability_zone则需要修改为"cn-shenzhen-a"或者深圳地域下的其他可用区。
+
+##### 5.1.2 初始化Terraform
 ```
-$cd d:\dev\delivery-by-terraform\delivery-wecube-for-stand-alone\to_ali_cloud
-$terraform init    -- 安装阿里云的插件, 需要点时间，因国内网速较慢
+$cd d:\dev\delivery-by-terraform\delivery-wecube-for-stand-alone\to_ali_cloud
+$terraform init    -- 安装阿里云的插件, 需要点时间，因国内网速较慢
 ```
-##### 5.1.3 执行部署(一键部署)  
+##### 5.1.3 执行部署(一键部署)
 ```
-$cd d:\dev\delivery-by-terraform\delivery-wecube-for-stand-alone\to_ali_cloud
-$terraform apply   -- 执行部署
+$cd d:\dev\delivery-by-terraform\delivery-wecube-for-stand-alone\to_ali_cloud
+$terraform apply   -- 执行部署
 $.....
-$Enter a value: yes  -- 确认执行
+$Enter a value: yes  -- 确认执行
 $.....
 ```
-![terraform apply ](docs/images/terraform_ali_cloud_apply.png)  
->如果你看到这个，说明已部署成功，拷贝输出的URL至浏览器即可访问Wecube   
-![wecube ](docs/images/wecube.png)  
-#### 5.1.4 销毁部署 (一键销毁)   
+![terraform apply ](docs/images/terraform_ali_cloud_apply.png)
+>如果你看到这个，说明已部署成功，拷贝输出的URL至浏览器即可访问Wecube
+![wecube ](docs/images/wecube.png)
+
+
+#### 5.1.4 销毁部署 (一键销毁)
 ```
-$cd d:\dev\delivery-by-terraform\delivery-wecube-for-stand-alone\to_ali_cloud
-$terraform destroy   -- 销毁部署  
+$cd d:\dev\delivery-by-terraform\delivery-wecube-for-stand-alone\to_ali_cloud
+$terraform destroy   -- 销毁部署
 $.....
-$Enter a value: yes  -- 确认执行  
+$Enter a value: yes  -- 确认执行
 $.....
 ```
 
 **若有destroy过程中报错，可执行terraform refresh 更新资源状态，再执行terraform destroy**  
-![terraform deploy   ](docs/images/terraform_ali_cloud_destroy.png)  
-#### 5.2 部署腾讯云  
-##### 5.2.1 配置Access Key/Secret Key至本地环境变量   
-![terraform tencent cloud key](docs/images/terraform_tencent_cloud_key.png)   
->注意: Access Key/Secret Key是敏感信息，建议配置到本地环境变量，不要配置在Terraform的模板文件*.tf里    
->注意: 若配置的region不为"ap-guangzhou"，则需要相应的修改delivery-by-terraform\delivery-wecube-for-stand-alone\to_tencent_cloud\tencent_wecube.tf中出现的所有"availability_zone"的值。例如region配置为"ap-chengdu",availability_zone则需要修改为"ap-chengdu-1"或成都地域下的其他可用区。  
-##### 5.2.2 初始化Terraform  
+
+![terraform deploy   ](docs/images/terraform_ali_cloud_destroy.png)
+
+#### 5.2 部署腾讯云
+##### 5.2.1 配置Access Key/Secret Key至本地环境变量 
+![terraform tencent cloud key](docs/images/terraform_tencent_cloud_key.png)
+>注意: Access Key/Secret Key是敏感信息，建议配置到本地环境变量，不要配置在Terraform的模板文件*.tf里  
+>注意: 若配置的region不为"ap-guangzhou"，则需要相应的修改delivery-by-terraform\delivery-wecube-for-stand-alone\to_tencent_cloud\tencent_wecube.tf中出现的所有"availability_zone"的值。例如region配置为"ap-chengdu",availability_zone则需要修改为"ap-chengdu-1"或成都地域下的其他可用区。
+
+##### 5.2.2 初始化Terraform
 ```
-$cd d:\dev\delivery-by-terraform\delivery-wecube-for-stand-alone\to_tencent_cloud
-$terraform init    -- 安装腾讯云的插件, 需要点时间，因国内网速较慢
+$cd d:\dev\delivery-by-terraform\delivery-wecube-for-stand-alone\to_tencent_cloud
+$terraform init    -- 安装腾讯云的插件, 需要点时间，因国内网速较慢
 ```
-##### 剩余的步骤跟上面的阿里云部署的步骤5.1.3， 5.1.4类似。  
-### 6. 生产版   
-生产版是使用云服务提供的持久化存储，可满足生产环境的基础需求。  
-目前提供了[腾讯云](#61-腾讯云-生产环境基础版)和[华为云](#62-华为云-生产环境基础版)的版本。    
-#### 6.1 腾讯云-生产环境基础版  
-**适用于腾讯云中国站**  
+
+##### 剩余的步骤跟上面的阿里云部署的步骤5.1.3， 5.1.4类似。
+
+
+### 6. 生产版
+生产版是使用云服务提供的持久化存储，可满足生产环境的基础需求。
+目前提供了[腾讯云](#61-腾讯云-生产环境基础版)和[华为云](#62-华为云-生产环境基础版)的版本。  
+
+#### 6.1 腾讯云-生产环境基础版
+**适用于腾讯云中国站**  
 此版本规划如下：   
 ![TencentCloudDeployment](docs/images/qcloud_deploy.png)  
 此版本部署将会创建：  
@@ -163,16 +185,16 @@ availability_zone_1 | ap-guangzhou-3 | 部署的主可用区 |
 availability_zone_2 | ap-guangzhou-4 | 部署的副可用区 |
 cos_name | wecube-bucket-1234567890 | '1234567890' 必须替换成自己的[APPID](url:https://console.cloud.tencent.com/capi) |  
   
-##### 6.1.1 配置参数  
+##### 6.1.1 配置参数  
 打开delivery-by-terraform\delivery-wecube-for-stand-alone\to_tencent_cloud\terraform.tfvars，
 配置参数
 
-##### 6.1.2 初始化Terraform
+##### 6.1.2 初始化Terraform
 ```
 $terraform init   -- 执行初始化，期间会下载terraform provider，国内网络比较慢
 ```
- 
-##### 6.1.3 执行部署(一键部署)
+ 
+###### 6.1.3 行部署(一键部署)
 ```
 $cd d:\dev\delivery-by-terraform\delivery-wecube-for-production\to_tencent_cloud
 $terraform apply   -- 执行部署
@@ -183,8 +205,8 @@ $.....
   
 ![terraform apply ](docs/images/terraform_tencent_cloud_apply_production.png)  
 >根据上图步骤，如果你看到这个，说明已部署成功  
-![wecube ](docs/images/wecube.png)  
-##### 6.1.4 销毁部署 (一键销毁)  
+![wecube ](docs/images/wecube.png)  
+##### 6.1.4 销毁部署 (一键销毁)  
 参考5.1.4 销毁部署。  
    
     
