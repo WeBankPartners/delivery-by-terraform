@@ -628,8 +628,8 @@ resource "tencentcloud_instance" "instance_vdi" {
   availability_zone          = "${var.availability_zone_1}"
   security_groups            = ["${tencentcloud_security_group.PRD_MG.id}","${tencentcloud_security_group.PRD1_MG_OVDI.id}"]
   instance_type              = "S2.MEDIUM4"
-  #image_id                   = "img-9id7emv7"
-  image_id                   = "img-nmgxso98"
+  image_id                   = "img-9id7emv7"
+  #image_id                   = "img-nmgxso98"
   instance_name              = "PRD1_MG_OVDI_10.128.196.3_wecubevdi"
   vpc_id                     = "${tencentcloud_vpc.PRD_MG.id}"
   subnet_id                  = "${tencentcloud_subnet.PRD1_MG_OVDI.id}"
