@@ -667,7 +667,7 @@ CREATE TABLE `plugin_package_runtime_resources_docker` (
   `plugin_package_id` varchar(255) NOT NULL,
   `image_name` varchar(256) NOT NULL,
   `container_name` varchar(128) NOT NULL,
-  `port_bindings` varchar(64) NOT NULL,
+  `port_bindings` varchar(256) NOT NULL,
   `volume_bindings` varchar(1024) NOT NULL,
   `env_variables` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -817,6 +817,31 @@ CREATE TABLE `system_variables` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `favorites` (
+	`favorites_id` VARCHAR(255) NOT NULL,
+	`created_by` VARCHAR(255) NULL DEFAULT NULL,
+	`created_time` DATETIME NULL DEFAULT NULL,
+	`updated_by` VARCHAR(255) NULL DEFAULT NULL,
+	`updated_time` DATETIME NULL DEFAULT NULL,
+	`collection_name` VARCHAR(255) NOT NULL,
+	`data` BLOB NULL,
+	PRIMARY KEY (`favorites_id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `favorites_role` (
+	`id` VARCHAR(255) NOT NULL,
+	`favorites_id` VARCHAR(255) NULL DEFAULT NULL,
+	`permission` VARCHAR(255) NULL DEFAULT NULL,
+	`role_id` VARCHAR(255) NULL DEFAULT NULL,
+	`role_name` VARCHAR(255) NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
 
 
 SET FOREIGN_KEY_CHECKS = 1;

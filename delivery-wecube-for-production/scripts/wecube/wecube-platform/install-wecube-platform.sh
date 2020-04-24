@@ -27,7 +27,7 @@ mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mys
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${auth_server_database_name} -e "source /root/wecube-platform-scripts/database/auth-server/01.auth_init.sql" 
  
 yum install docker-compose -y
-./wecube-platform-generate-compose-yml.sh wecube-platform.cfg ${wecube_version}
+./wecube-platform-generate-compose-yml.sh $1 ${wecube_version}
 
 echo "export http_proxy='http://10.128.199.3:3128'" >> /etc/profile
 echo "export https_proxy='http://10.128.199.3:3128'" >> /etc/profile
@@ -49,7 +49,13 @@ docker-compose -f docker-compose.yml up -d
 docker run --name minio-client-mb -itd --entrypoint=/bin/sh ccr.ccs.tencentyun.com/webankpartners/mc
 docker exec minio-client-mb mc config host add wecubeS3 $s3_url $s3_access_key $s3_secret_key wecubeS3
 docker exec minio-client-mb mc mb wecubeS3/wecube-plugin-package-bucket
-docker rm -f minio-client-create
+docker rm -f minio-client-mb
+
+
+cat > /etc/systemd/system/docker.service.d/https-proxy.conf << EOF
+EOF
+systemctl daemon-reload
+systemctl restart docker
 
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf 
 echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf 
