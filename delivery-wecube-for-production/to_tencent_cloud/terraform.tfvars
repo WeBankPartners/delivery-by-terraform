@@ -7,5 +7,6 @@ availability_zone_2 = "ap-hongkong-2"
 #this name should end with '-appid', please use your own APP ID  
 cos_name = "wecube-bucket-1300047667"
 
-default_password              = "Wecube@123456"
-wecube_version                = "20200418215528-a603abf"
+default_password = "Wecube@123456"
+wecube_version   = "20200424131349-c32549a"
+current_ip       = "218.17.197.198"
