@@ -44,5 +44,13 @@ variable "default_password" {
 }
 variable "wecube_version" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default     = "20200413192927-d6227ce"
+  default     = "20200415142157-b330083"
+}
+variable "wecube_home_folder" {
+  description = "You can override the value by setup os env variable - 'TF_VAR_wecube_install_folder'"
+  default     = "/data/wecube"
+}
+variable "is_install_plugins" {
+  description = "You can override the value by setup os env variable - 'TF_VAR_is_install_plugins'"
+  default     = "Y"
 }

@@ -46,39 +46,14 @@ resource "huaweicloud_vpc_subnet_v1" "subnet_proxy" {
 }
 
 
-#创建安全组 - for WeCube Storage(sg_group_wecube_db)
-resource "huaweicloud_networking_secgroup_v2" "sg_group_wecube_db" {
-  name        = "SG_WECUBE_DB"
+#创建安全组 - for WeCube Storage(sg_group_wecube)
+resource "huaweicloud_networking_secgroup_v2" "sg_group_wecube" {
+  name        = "PRD_MG"
   description = "Wecube Security Group"
 }
 #创建安全组规则
-resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_for_db" {
-  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_db.id}"
-  direction         = "ingress"
-  remote_ip_prefix  = "10.128.192.0/19"
-  protocol          = "tcp"
-  ethertype         = "IPv4"
-  port_range_min    = 1
-  port_range_max    = 65535
-}
-resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_db_tcp_out" {
-  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_db.id}"
-  direction         = "egress"
-  remote_ip_prefix  = "10.128.192.0/19"
-  protocol          = "tcp"
-  ethertype         = "IPv4"
-  port_range_min    = 1
-  port_range_max    = 65535
-}
-
-#创建安全组  -- for WeCube APP
-resource "huaweicloud_networking_secgroup_v2" "sg_group_wecube_app" {
-  name        = "SG_WECUBE_APP"
-  description = "Wecube Security Group"
-}
-#创建安全组规则
-resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_for_app" {
-  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"
+resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_in" {
+  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube.id}"
   direction         = "ingress"
   remote_ip_prefix  = "10.128.192.0/19"
   protocol          = "tcp"
@@ -87,32 +62,34 @@ resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_for_app" {
   port_range_max    = 65535
 }
 resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_out" {
-  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"
+  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube.id}"
   direction         = "egress"
   remote_ip_prefix  = "10.128.192.0/19"
   protocol          = "tcp"
+  ethertype         = "IPv4"
   port_range_min    = 1
   port_range_max    = 65535
-  ethertype         = "IPv4"
 }
-
-#创建安全组  -- for VDI-windows
-resource "huaweicloud_networking_secgroup_v2" "sg_group_wecube_vdi" {
-  name        = "SG_WECUBE_VDI"
-  description = "Wecube Security Group"
-}
-#创建安全组规则
-resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_for_vdi" {
-  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"
+resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_in_sf" {
+  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube.id}"
   direction         = "ingress"
-  remote_ip_prefix  = "10.128.192.0/19"
+  remote_ip_prefix  = "10.128.0.0/17"
+  protocol          = "tcp"
+  ethertype         = "IPv4"
+  port_range_min    = 1
+  port_range_max    = 65535
+}
+resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_tcp_out_sf" {
+  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube.id}"
+  direction         = "egress"
+  remote_ip_prefix  = "10.128.0.0/17"
   protocol          = "tcp"
   ethertype         = "IPv4"
   port_range_min    = 1
   port_range_max    = 65535
 }
 resource "huaweicloud_networking_secgroup_rule_v2" "allow_3389_tcp" {
-  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"
+  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube.id}"
   direction         = "ingress"
   remote_ip_prefix  = "0.0.0.0/0"
   protocol          = "tcp"
@@ -121,7 +98,7 @@ resource "huaweicloud_networking_secgroup_rule_v2" "allow_3389_tcp" {
   ethertype         = "IPv4"
 }
 resource "huaweicloud_networking_secgroup_rule_v2" "allow_tcp_22_for_app" {
-  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"
+  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube.id}"
   direction         = "ingress"
   remote_ip_prefix  = "0.0.0.0/0"
   protocol          = "tcp"
@@ -130,7 +107,7 @@ resource "huaweicloud_networking_secgroup_rule_v2" "allow_tcp_22_for_app" {
   port_range_max    = 22
 }
 resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_vdi_tcp_out" {
-  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"
+  security_group_id = "${huaweicloud_networking_secgroup_v2.sg_group_wecube.id}"
   direction         = "egress"
   remote_ip_prefix  = "0.0.0.0/0"
   protocol          = "tcp"

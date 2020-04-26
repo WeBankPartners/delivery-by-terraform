@@ -1,12 +1,14 @@
 #!/bin/bash
 
-wecube_version=$2
+
 source $1
+wecube_version=$2
 
 echo "Starting wecube platform ..."
 
 echo "${mysql_user_name}@${mysql_server_addr}:${mysql_server_port}  ${mysql_user_password}"
 yum install docker -y
+
 systemctl start docker.service
 systemctl enable docker.service
 
@@ -16,8 +18,6 @@ mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mys
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/01.wecube.schema.sql" 
 
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/02.wecube.system.data.sql" 
-
-mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/03.core_flow_engine_init.sql" 
 
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -e "CREATE DATABASE IF NOT EXISTS ${auth_server_database_name}"
 
@@ -31,3 +31,9 @@ echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf 
 echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf 
 sysctl -p 
+
+echo "export http_proxy='http://10.128.199.3:3128'" >> /etc/profile
+echo "export https_proxy='http://10.128.199.3:3128'" >> /etc/profile
+
+source /etc/profile
+
