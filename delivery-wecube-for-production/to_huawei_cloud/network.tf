@@ -6,43 +6,43 @@ resource "huaweicloud_vpc_v1" "wecube_vpc" {
 
 #创建子网 - VDI Windows运行子网
 resource "huaweicloud_vpc_subnet_v1" "subnet_vdi" {
-  name       = "PRD1_MG_VDI"
-  cidr       = "10.128.192.0/24"
-  gateway_ip = "10.128.192.1"
-  vpc_id     = "${huaweicloud_vpc_v1.wecube_vpc.id}"
-  primary_dns = "${var.hw_dns1}"
-  secondary_dns = "${var.hw_dns2}"
-  availability_zone="${var.hw_az_master}"
+  name              = "PRD1_MG_VDI"
+  cidr              = "10.128.192.0/24"
+  gateway_ip        = "10.128.192.1"
+  vpc_id            = "${huaweicloud_vpc_v1.wecube_vpc.id}"
+  primary_dns       = "${var.hw_dns1}"
+  secondary_dns     = "${var.hw_dns2}"
+  availability_zone = "${var.hw_az_master}"
 }
 #创建子网- Wecube Platform组件运行的实例
 resource "huaweicloud_vpc_subnet_v1" "subnet_app" {
-  name       = "PRD1_MG_APP"
-  vpc_id     = "${huaweicloud_vpc_v1.wecube_vpc.id}"
-  cidr       = "10.128.202.0/24"
-  gateway_ip = "10.128.202.1"
-  primary_dns = "${var.hw_dns1}"
-  secondary_dns = "${var.hw_dns2}"
-  availability_zone="${var.hw_az_master}"
+  name              = "PRD1_MG_APP"
+  vpc_id            = "${huaweicloud_vpc_v1.wecube_vpc.id}"
+  cidr              = "10.128.202.0/24"
+  gateway_ip        = "10.128.202.1"
+  primary_dns       = "${var.hw_dns1}"
+  secondary_dns     = "${var.hw_dns2}"
+  availability_zone = "${var.hw_az_master}"
 }
 #创建子网 - WeCube持久化存储的子网
 resource "huaweicloud_vpc_subnet_v1" "subnet_db" {
-  name       = "PRD1_MG_RDB"
-  vpc_id     = "${huaweicloud_vpc_v1.wecube_vpc.id}"
-  cidr       = "10.128.206.0/24"
-  gateway_ip = "10.128.206.1"
-  primary_dns = "${var.hw_dns1}"
-  secondary_dns = "${var.hw_dns2}"
-  availability_zone="${var.hw_az_master}"
+  name              = "PRD1_MG_RDB"
+  vpc_id            = "${huaweicloud_vpc_v1.wecube_vpc.id}"
+  cidr              = "10.128.206.0/24"
+  gateway_ip        = "10.128.206.1"
+  primary_dns       = "${var.hw_dns1}"
+  secondary_dns     = "${var.hw_dns2}"
+  availability_zone = "${var.hw_az_master}"
 }
 #创建子网 - 
 resource "huaweicloud_vpc_subnet_v1" "subnet_proxy" {
-  name       = "PRD1_MG_PROXY"
-  vpc_id     = "${huaweicloud_vpc_v1.wecube_vpc.id}"
-  cidr       = "10.128.199.0/24"
-  gateway_ip = "10.128.199.1"
-  primary_dns = "${var.hw_dns1}"
-  secondary_dns = "${var.hw_dns2}"
-  availability_zone="${var.hw_az_master}"
+  name              = "PRD1_MG_PROXY"
+  vpc_id            = "${huaweicloud_vpc_v1.wecube_vpc.id}"
+  cidr              = "10.128.199.0/24"
+  gateway_ip        = "10.128.199.1"
+  primary_dns       = "${var.hw_dns1}"
+  secondary_dns     = "${var.hw_dns2}"
+  availability_zone = "${var.hw_az_master}"
 }
 
 
