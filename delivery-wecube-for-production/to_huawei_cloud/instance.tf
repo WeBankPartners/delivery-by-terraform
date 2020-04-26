@@ -78,8 +78,8 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_plugin" {
 
 #创建WeCube S3存储桶
 resource "huaweicloud_s3_bucket" "s3-wecube" {
-  bucket = "sg-s3-wecube"
-  acl    = "private"
+  bucket        = "sg-s3-wecube"
+  acl           = "private"
   force_destroy = true
 }
 
@@ -96,8 +96,8 @@ resource "huaweicloud_ecs_instance_v1" "instance_plugin_docker_host_a" {
   }
   availability_zone = "${var.hw_az_master}"
   security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"]
-  system_disk_size = 40
-  password         = "${var.default_password}"
+  system_disk_size  = 40
+  password          = "${var.default_password}"
 }
 
 #创建WeCube Platform主机
@@ -113,8 +113,8 @@ resource "huaweicloud_ecs_instance_v1" "instance_wecube_platform" {
   }
   availability_zone = "${var.hw_az_master}"
   security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_app.id}"]
-  system_disk_size = 40
-  password         = "${var.default_password}"
+  system_disk_size  = 40
+  password          = "${var.default_password}"
 }
 
 #创建Squid主机
@@ -130,7 +130,7 @@ resource "huaweicloud_compute_instance_v2" "instance_squid" {
   }
   availability_zone = "${var.hw_az_master}"
   security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_group_wecube_vdi.id}"]
-  admin_pass = "${var.default_password}"
+  admin_pass        = "${var.default_password}"
 }
 
 resource "huaweicloud_networking_floatingip_v2" "squid_public_ip" {
@@ -188,36 +188,36 @@ resource "null_resource" "null_instance" {
 
   provisioner "remote-exec" {
     inline = [
-	  "echo 'nameserver ${var.hw_dns1}'>>/etc/resolv.conf",
-	  "mkdir -p /etc/yum.repos.d/repo_bak/ && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repo_bak/",
-	  "curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.myhuaweicloud.com/repo/CentOS-Base-7.repo",
-	  "rpm -ivh http://mirrors.myhuaweicloud.com/epel/epel-release-latest-7.noarch.rpm",
-	  "wget -qO /etc/yum.repos.d/epel.repo http://mirrors.myhuaweicloud.com/repo/epel-7.repo",
-	  "yum clean metadata",
-	  "yum makecache",
-	  "yum install epel-release -y >/dev/null 2>&1",
+      "echo 'nameserver ${var.hw_dns1}'>>/etc/resolv.conf",
+      "mkdir -p /etc/yum.repos.d/repo_bak/ && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repo_bak/",
+      "curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.myhuaweicloud.com/repo/CentOS-Base-7.repo",
+      "rpm -ivh http://mirrors.myhuaweicloud.com/epel/epel-release-latest-7.noarch.rpm",
+      "wget -qO /etc/yum.repos.d/epel.repo http://mirrors.myhuaweicloud.com/repo/epel-7.repo",
+      "yum clean metadata",
+      "yum makecache",
+      "yum install epel-release -y >/dev/null 2>&1",
       "chmod -R +x /root/scripts/*",
-	  #"/root/scripts/init-host.sh",
+      #"/root/scripts/init-host.sh",
       "yum install dos2unix -y",
       "yum install -y sshpass",
       "yum install -y expect",
       "dos2unix /root/scripts/*",
       "dos2unix /root/scripts/wecube-platform/*",
       "cd /root/scripts",
-	  
+
       #初始化pluginDocker主机，并且安装S3
       "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} wecube-s3.tpl /root/",
-	  "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
+      "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
       "./init-plugin-resource-host.sh ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} > init.log 2>&1",
 
-	  "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
+      "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
       "./init-plugin-docker-host.sh ${huaweicloud_ecs_instance_v1.instance_plugin_docker_host_a.nics.0.ip_address} ${var.default_password} /root/scripts/wecube-platform/wecube-platform.cfg >> init.log 2>&1",
 
       #初始化WeCube主机
-	  "./utils-sed.sh '{{MYSQL_RESOURCE_SERVER_IP}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} /root/scripts/wecube-platform/database/platform-core/02.wecube.system.data.sql",
+      "./utils-sed.sh '{{MYSQL_RESOURCE_SERVER_IP}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} /root/scripts/wecube-platform/database/platform-core/02.wecube.system.data.sql",
       "./utils-sed.sh '{{S3_ACCESS_KEY}}' ${var.hw_access_key} /root/scripts/wecube-platform/wecube-platform.cfg",
-	  "./utils-sed.sh '{{S3_SECRET_KEY}}' ${var.hw_secret_key} /root/scripts/wecube-platform/wecube-platform.cfg",
-	  "./utils-sed.sh '{{S3_ENDPOINT}}' 'obs.'${var.hw_region}'.myhuaweicloud.com' /root/scripts/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{S3_SECRET_KEY}}' ${var.hw_secret_key} /root/scripts/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{S3_ENDPOINT}}' 'obs.'${var.hw_region}'.myhuaweicloud.com' /root/scripts/wecube-platform/wecube-platform.cfg",
       "./utils-sed.sh '{{WECUBE_HOST}}' ${huaweicloud_ecs_instance_v1.instance_wecube_platform.nics.0.ip_address} /root/scripts/wecube-platform/wecube-platform.cfg",
 
       "./utils-sed.sh '{{PLUGIN_HOST_PASSWORD}}' ${var.default_password} /root/scripts/wecube-platform/wecube-platform.cfg",
@@ -228,7 +228,7 @@ resource "null_resource" "null_instance" {
       "./utils-sed.sh '{{WECUBE_BUCKET}}' ${huaweicloud_s3_bucket.s3-wecube.bucket} /root/scripts/wecube-platform/wecube-platform.cfg",
 
 
-	  "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_wecube_platform.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
+      "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_wecube_platform.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
       "cp -r /root/scripts/wecube-platform /root/scripts/wecube-platform-scripts",
 
       "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.instance_wecube_platform.nics.0.ip_address} ${var.default_password} '-r /root/scripts/wecube-platform-scripts' /root/",
