@@ -13,6 +13,12 @@ sshpass -p ${password} ssh -o "StrictHostKeyChecking no" root@${remoteHost}  > /
 if [ ! -d ${wecube_plugin_deploy_path} ];then
       mkdir -p ${wecube_plugin_deploy_path}
 fi
+
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf 
+echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf 
+echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf 
+sysctl -p 
+
 chmod +x /root/init-host.sh && ./init-host.sh
 
 yum install docker -y

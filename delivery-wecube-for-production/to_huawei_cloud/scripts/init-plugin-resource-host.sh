@@ -10,8 +10,6 @@ s3_port=9001
 s3_access_key="access_key"
 s3_secret_key="secret_key"
 
-#echo "sshpass -p ${password} scp /root/scripts/wecube-s3.tpl /root/scripts/init-host.sh root@${remoteHost}:/root/"
-
 sshpass -p ${password} ssh -o "StrictHostKeyChecking no" root@${remoteHost}  > /dev/null 2>&1 << remoteCmd
 
 ls /root/  > install.log 2>&1
