@@ -393,7 +393,7 @@ resource "tencentcloud_instance" "docker_host_2" {
   security_groups            = ["${tencentcloud_security_group.PRD_MG.id}","${tencentcloud_security_group.PRD2_MG_APP.id}"]
   instance_type              = "S2.LARGE8"
   image_id                   = "img-oikl1tzv"
-  instance_name              = "PRD1_MG_APP_10.128.218.3_wecubeplugin"
+  instance_name              = "PRD2_MG_APP_10.128.218.3_wecubeplugin"
   vpc_id                     = "${tencentcloud_vpc.PRD_MG.id}"
   subnet_id                  = "${tencentcloud_subnet.PRD2_MG_APP.id}"
   system_disk_type           = "CLOUD_PREMIUM"
@@ -423,7 +423,7 @@ resource "tencentcloud_instance" "wecube_host_2" {
   security_groups            = ["${tencentcloud_security_group.PRD_MG.id}","${tencentcloud_security_group.PRD2_MG_APP.id}"]
   instance_type              = "S2.MEDIUM4"
   image_id                   = "img-oikl1tzv"
-  instance_name              = "PRD1_MG_APP_10.128.218.2_wecubecore"
+  instance_name              = "PRD2_MG_APP_10.128.218.2_wecubecore"
   vpc_id                     = "${tencentcloud_vpc.PRD_MG.id}"
   subnet_id                  = "${tencentcloud_subnet.PRD2_MG_APP.id}"
   system_disk_type           = "CLOUD_PREMIUM"
@@ -432,6 +432,7 @@ resource "tencentcloud_instance" "wecube_host_2" {
   password                   = "${var.default_password}"
 }
 
+#创建 负载均衡 internal_clb_1
 resource "tencentcloud_clb_instance" "internal_clb_1" {
   network_type = "INTERNAL"
   clb_name     = "PRD1_MG_LB_1"
@@ -528,10 +529,10 @@ resource "tencentcloud_clb_attachment" "http_listener_gateway1_rule_attachment2"
 }
 
 
-
+#创建 负载均衡 internal_clb_2
 resource "tencentcloud_clb_instance" "internal_clb_2" {
   network_type = "INTERNAL"
-  clb_name     = "PRD1_MG_LB_2"
+  clb_name     = "PRD2_MG_LB_2"
   project_id   = 0
   vpc_id       = "${tencentcloud_vpc.PRD_MG.id}"
   subnet_id    = "${tencentcloud_subnet.PRD2_MG_LB.id}"

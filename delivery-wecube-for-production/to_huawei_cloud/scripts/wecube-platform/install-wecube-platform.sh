@@ -16,12 +16,13 @@ yum install mysql -y
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -e "CREATE DATABASE IF NOT EXISTS ${mysql_server_database_name}"
 
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/01.wecube.schema.sql" 
-
+mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/03.core_flow_engine_init.sql"
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/02.wecube.system.data.sql" 
 
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -e "CREATE DATABASE IF NOT EXISTS ${auth_server_database_name}"
 
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${auth_server_database_name} -e "source /root/wecube-platform-scripts/database/auth-server/01.auth_init.sql" 
+mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${auth_server_database_name} -e "source /root/wecube-platform-scripts/database/auth-server/02.auth.system.data.sql" 
  
 yum install docker-compose -y
 ./wecube-platform-generate-compose-yml.sh wecube-platform.cfg ${wecube_version}

@@ -1,14 +1,14 @@
 #Your Access Key
-hw_access_key = "hw_access_key"
+hw_access_key = "Y361GSQB7SZPTRBZVAWI"
 
 #Your Secret Key
-hw_secret_key = "hw_secret_key"
+hw_secret_key = "1dYRU1DBVaYKSixG0kcw2kqIehgEGlEdT4nb7dLN"
 
 #Your Domain ID(Account ID)
-hw_domain_id = "hw_domain_id"
+hw_domain_id = "07bfdaf7d00026f90f8ac01118d2e880"
 
 #Your Project ID
-hw_project_id = "hw_project_id"
+hw_project_id = "07c34b94508010ff2fb3c011b4a986e3"
 
 #Specified the region which wecube deployed
 hw_region = "ap-southeast-3"
@@ -35,3 +35,7 @@ wecube_home_folder = "/data/wecube"
 
 #If "Y", it will auto launch plugins
 is_install_plugins = "Y"
+
+current_ip = "0.0.0.0/0"
+
+obs_bucket_name = "sg-s3-wecube"

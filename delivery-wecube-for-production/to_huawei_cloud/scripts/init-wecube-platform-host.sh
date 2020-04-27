@@ -9,16 +9,12 @@ remoteHost=$1
 password=$2
 image_version=$3
 
-curl -L https://github.com/WeBankPartners/wecube-platform/archive/master.zip -o wecube-source.zip
-
-unzip -o -q wecube-source.zip -d wecube-source
-
 mkdir -p wecube-platform/database/auth-server
 mkdir -p wecube-platform/database/platform-core
 
-cp -f wecube-source/wecube-platform-master/platform-core/src/main/resources/database/01.wecube.schema.sql wecube-platform/database/auth-server/01.wecube.schema.sql
-
-cp -f wecube-source/wecube-platform-master/platform-core/src/main/resources/database/03.wecube.flow_engine.schema.sql wecube-platform/database/platform-core/03.wecube.flow_engine.schema.sql
+curl -#L https://github.com/WeBankPartners/wecube-platform/raw/master/platform-core/src/main/resources/database/01.wecube.schema.sql -o wecube-platform/database/platform-core/01.wecube.schema.sql
+curl -#L https://github.com/WeBankPartners/wecube-platform/raw/master/platform-core/src/main/resources/database/03.wecube.flow_engine.schema.sql -o wecube-platform/database/platform-core/03.wecube.flow_engine.schema.sql
+curl -#L https://github.com/WeBankPartners/wecube-platform/raw/master/platform-auth-server/src/main/resources/database/01.auth.schema.sql -o wecube-platform/database/auth-server/01.auth_init.sql
 
 
 sshpass -p ${password} ssh -o "StrictHostKeyChecking no" root@${remoteHost}  > /dev/null 2>&1 << remoteCmd

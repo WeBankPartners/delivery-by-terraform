@@ -54,3 +54,11 @@ variable "is_install_plugins" {
   description = "You can override the value by setup os env variable - 'TF_VAR_is_install_plugins'"
   default     = "Y"
 }
+variable "current_ip" {
+  description = "You can override the value by setup os env variable - 'TF_VAR_current_ip'"
+  default     = "127.0.0.1"
+}
+variable "obs_bucket_name" {
+  description = "You can override the value by setup os env variable - 'TF_VAR_obs_bucket_name'"
+  default     = "sg-s3-wecube"
+}
