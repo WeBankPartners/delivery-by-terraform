@@ -9,6 +9,9 @@ remoteHost=$1
 password=$2
 image_version=$3
 
+config_file=$4
+init_db=$5
+
 mkdir -p wecube-platform/database/auth-server
 mkdir -p wecube-platform/database/platform-core
 
@@ -27,7 +30,7 @@ dos2unix /root/wecube-platform-scripts/*
 dos2unix /root/wecube-platform-scripts/auto-plugin-installer/*
 cd /root/wecube-platform-scripts/
 
-./install-wecube-platform.sh wecube-platform.cfg ${image_version} > install-wecube.log 2>&1
+./install-wecube-platform.sh ${config_file} ${image_version} ${init_db} > install-wecube.log 2>&1
 
 
 exit

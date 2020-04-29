@@ -16,7 +16,7 @@ echo "plugin_db_host=$plugin_db_host"
 echo "plugin_host=$plugin_host"
 echo "INSTALLER_DIR=$INSTALLER_DIR"
 
-if [ ${is_install_plugins} == "N" ];then
+if [ ${is_install_plugins} != "Y" ];then
   exit;
 fi
 

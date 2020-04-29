@@ -2,7 +2,6 @@
 
 echo "Starting WeCube plugin S3 ..."
 
-echo "remoteHost=$1,password=$2,s3_port=$3,s3_access_key=$4,s3_secret_key=$5"
 echo `pwd`
 remoteHost=$1
 password=$2

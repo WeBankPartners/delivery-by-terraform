@@ -1,6 +1,6 @@
 #mysql参数模板
 resource "huaweicloud_rds_parametergroup_v3" "wecube_db" {
-  name        = "wecube_db"
+  name        = "${var.rds_parametergroup_name}"
   description = "description_1"
   values = {
     character_set_server = "utf8mb4"
@@ -21,7 +21,7 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_wecube_core" {
     version  = "5.6"
     port     = "3306"
   }
-  name              = "PRD1_MG_RDB_wecubecore"
+  name              = "${var.rds_core_name}"
   security_group_id = "${huaweicloud_networking_secgroup_v2.sg_mg.id}"
   subnet_id         = "${huaweicloud_vpc_subnet_v1.subnet_db1.id}"
   vpc_id            = "${huaweicloud_vpc_v1.vpc_mg.id}"
@@ -30,7 +30,7 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_wecube_core" {
     size = 40
   }
 
-  # 2C4G 
+  # 2C4G HA
   flavor = "rds.mysql.c6.large.2.ha"
   # “async”为异步模式。“semisync”为半同步模式。
   ha_replication_mode = "semisync"
@@ -51,7 +51,7 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_plugin" {
     version  = "5.6"
     port     = "3306"
   }
-  name              = "PRD1_MG_RDB_wecubeplugin"
+  name              = "${var.rds_plugin_name}"
   security_group_id = "${huaweicloud_networking_secgroup_v2.sg_mg.id}"
   subnet_id         = "${huaweicloud_vpc_subnet_v1.subnet_db1.id}"
   vpc_id            = "${huaweicloud_vpc_v1.vpc_mg.id}"
@@ -60,7 +60,7 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_plugin" {
     size = 40
   }
 
-  # 2C4G 
+  # 2C4G HA
   flavor = "rds.mysql.c6.large.2.ha"
   # “async”为异步模式。“semisync”为半同步模式。
   ha_replication_mode = "semisync"
@@ -74,85 +74,85 @@ resource "huaweicloud_rds_instance_v3" "mysql_instance_plugin" {
 
 #创建WeCube S3存储桶
 resource "huaweicloud_s3_bucket" "s3-wecube" {
-  bucket        = "${var.obs_bucket_name}"
+  bucket        = "${var.s3_bucket_name}"
   acl           = "private"
   force_destroy = true
 }
 
 #创建WeCube plugin docker 主机
 resource "huaweicloud_ecs_instance_v1" "docker_host_1" {
-  name     = "PRD1_MG_APP_10.128.202.3_wecubeplugin"
+  name     = "${var.ecs_plugin_host1_name}"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G
-  #flavor = "s6.xlarge.2"
+  flavor = "s3.xlarge.2"
 
-  # for 4C16G
-  flavor = "s3.xlarge.4"
   vpc_id = "${huaweicloud_vpc_v1.vpc_mg.id}"
   nics {
     network_id = "${huaweicloud_vpc_subnet_v1.subnet_app1.id}"
     ip_address = "10.128.202.3"
   }
   availability_zone = "${var.hw_az_master}"
-  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_mg.id}", "${huaweicloud_networking_secgroup_v2.sg_app1.id}"]
+  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_mg.id}"]
   system_disk_size  = 40
+  system_disk_type  = "SAS"
   password          = "${var.default_password}"
 }
 resource "huaweicloud_ecs_instance_v1" "docker_host_2" {
-  name     = "PRD2_MG_APP_10.128.218.3_wecubeplugin"
+  name     = "${var.ecs_plugin_host2_name}"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 4C8G
-  #flavor = "s6.xlarge.2"
+  flavor = "s3.xlarge.2"
 
-  # for 4C16G
-  flavor = "s3.xlarge.4"
   vpc_id = "${huaweicloud_vpc_v1.vpc_mg.id}"
   nics {
     network_id = "${huaweicloud_vpc_subnet_v1.subnet_app2.id}"
     ip_address = "10.128.218.3"
   }
   availability_zone = "${var.hw_az_slave}"
-  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_mg.id}", "${huaweicloud_networking_secgroup_v2.sg_app2.id}"]
+  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_mg.id}"]
   system_disk_size  = 40
+  system_disk_type  = "SAS"
   password          = "${var.default_password}"
 }
 
 #创建WeCube Platform主机
 resource "huaweicloud_ecs_instance_v1" "wecube_host_1" {
-  name     = "PRD1_MG_APP_10.128.202.2_wecubecore"
+  name     = "${var.ecs_wecube_host1_name}"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 2C4G
-  flavor = "s6.large.2"
+  flavor = "s3.large.2"
   vpc_id = "${huaweicloud_vpc_v1.vpc_mg.id}"
   nics {
     network_id = "${huaweicloud_vpc_subnet_v1.subnet_app1.id}"
     ip_address = "10.128.202.2"
   }
   availability_zone = "${var.hw_az_master}"
-  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_mg.id}", "${huaweicloud_networking_secgroup_v2.sg_app1.id}"]
+  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_mg.id}"]
   system_disk_size  = 40
+  system_disk_type  = "SAS"
   password          = "${var.default_password}"
 }
 resource "huaweicloud_ecs_instance_v1" "wecube_host_2" {
-  name     = "PRD2_MG_APP_10.128.218.2_wecubecore"
+  name     = "${var.ecs_wecube_host2_name}"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 2C4G
-  flavor = "s6.large.2"
+  flavor = "s3.large.2"
   vpc_id = "${huaweicloud_vpc_v1.vpc_mg.id}"
   nics {
     network_id = "${huaweicloud_vpc_subnet_v1.subnet_app2.id}"
     ip_address = "10.128.218.2"
   }
   availability_zone = "${var.hw_az_slave}"
-  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_mg.id}", "${huaweicloud_networking_secgroup_v2.sg_app2.id}"]
+  security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_mg.id}"]
   system_disk_size  = 40
+  system_disk_type  = "SAS"
   password          = "${var.default_password}"
 }
 
 #创建 负载均衡 internal_elb_1
 resource "huaweicloud_lb_loadbalancer_v2" "internal_elb_1" {
-  vip_subnet_id = "${huaweicloud_vpc_subnet_v1.subnet_lb1.id}"
-  name          = "PRD1_MG_LB_1"
+  vip_subnet_id = "${huaweicloud_vpc_subnet_v1.subnet_lb1.subnet_id}"
+  name          = "${var.lb1_name}"
   vip_address   = "10.128.200.2"
 }
 #19090 portal监听器
@@ -160,10 +160,11 @@ resource "huaweicloud_lb_listener_v2" "http_listener_portal1" {
   protocol        = "HTTP"
   protocol_port   = 19090
   loadbalancer_id = "${huaweicloud_lb_loadbalancer_v2.internal_elb_1.id}"
-  name            = "http_listener_portal1"
+  name            = "${var.lb1_listener1_name}"
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb1_portal" {
+  name = "WeCube-Portal"
   protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_portal1.id}"
@@ -176,34 +177,35 @@ resource "huaweicloud_lb_member_v2" "member_host1_portal1" {
   address       = "${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address}"
   protocol_port = 19090
   pool_id       = "${huaweicloud_lb_pool_v2.pool_lb1_portal.id}"
-  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_lb1.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app1.subnet_id}"
 }
 resource "huaweicloud_lb_member_v2" "member_host2_portal1" {
   address       = "${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
   protocol_port = 19090
   pool_id       = "${huaweicloud_lb_pool_v2.pool_lb1_portal.id}"
-  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_lb1.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app2.subnet_id}"
 }
 #创建健康检查
 resource "huaweicloud_lb_monitor_v2" "monitor_host1_portal" {
-  pool_id      = "${huaweicloud_lb_pool_v2.pool_lb1_portal.id}"
-  type         = "HTTP"
-  delay        = 20
-  timeout      = 10
-  max_retries  = 5
-  url_path     = "/platform/v1/health-check"
+  pool_id        = "${huaweicloud_lb_pool_v2.pool_lb1_portal.id}"
+  type           = "HTTP"
+  delay          = 20
+  timeout        = 10
+  max_retries    = 5
+  url_path       = "/platform/v1/health-check"
   expected_codes = "200"
 }
 #19110 gateway监听器
 resource "huaweicloud_lb_listener_v2" "http_listener_gateway1" {
-  protocol        = "TCP"
+  protocol        = "HTTP"
   protocol_port   = 19110
   loadbalancer_id = "${huaweicloud_lb_loadbalancer_v2.internal_elb_1.id}"
-  name            = "http_listener_gateway1"
+  name            = "${var.lb1_listener2_name}"
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb1_gateway" {
-  protocol    = "TCP"
+  name = "WeCube-Gateway"
+  protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_gateway1.id}"
   persistence {
@@ -215,24 +217,25 @@ resource "huaweicloud_lb_member_v2" "member_host1_gateway1" {
   address       = "${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address}"
   protocol_port = 19110
   pool_id       = "${huaweicloud_lb_pool_v2.pool_lb1_gateway.id}"
-  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_lb1.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app1.subnet_id}"
 }
 resource "huaweicloud_lb_member_v2" "member_host2_gateway1" {
   address       = "${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
   protocol_port = 19110
   pool_id       = "${huaweicloud_lb_pool_v2.pool_lb1_gateway.id}"
-  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_lb1.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app2.subnet_id}"
 }
 #19100 core监听器
 resource "huaweicloud_lb_listener_v2" "http_listener_core1" {
-  protocol        = "TCP"
-  protocol_port   = 19110
+  protocol        = "HTTP"
+  protocol_port   = 19100
   loadbalancer_id = "${huaweicloud_lb_loadbalancer_v2.internal_elb_1.id}"
-  name            = "http_listener_core1"
+  name            = "${var.lb1_listener3_name}"
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb1_core" {
-  protocol    = "TCP"
+  name = "WeCube-Core"
+  protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_core1.id}"
   persistence {
@@ -244,24 +247,25 @@ resource "huaweicloud_lb_member_v2" "member_host1_core1" {
   address       = "${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address}"
   protocol_port = 19110
   pool_id       = "${huaweicloud_lb_pool_v2.pool_lb1_core.id}"
-  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_lb1.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app1.subnet_id}"
 }
 resource "huaweicloud_lb_member_v2" "member_host2_core1" {
   address       = "${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
   protocol_port = 19110
   pool_id       = "${huaweicloud_lb_pool_v2.pool_lb1_core.id}"
-  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_lb1.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app2.subnet_id}"
 }
 #19120 auth监听器
 resource "huaweicloud_lb_listener_v2" "http_listener_auth1" {
-  protocol        = "TCP"
-  protocol_port   = 19110
+  protocol        = "HTTP"
+  protocol_port   = 19120
   loadbalancer_id = "${huaweicloud_lb_loadbalancer_v2.internal_elb_1.id}"
-  name            = "http_listener_auth1"
+  name            = "${var.lb1_listener4_name}"
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb1_auth" {
-  protocol    = "TCP"
+  name = "WeCube-Auth"
+  protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_auth1.id}"
   persistence {
@@ -271,36 +275,163 @@ resource "huaweicloud_lb_pool_v2" "pool_lb1_auth" {
 #创建后端服务器
 resource "huaweicloud_lb_member_v2" "member_host1_auth1" {
   address       = "${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address}"
-  protocol_port = 19110
+  protocol_port = 19120
   pool_id       = "${huaweicloud_lb_pool_v2.pool_lb1_auth.id}"
-  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_lb1.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app1.subnet_id}"
 }
 resource "huaweicloud_lb_member_v2" "member_host2_auth1" {
   address       = "${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
-  protocol_port = 19110
+  protocol_port = 19120
   pool_id       = "${huaweicloud_lb_pool_v2.pool_lb1_auth.id}"
-  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_lb1.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app2.subnet_id}"
 }
 
 
 #创建 负载均衡 internal_elb_2
 resource "huaweicloud_lb_loadbalancer_v2" "internal_elb_2" {
-  vip_subnet_id = "${huaweicloud_vpc_subnet_v1.subnet_lb2.id}"
-  name          = "PRD2_MG_LB_2"
+  vip_subnet_id = "${huaweicloud_vpc_subnet_v1.subnet_lb2.subnet_id}"
+  name          = "${var.lb2_name}"
   vip_address   = "10.128.216.2"
 }
-
+#19090 portal监听器
+resource "huaweicloud_lb_listener_v2" "http_listener_portal2" {
+  protocol        = "HTTP"
+  protocol_port   = 19090
+  loadbalancer_id = "${huaweicloud_lb_loadbalancer_v2.internal_elb_2.id}"
+  name            = "${var.lb2_listener1_name}"
+}
+#创建后端服务组
+resource "huaweicloud_lb_pool_v2" "pool_lb2_portal" {
+  name = "WeCube-Portal"
+  protocol    = "HTTP"
+  lb_method   = "ROUND_ROBIN"
+  listener_id = "${huaweicloud_lb_listener_v2.http_listener_portal2.id}"
+  persistence {
+    type = "HTTP_COOKIE"
+  }
+}
+#创建后端服务器
+resource "huaweicloud_lb_member_v2" "member_host1_portal2" {
+  address       = "${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address}"
+  protocol_port = 19090
+  pool_id       = "${huaweicloud_lb_pool_v2.pool_lb2_portal.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app1.subnet_id}"
+}
+resource "huaweicloud_lb_member_v2" "member_host2_portal2" {
+  address       = "${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
+  protocol_port = 19090
+  pool_id       = "${huaweicloud_lb_pool_v2.pool_lb2_portal.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app2.subnet_id}"
+}
+#创建健康检查
+resource "huaweicloud_lb_monitor_v2" "monitor_host1_portal2" {
+  pool_id        = "${huaweicloud_lb_pool_v2.pool_lb2_portal.id}"
+  type           = "HTTP"
+  delay          = 20
+  timeout        = 10
+  max_retries    = 5
+  url_path       = "/platform/v1/health-check"
+  expected_codes = "200"
+}
+#19110 gateway监听器
+resource "huaweicloud_lb_listener_v2" "http_listener_gateway2" {
+  protocol        = "HTTP"
+  protocol_port   = 19110
+  loadbalancer_id = "${huaweicloud_lb_loadbalancer_v2.internal_elb_2.id}"
+  name            = "${var.lb2_listener2_name}"
+}
+#创建后端服务组
+resource "huaweicloud_lb_pool_v2" "pool_lb2_gateway" {
+  name = "WeCube-Gateway"
+  protocol    = "HTTP"
+  lb_method   = "ROUND_ROBIN"
+  listener_id = "${huaweicloud_lb_listener_v2.http_listener_gateway2.id}"
+  persistence {
+    type = "HTTP_COOKIE"
+  }
+}
+#创建后端服务器
+resource "huaweicloud_lb_member_v2" "member_host1_gateway2" {
+  address       = "${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address}"
+  protocol_port = 19110
+  pool_id       = "${huaweicloud_lb_pool_v2.pool_lb2_gateway.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app1.subnet_id}"
+}
+resource "huaweicloud_lb_member_v2" "member_host2_gateway2" {
+  address       = "${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
+  protocol_port = 19110
+  pool_id       = "${huaweicloud_lb_pool_v2.pool_lb2_gateway.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app2.subnet_id}"
+}
+#19100 core监听器
+resource "huaweicloud_lb_listener_v2" "http_listener_core2" {
+  protocol        = "HTTP"
+  protocol_port   = 19100
+  loadbalancer_id = "${huaweicloud_lb_loadbalancer_v2.internal_elb_2.id}"
+  name            = "${var.lb2_listener3_name}"
+}
+#创建后端服务组
+resource "huaweicloud_lb_pool_v2" "pool_lb2_core" {
+  name = "WeCube-Core"
+  protocol    = "HTTP"
+  lb_method   = "ROUND_ROBIN"
+  listener_id = "${huaweicloud_lb_listener_v2.http_listener_core2.id}"
+  persistence {
+    type = "HTTP_COOKIE"
+  }
+}
+#创建后端服务器
+resource "huaweicloud_lb_member_v2" "member_host1_core2" {
+  address       = "${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address}"
+  protocol_port = 19110
+  pool_id       = "${huaweicloud_lb_pool_v2.pool_lb2_core.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app1.subnet_id}"
+}
+resource "huaweicloud_lb_member_v2" "member_host2_core2" {
+  address       = "${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
+  protocol_port = 19110
+  pool_id       = "${huaweicloud_lb_pool_v2.pool_lb2_core.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app2.subnet_id}"
+}
+#19120 auth监听器
+resource "huaweicloud_lb_listener_v2" "http_listener_auth2" {
+  protocol        = "HTTP"
+  protocol_port   = 19120
+  loadbalancer_id = "${huaweicloud_lb_loadbalancer_v2.internal_elb_2.id}"
+  name            = "${var.lb2_listener4_name}"
+}
+#创建后端服务组
+resource "huaweicloud_lb_pool_v2" "pool_lb2_auth" {
+  name = "WeCube-Auth"
+  protocol    = "HTTP"
+  lb_method   = "ROUND_ROBIN"
+  listener_id = "${huaweicloud_lb_listener_v2.http_listener_auth2.id}"
+  persistence {
+    type = "HTTP_COOKIE"
+  }
+}
+#创建后端服务器
+resource "huaweicloud_lb_member_v2" "member_host1_auth2" {
+  address       = "${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address}"
+  protocol_port = 19120
+  pool_id       = "${huaweicloud_lb_pool_v2.pool_lb2_auth.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app1.subnet_id}"
+}
+resource "huaweicloud_lb_member_v2" "member_host2_auth2" {
+  address       = "${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
+  protocol_port = 19120
+  pool_id       = "${huaweicloud_lb_pool_v2.pool_lb2_auth.id}"
+  subnet_id     = "${huaweicloud_vpc_subnet_v1.subnet_app2.subnet_id}"
+}
 
 
 #创建Squid主机
 resource "huaweicloud_compute_instance_v2" "instance_squid" {
-  name     = "PRD1_MG_PROXY_wecubesquid"
+  name     = "${var.ecs_squid_name}"
   image_id = "bb352f17-03a8-4782-8429-6cdc1fc5207e"
   # for 1C1G
-  #flavor_name = "s6.small.1"
+  flavor_name = "s3.small.1"
 
-  # for 1C4G
-  flavor_name = "s3.medium.4"
   network {
     uuid           = "${huaweicloud_vpc_subnet_v1.subnet_proxy.id}"
     fixed_ip_v4    = "10.128.199.3"
@@ -322,10 +453,11 @@ resource "huaweicloud_compute_floatingip_associate_v2" "squid_public_ip" {
 
 #创建VDI-windows主机
 resource "huaweicloud_ecs_instance_v1" "instance_vdi" {
-  name     = "PRD1_MG_OVDI_wecubevdi"
+  name     = "${var.ecs_vdi_name}"
   image_id = "921808eb-6cde-46cc-8e22-87df97b099a0"
+  #image_id = "fc5f6efb-882b-40d7-92a5-89d6e8b5ceee"
   # for 2C4G
-  flavor = "s6.large.2"
+  flavor = "s3.large.2"
   vpc_id = "${huaweicloud_vpc_v1.vpc_mg.id}"
   nics {
     network_id = "${huaweicloud_vpc_subnet_v1.subnet_vdi.id}"
@@ -333,7 +465,7 @@ resource "huaweicloud_ecs_instance_v1" "instance_vdi" {
   }
   availability_zone = "${var.hw_az_master}"
   security_groups   = ["${huaweicloud_networking_secgroup_v2.sg_mg.id}", "${huaweicloud_networking_secgroup_v2.sg_ovdi.id}"]
-  #system_disk_type  = "co-p1"
+  #system_disk_type  = "SAS"
   system_disk_size = 40
   password         = "${var.default_password}"
 }
@@ -388,7 +520,14 @@ resource "null_resource" "null_instance" {
       #差异化变量替换
       "./utils-sed.sh '{{MYSQL_RESOURCE_SERVER_IP}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} ${var.wecube_home_folder}/wecube-platform/database/platform-core/02.wecube.system.data.sql",
       "./utils-sed.sh '{{GATEWAY_IP}}' ${huaweicloud_lb_loadbalancer_v2.internal_elb_1.vip_address} ${var.wecube_home_folder}/wecube-platform/database/platform-core/02.wecube.system.data.sql",
+      "./utils-sed.sh '{{DOCKER1_RESOURCE_SERVER_IP}}' ${huaweicloud_ecs_instance_v1.docker_host_1.nics.0.ip_address} ${var.wecube_home_folder}/wecube-platform/database/platform-core/02.wecube.system.data.sql",
+      "./utils-sed.sh '{{DOCKER2_RESOURCE_SERVER_IP}}' ${huaweicloud_ecs_instance_v1.docker_host_2.nics.0.ip_address} ${var.wecube_home_folder}/wecube-platform/database/platform-core/02.wecube.system.data.sql",
+      "./utils-sed.sh '{{S3_1_RESOURCE_SERVER_IP}}' ${huaweicloud_ecs_instance_v1.docker_host_1.nics.0.ip_address} ${var.wecube_home_folder}/wecube-platform/database/platform-core/02.wecube.system.data.sql",
+      "./utils-sed.sh '{{S3_2_RESOURCE_SERVER_IP}}' ${huaweicloud_ecs_instance_v1.docker_host_2.nics.0.ip_address} ${var.wecube_home_folder}/wecube-platform/database/platform-core/02.wecube.system.data.sql",
 
+
+      "./utils-sed.sh '{{RESOURCE_HOST1}}' ${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address} ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{RESOURCE_HOST2}}' ${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}  ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
       "./utils-sed.sh '{{S3_ACCESS_KEY}}' ${var.hw_access_key} ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
       "./utils-sed.sh '{{S3_SECRET_KEY}}' ${var.hw_secret_key} ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
       "./utils-sed.sh '{{S3_ENDPOINT}}' 'obs.'${var.hw_region}'.myhuaweicloud.com' ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
@@ -398,64 +537,69 @@ resource "null_resource" "null_instance" {
       "./utils-sed.sh '{{MYSQL_PASSWORD}}' ${var.default_password} ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
       "./utils-sed.sh '{{WECUBE_BUCKET}}' ${huaweicloud_s3_bucket.s3-wecube.bucket} ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
 
-      "cp /root/scripts/wecube/wecube-platform/wecube-platform.cfg /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
+      "cp ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg ${var.wecube_home_folder}/wecube-platform/wecube-platform-2.cfg",
       "./utils-sed.sh '{{WECUBE_HOST}}' ${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address} ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
       "./utils-sed.sh '{{LB_IP}}' ${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address} ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
-      #"./utils-sed.sh '{{LB_IP}}' ${huaweicloud_lb_loadbalancer_v2.internal_elb_1.vip_address} ${var.wecube_home_folder}/wecube-platform/wecube-platform.cfg",
 
       "./utils-sed.sh '{{WECUBE_HOST}}' ${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address} ${var.wecube_home_folder}/wecube-platform/wecube-platform-2.cfg",
       "./utils-sed.sh '{{LB_IP}}' ${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address} ${var.wecube_home_folder}/wecube-platform/wecube-platform-2.cfg",
-      #"./utils-sed.sh '{{LB_IP}}' ${huaweicloud_lb_loadbalancer_v2.internal_elb_1.vip_address} ${var.wecube_home_folder}/wecube-platform/wecube-platform-2.cfg",
-
 
       #CMDB数据回写前 - 变量替换
       "./utils-sed.sh '{{mysql_password}}' ${var.default_password} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{plugin_mysql_host}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{plugin_mysql_port}}' 3306 ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{cmdb_sql_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/cmdb/01.register_cmdb_asset_ids.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      
+      "./utils-sed.sh '{{project_id}}' ${var.hw_project_id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{az_master}}' ${var.hw_az_master} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{az_slave}}' ${var.hw_az_slave} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{wecube_vpc_asset_id}}' ${huaweicloud_vpc_v1.vpc_mg.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{vpc_name}}' ${var.vpc_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+         
       "./utils-sed.sh '{{security_group_asset_id}}' ${huaweicloud_networking_secgroup_v2.sg_mg.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_app1_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_app1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_rdb_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_db1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_vdi_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_proxy_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_proxy.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{wecube_core_host_id}}' ${huaweicloud_ecs_instance_v1.wecube_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{pluign_host_id}}' ${huaweicloud_ecs_instance_v1.docker_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{app1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_app1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{app2_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_app2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_app1_name}}' ${var.subnet_app1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_app2_name}}' ${var.subnet_app2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{db1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_db1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{db2_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_db2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_db1_name}}' ${var.subnet_db1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_db2_name}}' ${var.subnet_db2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{lb1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_lb1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{lb2_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_lb2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_lb1_name}}' ${var.subnet_lb1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_lb2_name}}' ${var.subnet_lb2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{vdi_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_vdi_name}}' ${var.subnet_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{proxy_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_proxy.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_proxy_name}}' ${var.subnet_proxy_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{wecube_host1_id}}' ${huaweicloud_ecs_instance_v1.wecube_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_host2_id}}' ${huaweicloud_ecs_instance_v1.wecube_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_wecube_host1_name}}' ${var.ecs_wecube_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_wecube_host2_name}}' ${var.ecs_wecube_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{pluign_host1_id}}' ${huaweicloud_ecs_instance_v1.docker_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{pluign_host2_id}}' ${huaweicloud_ecs_instance_v1.docker_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_plugin_host1_name}}' ${var.ecs_plugin_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_plugin_host2_name}}' ${var.ecs_plugin_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
       "./utils-sed.sh '{{squid_host_id}}' ${huaweicloud_compute_instance_v2.instance_squid.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{vdi_host_id}}' ${huaweicloud_ecs_instance_v1.instance_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{rdb_wecube_id}}' ${huaweicloud_rds_instance_v3.mysql_instance_wecube_core.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{rdb_plugin_id}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_squid_name}}' ${var.ecs_squid_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_vdi_name}}' ${var.ecs_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{allow_all_mg_tcp_in}}' ${huaweicloud_networking_secgroup_rule_v2.allow_all_mg_tcp_in.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_PROXY_ACCEPT_NDC_WAN_ingress22}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_PROXY_ACCEPT_NDC_WAN_ingress22.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_PROXY_ACCEPT_NDC_WAN_egress80-443}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_PROXY_ACCEPT_NDC_WAN_egress80-443.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_PROXY_ACCEPT_PRD_MG_egress22}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_PROXY_ACCEPT_PRD_MG_egress22.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_OVDI_ACCEPT_NDC_WAN_egress1-65535}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_OVDI_ACCEPT_NDC_WAN_egress1-65535.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_OVDI_ACCEPT_PRD1_MG_APP_egress80-19999}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_OVDI_ACCEPT_PRD1_MG_APP_egress80-19999.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_OVDI_ACCEPT_PRD2_MG_APP_egress80-19999}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_OVDI_ACCEPT_PRD2_MG_APP_egress80-19999.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_OVDI_ACCEPT_PRD1_MG_LB_egress80-19999}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_OVDI_ACCEPT_PRD1_MG_LB_egress80-19999.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_OVDI_ACCEPT_PRD2_MG_LB_egress80-19999}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_OVDI_ACCEPT_PRD2_MG_LB_egress80-19999.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_OVDI_ACCEPT_NDC_WAN_ingress22}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_OVDI_ACCEPT_NDC_WAN_ingress22.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_APP_ACCEPT_PRD1_MG_PROXY_egress3128}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_APP_ACCEPT_PRD1_MG_PROXY_egress3128.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_APP_ACCEPT_PRD1_MG_RDB_egress3306}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_APP_ACCEPT_PRD1_MG_RDB_egress3306.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_APP_ACCEPT_PRD2_MG_RDB_egress3306}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_APP_ACCEPT_PRD2_MG_RDB_egress3306.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_APP_ACCEPT_PRD1_MG_APP_egress1-65535}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_APP_ACCEPT_PRD1_MG_APP_egress1-65535.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_APP_ACCEPT_PRD2_MG_APP_egress1-65535}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_APP_ACCEPT_PRD2_MG_APP_egress1-65535.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_APP_ACCEPT_PRD1_MG_LB_egress80-19999}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_APP_ACCEPT_PRD1_MG_LB_egress80-19999.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD1_MG_APP_ACCEPT_PRD2_MG_LB_egress80-19999}}' ${huaweicloud_networking_secgroup_rule_v2.PRD1_MG_APP_ACCEPT_PRD2_MG_LB_egress80-19999.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD2_MG_APP_ACCEPT_PRD1_MG_PROXY_egress3128}}' ${huaweicloud_networking_secgroup_rule_v2.PRD2_MG_APP_ACCEPT_PRD1_MG_PROXY_egress3128.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD2_MG_APP_ACCEPT_PRD1_MG_RDB_egress3306}}' ${huaweicloud_networking_secgroup_rule_v2.PRD2_MG_APP_ACCEPT_PRD1_MG_RDB_egress3306.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD2_MG_APP_ACCEPT_PRD2_MG_RDB_egress3306}}' ${huaweicloud_networking_secgroup_rule_v2.PRD2_MG_APP_ACCEPT_PRD2_MG_RDB_egress3306.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD2_MG_APP_ACCEPT_PRD1_MG_APP_egress1-65535}}' ${huaweicloud_networking_secgroup_rule_v2.PRD2_MG_APP_ACCEPT_PRD1_MG_APP_egress1-65535.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD2_MG_APP_ACCEPT_PRD2_MG_APP_egress1-65535}}' ${huaweicloud_networking_secgroup_rule_v2.PRD2_MG_APP_ACCEPT_PRD2_MG_APP_egress1-65535.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD2_MG_APP_ACCEPT_PRD1_MG_LB_egress80-19999}}' ${huaweicloud_networking_secgroup_rule_v2.PRD2_MG_APP_ACCEPT_PRD1_MG_LB_egress80-19999.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{PRD2_MG_APP_ACCEPT_PRD2_MG_LB_egress80-19999}}' ${huaweicloud_networking_secgroup_rule_v2.PRD2_MG_APP_ACCEPT_PRD2_MG_LB_egress80-19999.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-
+      "./utils-sed.sh '{{rdb_wecubecore_id}}' ${huaweicloud_rds_instance_v3.mysql_instance_wecube_core.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{rdb_wecubeplugin_id}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{rds_core_name}}' ${var.rds_core_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{rds_plugin_name}}' ${var.rds_plugin_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
       "./utils-sed.sh '{{wecube_mysql_host}}' ${huaweicloud_rds_instance_v3.mysql_instance_wecube_core.private_ips.0} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{wecube_mysql_port}}' 3306 ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{wecube_sql_script_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/wecube/01.update_system_variables.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{project_id}}' ${var.hw_project_id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
       #初始化Squid主机
       "./utils-scp.sh root ${huaweicloud_compute_instance_v2.instance_squid.network.0.fixed_ip_v4} ${var.default_password} '-r ${var.wecube_home_folder}/auto-plugin-installer' /root/",
@@ -474,7 +618,11 @@ resource "null_resource" "null_instance" {
       "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
       "cp -r ${var.wecube_home_folder}/wecube-platform ${var.wecube_home_folder}/wecube-platform-scripts",
       "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address} ${var.default_password} '-r ${var.wecube_home_folder}/wecube-platform-scripts' /root/",
-      "./init-wecube-platform-host.sh ${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address} ${var.default_password} ${var.wecube_version} >> init.log 2>&1",
+      "./init-wecube-platform-host.sh ${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address} ${var.default_password} ${var.wecube_version} 'wecube-platform.cfg' 'Y' >> init.log 2>&1",
+
+      "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address} ${var.default_password} init-host.sh /root/",
+      "./utils-scp.sh root ${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address} ${var.default_password} '-r ${var.wecube_home_folder}/wecube-platform-scripts' /root/",
+      "./init-wecube-platform-host.sh ${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address} ${var.default_password} ${var.wecube_version} 'wecube-platform-2.cfg' 'N' >> init.log 2>&1",
 
       #auto run plugins
       "cd auto-plugin-installer",

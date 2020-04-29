@@ -58,7 +58,37 @@ variable "current_ip" {
   description = "You can override the value by setup os env variable - 'TF_VAR_current_ip'"
   default     = "127.0.0.1"
 }
-variable "obs_bucket_name" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_obs_bucket_name'"
-  default     = "sg-s3-wecube"
-}
+
+
+#for resource name
+variable "vpc_name" {}
+variable "subnet_vdi_name" {}
+variable "subnet_proxy_name" {}
+variable "subnet_lb1_name" {}
+variable "subnet_lb2_name" {}
+variable "subnet_app1_name" {}
+variable "subnet_app2_name" {}
+variable "subnet_db1_name" {}
+variable "subnet_db2_name" {}
+
+
+variable "rds_parametergroup_name" {}
+variable "rds_core_name" {}
+variable "rds_plugin_name" {}
+variable "ecs_plugin_host1_name" {}
+variable "s3_bucket_name" {}
+variable "ecs_plugin_host2_name" {}
+variable "ecs_wecube_host1_name" {}
+variable "ecs_wecube_host2_name" {}
+variable "ecs_squid_name" {}
+variable "ecs_vdi_name" {}
+variable "lb1_name" {}
+variable "lb1_listener1_name" {}
+variable "lb1_listener2_name" {}
+variable "lb1_listener3_name" {}
+variable "lb1_listener4_name" {}
+variable "lb2_name" {}
+variable "lb2_listener1_name" {}
+variable "lb2_listener2_name" {}
+variable "lb2_listener3_name" {}
+variable "lb2_listener4_name" {}
