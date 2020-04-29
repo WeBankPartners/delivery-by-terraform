@@ -5,10 +5,10 @@ hw_access_key = "hw_access_key"
 hw_secret_key = "hw_secret_key"
 
 #Your Domain ID(Account ID)
-hw_domain_id = "07bfdaf7d00026f90f8ac01118d2e880"
+hw_domain_id = "hw_domain_id"
 
 #Your Project ID
-hw_project_id = "07c34b94508010ff2fb3c011b4a986e3"
+hw_project_id = "hw_project_id"
 
 #Specified the region which wecube deployed
 hw_region = "ap-southeast-3"
