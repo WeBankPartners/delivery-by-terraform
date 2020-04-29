@@ -1,8 +1,8 @@
 #Your Access Key
-hw_access_key = "Y361GSQB7SZPTRBZVAWI"
+hw_access_key = "hw_access_key"
 
 #Your Secret Key
-hw_secret_key = "1dYRU1DBVaYKSixG0kcw2kqIehgEGlEdT4nb7dLN"
+hw_secret_key = "hw_secret_key"
 
 #Your Domain ID(Account ID)
 hw_domain_id = "07bfdaf7d00026f90f8ac01118d2e880"
