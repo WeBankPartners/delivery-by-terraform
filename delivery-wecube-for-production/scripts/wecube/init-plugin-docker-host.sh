@@ -21,7 +21,7 @@ mkdir -p /data/wecube/plugin
 mkdir -p /etc/systemd/system/docker.service.d
 cat > /etc/systemd/system/docker.service.d/https-proxy.conf << EOF
 [Service]
-Environment="HTTP_PROXY=http://10.128.199.3:3128" "HTTPS_PROXY=http://10.128.199.3:3128" "NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,"
+Environment="HTTP_PROXY=http://10.40.220.3:3128" "HTTPS_PROXY=http://10.40.220.3:3128" "NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,"
 EOF
 systemctl daemon-reload
 systemctl restart docker
@@ -32,8 +32,8 @@ cd /root/
 sed "s~{{S3_PORT}}~$s3_port~g" wecube-s3.tpl > wecube-s3.yml
 docker-compose -f wecube-s3.yml up -d
 
-echo "export http_proxy='http://10.128.199.3:3128'" >> /etc/profile
-echo "export https_proxy='http://10.128.199.3:3128'" >> /etc/profile
+echo "export http_proxy='http://10.40.220.3:3128'" >> /etc/profile
+echo "export https_proxy='http://10.40.220.3:3128'" >> /etc/profile
 
 source /etc/profile
 

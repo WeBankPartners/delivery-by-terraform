@@ -29,14 +29,14 @@ mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mys
 yum install docker-compose -y
 ./wecube-platform-generate-compose-yml.sh $1 ${wecube_version}
 
-echo "export http_proxy='http://10.128.199.3:3128'" >> /etc/profile
-echo "export https_proxy='http://10.128.199.3:3128'" >> /etc/profile
+echo "export http_proxy='http://10.40.220.3:3128'" >> /etc/profile
+echo "export https_proxy='http://10.40.220.3:3128'" >> /etc/profile
 
 source /etc/profile
 mkdir -p /etc/systemd/system/docker.service.d
 cat > /etc/systemd/system/docker.service.d/https-proxy.conf << EOF
 [Service]
-Environment="HTTP_PROXY=http://10.128.199.3:3128" "HTTPS_PROXY=http://10.128.199.3:3128" "NO_PROXY=localhost,127.0.0.1"
+Environment="HTTP_PROXY=http://10.40.220.3:3128" "HTTPS_PROXY=http://10.40.220.3:3128" "NO_PROXY=localhost,127.0.0.1"
 EOF
 systemctl daemon-reload
 systemctl restart docker

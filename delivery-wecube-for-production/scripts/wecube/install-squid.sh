@@ -22,13 +22,13 @@ sed -i "1i\acl whitelist dstdomain -i bm.tencentcloudapi.com" /etc/squid/squid.c
 sed -i "1i\acl whitelist dstdomain -i mongodb.tencentcloudapi.com" /etc/squid/squid.conf
 sed -i "1i\acl whitelist dstdomain -i ccr.ccs.tencentyun.com" /etc/squid/squid.conf
 sed -i "1i\acl whitelist dstdomain -i mirrors.tencentyun.com" /etc/squid/squid.conf
-sed -i "1i\acl internal dst 10.128.192.0/19 " /etc/squid/squid.conf
+sed -i "1i\acl internal dst 10.40.192.0/19 " /etc/squid/squid.conf
 sed -i "1i\acl whitelist_url url_regex -i http://ccr-.*" /etc/squid/squid.conf
 
 #sed -i "1i\acl whitelist_url url_regex -i *.myqcloud.com" /etc/squid/squid.conf
 
 sed -i "1i\acl whitelist dstdomain –i github.com" /etc/squid/squid.conf
-sed -i "1i\acl wecubehosts src 10.128.192.0/19      #vpc" /etc/squid/squid.conf
+sed -i "1i\acl wecubehosts src 10.40.192.0/19      #vpc" /etc/squid/squid.conf
 sed -i "1i\# squid config for WeCube" /etc/squid/squid.conf
 
 service squid reload
