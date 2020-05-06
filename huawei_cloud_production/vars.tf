@@ -1,9 +1,9 @@
 variable "hw_access_key" {
-  default = "hw_access_key"
+  # default = "hw_access_key"
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_access_key'"
 }
 variable "hw_secret_key" {
-  default = "hw_secret_key"
+  # default = "hw_secret_key"
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_secret_key'"
 }
 variable "hw_domain_id" {
