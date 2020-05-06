@@ -10,6 +10,7 @@ sed -i "1i\http_access allow wecubehosts whitelist" /etc/squid/squid.conf
 sed -i "1i\http_access allow wecubehosts whitelist_url" /etc/squid/squid.conf
 sed -i "1i\http_access allow wecubehosts internal" /etc/squid/squid.conf
 
+sed -i "1i\acl whitelist dstdomain -i vpc.api.qcloud.com" /etc/squid/squid.conf
 sed -i "1i\acl whitelist dstdomain -i cvm.tencentcloudapi.com" /etc/squid/squid.conf
 sed -i "1i\acl whitelist dstdomain -i cbs.tencentcloudapi.com" /etc/squid/squid.conf
 sed -i "1i\acl whitelist dstdomain -i redis.tencentcloudapi.com" /etc/squid/squid.conf
