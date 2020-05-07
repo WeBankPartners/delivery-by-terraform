@@ -1,0 +1,1 @@
+newman run 041_service_mgmt_request.postman_collection.json -e $1 -d $2 --delay-request 2000 --disable-unicode --reporters cli,htmlextra --reporter-htmlextra-export "newman/raise_service_mgmt_request.html"

@@ -1,0 +1,4 @@
+cl_name,cl_desc,pl_name,pl_desc,pl_ownerRole,rt_name,rt_desc
+信息安全部,信息安全部,基础安全服务,基础安全服务,SUPER_ADMIN,基础安全问题审批,基础安全问题审批
+信息安全部,信息安全部,业务安全服务,业务安全服务,PRD_OPS,xx业务安全问题,xx业务安全问题
+基础科技部,基础科技部,企业IT服务,企业IT服务,PRD_OPS,申请企业git账号,申请企业git账号

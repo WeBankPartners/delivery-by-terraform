@@ -1,0 +1,1 @@
+newman run 030_wecube_workflow_import.postman_collection.json -e $1 -d $2 --delay-request 2000 --disable-unicode --reporters cli,htmlextra --reporter-htmlextra-export "newman/wecube_import_workflows.html"

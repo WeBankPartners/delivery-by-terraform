@@ -492,7 +492,7 @@ resource "tencentcloud_instance" "instance_squid" {
   }
 
   provisioner "file" {
-    source      = "../scripts"
+    source      = "scripts"
     destination = "/root/scripts"
   }
 
@@ -502,9 +502,10 @@ resource "tencentcloud_instance" "instance_squid" {
       "yum install dos2unix -y",
       "yum install -y sshpass",
       "yum install -y expect",
-      "dos2unix /root/scripts/wecube/*",
+      # "dos2unix /root/scripts/wecube/*",
       "cd /root/scripts/wecube",
-      "pwd",
+      "find . -type f -exec dos2unix {} \;",
+      # "pwd",
 
       #初始化Squid主机
       "./install-squid.sh >> init.log 2>&1",
@@ -548,6 +549,71 @@ resource "tencentcloud_instance" "instance_squid" {
 
       "./utils-scp.sh root ${tencentcloud_instance.wecube_host_2.private_ip} ${var.default_password} '-r /root/scripts/wecube/wecube-platform-scripts' /root/",
       "./init-wecube-platform-host.sh ${tencentcloud_instance.wecube_host_2.private_ip} ${var.default_password} ${var.wecube_version} 'wecube-platform-2.cfg' 9000 >> init.log 2>&1"
+
+      
+      #CMDB数据回写前 - 变量替换
+      "./utils-sed.sh '{{mysql_password}}' ${var.default_password} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{plugin_mysql_host}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{cmdb_sql_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/cmdb/01.register_cmdb_asset_ids.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      
+      "./utils-sed.sh '{{project_id}}' ${var.hw_project_id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{az_master}}' ${var.hw_az_master} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{az_slave}}' ${var.hw_az_slave} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_vpc_asset_id}}' ${huaweicloud_vpc_v1.vpc_mg.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{vpc_name}}' ${var.vpc_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+         
+      "./utils-sed.sh '{{security_group_asset_id}}' ${huaweicloud_networking_secgroup_v2.sg_mg.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{app1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_app1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{app2_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_app2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_app1_name}}' ${var.subnet_app1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_app2_name}}' ${var.subnet_app2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{db1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_db1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{db2_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_db2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_db1_name}}' ${var.subnet_db1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_db2_name}}' ${var.subnet_db2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{lb1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_lb1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{lb2_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_lb2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_lb1_name}}' ${var.subnet_lb1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_lb2_name}}' ${var.subnet_lb2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{vdi_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_vdi_name}}' ${var.subnet_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{proxy_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_proxy.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{subnet_proxy_name}}' ${var.subnet_proxy_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{wecube_host1_id}}' ${huaweicloud_ecs_instance_v1.wecube_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_host2_id}}' ${huaweicloud_ecs_instance_v1.wecube_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_wecube_host1_name}}' ${var.ecs_wecube_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_wecube_host2_name}}' ${var.ecs_wecube_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{pluign_host1_id}}' ${huaweicloud_ecs_instance_v1.docker_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{pluign_host2_id}}' ${huaweicloud_ecs_instance_v1.docker_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_plugin_host1_name}}' ${var.ecs_plugin_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_plugin_host2_name}}' ${var.ecs_plugin_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{squid_host_id}}' ${huaweicloud_compute_instance_v2.instance_squid.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{vdi_host_id}}' ${huaweicloud_ecs_instance_v1.instance_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_squid_name}}' ${var.ecs_squid_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{ecs_vdi_name}}' ${var.ecs_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{rdb_wecubecore_id}}' ${huaweicloud_rds_instance_v3.mysql_instance_wecube_core.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{rdb_wecubeplugin_id}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{rds_core_name}}' ${var.rds_core_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{rds_plugin_name}}' ${var.rds_plugin_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{wecube_mysql_host}}' ${huaweicloud_rds_instance_v3.mysql_instance_wecube_core.private_ips.0} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_mysql_port}}' 3306 ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_sql_script_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/wecube/01.update_system_variables.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{WECUBE_VERSION}}' 3306 ${var.wecube_version}/auto-plugin-installer/db.cfg",
+      
+      #auto run plugins
+      "cd auto-plugin-installer",
+      "./auto-run-plugins.sh 'Y' ${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address} ${var.default_password} ${var.wecube_home_folder} ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} ${huaweicloud_ecs_instance_v1.docker_host_1.nics.0.ip_address} ${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
+
     ]
   }
 }

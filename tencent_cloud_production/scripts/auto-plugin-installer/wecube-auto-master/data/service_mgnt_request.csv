@@ -1,0 +1,4 @@
+name,emergency,description,roleId,envType,template_name
+xx项目组申请企业git账号,normal,xx项目组申请企业git账号,SUPER_ADMIN,test,申请企业git账号
+xx APP安全扫描,normal,xx APP安全扫描,SUPER_ADMIN,test,xx业务安全问题
+生产环境sudo权限申请,urgent,生产环境sudo权限申请,SUPER_ADMIN,production,xx业务安全问题

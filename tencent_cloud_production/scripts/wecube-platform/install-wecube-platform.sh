@@ -51,7 +51,6 @@ docker exec minio-client-mb mc config host add wecubeS3 $s3_url $s3_access_key $
 docker exec minio-client-mb mc mb wecubeS3/wecube-plugin-package-bucket
 docker rm -f minio-client-mb
 
-
 cat > /etc/systemd/system/docker.service.d/https-proxy.conf << EOF
 EOF
 systemctl daemon-reload

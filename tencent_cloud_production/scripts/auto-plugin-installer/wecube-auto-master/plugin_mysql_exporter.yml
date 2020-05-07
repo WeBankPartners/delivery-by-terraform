@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  mysqld_exporter:
+    image: prom/mysqld-exporter:latest
+    container_name: plugin_mysqld_exporter
+    environment:
+      - DATA_SOURCE_NAME=root:Abcd1234@({{PLUGIN_HOST}}:3306)/
+    ports:
+      - "9104:9104"
+    networks:
+      - dbnode
+    version: '2'
+
+services:
+  mysqld_exporter:
+    image: prom/mysqld-exporter:latest
+    container_name: plugin_mysqld_exporter
+    environment:
+      - DATA_SOURCE_NAME=root:Abcd1234@({{PLUGIN_HOST}}:3306)/
+    ports:
+      - "9104:9104"
+    networks:
+      - dbnode
+    command: ["-web.listen-address=:9104", "-collect.global_status=true", "-collect.global_variables=false", "-collect.slave_status=false", "-collect.info_schema.tables=false", "-collect.binlog_size=false", "-collect.info_schema.processlist=false", "-collect.info_schema.userstats=false", "-collect.info_schema.tables=false", "-collect.auto_increment.columns=false", "-collect.info_schema.tablestats=false", "-collect.perf_schema.file_events=false", "-collect.perf_schema.eventsstatements=false", "-collect.perf_schema.indexiowaits=false", "-collect.perf_schema.tableiowaits=false", "-collect.perf_schema.tablelocks=false", "-collect.perf_schema.eventswaits=false"]
+command: ["-web.listen-address=:9104", "-collect.global_status=true", "-collect.global_variables=false", "-collect.slave_status=false", "-collect.info_schema.tables=false", "-collect.binlog_size=false", "-collect.info_schema.processlist=false", "-collect.info_schema.userstats=false", "-collect.info_schema.tables=false", "-collect.auto_increment.columns=false", "-collect.info_schema.tablestats=false", "-collect.perf_schema.file_events=false", "-collect.perf_schema.eventsstatements=false", "-collect.perf_schema.indexiowaits=false", "-collect.perf_schema.tableiowaits=false", "-collect.perf_schema.tablelocks=false", "-collect.perf_schema.eventswaits=false"]

@@ -1,0 +1,720 @@
+{
+	"info": {
+		"_postman_id": "1f4cdc55-66d6-4097-8085-977d8172b31a",
+		"name": "010_wecube_init",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c9c21754-dc6e-48af-ba46-ebff205a11a2",
+						"exec": [
+							"pm.test(\"login\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"    pm.environment.set(\"authorization\", postman.getResponseHeader(\"Authorization\"));",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Origin",
+						"value": "http://111.230.161.237:29090"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"{{username}}\",\"password\":\"{{password}}\"}"
+				},
+				"url": {
+					"raw": "http://{{domain}}/auth/v1/api/login",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"auth",
+						"v1",
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my-menus",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "604706f3-fb44-4dee-a846-1fab19af8cf4",
+						"exec": [
+							"pm.test(\"my menus\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					}
+				],
+				"url": {
+					"raw": "http://{{domain}}/platform/v1/my-menus",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"v1",
+						"my-menus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resource-files",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b0b4458f-aa0d-4d28-8738-d783b0b0518b",
+						"exec": [
+							"pm.test(\"resource file\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					}
+				],
+				"url": {
+					"raw": "http://{{domain}}/platform/v1/resource-files",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"v1",
+						"resource-files"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert_plugin_docker",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2e28eea0-4d99-421c-8cdd-d6bd1276d4fd",
+						"exec": [
+							"pm.test(\"insert plugin docker\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Origin",
+						"value": "http://111.230.161.237:29090"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"host\":\"{{plugin_host}}\",\"isAllocated\":true,\"loginPassword\":\"Abcd1234\",\"loginUsername\":\"wecube\",\"name\":\"plugin_docker_host\",\"port\":\"22\",\"purpose\":\"docker host for plugin\",\"status\":\"active\",\"type\":\"docker\"}]"
+				},
+				"url": {
+					"raw": "http://{{domain}}/platform/resource/servers/create",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"resource",
+						"servers",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert_plugin_mysql",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "47642b47-0b3d-4abe-b677-337a7e35db5c",
+						"exec": [
+							"pm.test(\"insert plugin mysql\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Origin",
+						"value": "http://111.230.161.237:29090"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"host\":\"{{plugin_host}}\",\"isAllocated\":true,\"loginPassword\":\"Abcd1234\",\"loginUsername\":\"root\",\"name\":\"plugin_mysql_host\",\"port\":\"3306\",\"purpose\":\"mysql for plugin\",\"status\":\"active\",\"type\":\"mysql\"}]"
+				},
+				"url": {
+					"raw": "http://{{domain}}/platform/resource/servers/create",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"resource",
+						"servers",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert_plugin_s3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "102caae1-22e4-4147-8d70-fdc31907f7a4",
+						"exec": [
+							"pm.test(\"insert plugin s3\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Origin",
+						"value": "http://111.230.161.237:29090"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"host\":\"{{wecube_host}}\",\"isAllocated\":true,\"loginPassword\":\"secret_key\",\"loginUsername\":\"access_key\",\"name\":\"plugin_s3\",\"port\":\"9000\",\"purpose\":\"s3 service\",\"status\":\"active\",\"type\":\"s3\"}]"
+				},
+				"url": {
+					"raw": "http://{{domain}}/platform/resource/servers/create",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"resource",
+						"servers",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "system_var_create_s3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "37430feb-974e-4b10-88c2-03e888dc3b60",
+						"exec": [
+							"pm.test(\"create system var (s3 server url)\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Origin",
+						"value": "http://111.230.161.237:29090"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"defaultValue\":\"http://{{wecube_host}}:9000\",\"name\":\"S3_SERVER_URL\",\"value\":\"http://{{wecube_host}}:9000\",\"scope\":\"global\",\"source\":\"auto_script\",\"status\":\"active\"}]"
+				},
+				"url": {
+					"raw": "http://{{domain}}/platform/v1/system-variables/create",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"v1",
+						"system-variables",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "system_var_create_s3_secrect_key",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "92c56e55-bf70-4b7d-8fb8-090923be34f5",
+						"exec": [
+							"pm.test(\"create system var (s3 secrect key)\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Origin",
+						"value": "http://111.230.161.237:29090"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"defaultValue\":\"secret_key\",\"name\":\"S3_SECRET_KEY\",\"value\":\"secret_key\",\"scope\":\"global\",\"source\":\"auto_script\",\"status\":\"active\"}]"
+				},
+				"url": {
+					"raw": "http://{{domain}}/platform/v1/system-variables/create",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"v1",
+						"system-variables",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "system_var_create_s3_access_key",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "223ab904-8326-4447-b865-f364093a43a5",
+						"exec": [
+							"pm.test(\"create system var (s3 access key)\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Origin",
+						"value": "http://111.230.161.237:29090"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"defaultValue\":\"access_key\",\"name\":\"S3_ACCESS_KEY\",\"value\":\"access_key\",\"scope\":\"global\",\"source\":\"auto_script\",\"status\":\"active\"}]"
+				},
+				"url": {
+					"raw": "http://{{domain}}/platform/v1/system-variables/create",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"v1",
+						"system-variables",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "system_var_update_core_addr",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "39dd86ba-bcb5-42e0-845f-4590ce10ecbc",
+						"exec": [
+							"pm.test(\"update core_addr var)\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "808840e1-aed1-4ce2-9b6d-3fb032e6d1b2",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "accept-encoding",
+						"value": "gzip, deflate"
+					},
+					{
+						"key": "accept-language",
+						"value": "en,zh-CN;q=0.9,zh;q=0.8"
+					},
+					{
+						"key": "authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json;charset=UTF-8"
+					},
+					{
+						"key": "cookie",
+						"value": "JSESSIONID=2F6F1C677FC6AE524CE88CD44120D5AD; DokuWiki=5d2b2ea77997ce7cee2a7765004242aa; DW68700bfd16c2027de7de74a5a8202a6f=Z3JheQ%3D%3D%7C1%7CLdbykUFnANNJZ5pV3HtaAKvcJBM6E6QiP8zvSGS5HZk%3D"
+					},
+					{
+						"key": "host",
+						"value": "120.79.2.48:30001"
+					},
+					{
+						"key": "origin",
+						"value": "http://120.79.2.48:30001"
+					},
+					{
+						"key": "proxy-connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "referer",
+						"value": "http://120.79.2.48:30001/"
+					},
+					{
+						"key": "user-agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"id\":\"global__CORE_ADDR\",\"defaultValue\":\"http://{{wecube_host}}:19090\",\"name\":\"CORE_ADDR\",\"scope\":\"global\",\"source\":\"system\",\"status\":\"active\"}]"
+				},
+				"url": {
+					"raw": "http://{{domain}}/platform/v1/system-variables/update",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"v1",
+						"system-variables",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "system_var_update_gateway_url",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "39dd86ba-bcb5-42e0-845f-4590ce10ecbc",
+						"exec": [
+							"pm.test(\"update gateway server url var)\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "808840e1-aed1-4ce2-9b6d-3fb032e6d1b2",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "accept-encoding",
+						"value": "gzip, deflate"
+					},
+					{
+						"key": "accept-language",
+						"value": "en,zh-CN;q=0.9,zh;q=0.8"
+					},
+					{
+						"key": "authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json;charset=UTF-8"
+					},
+					{
+						"key": "cookie",
+						"value": "JSESSIONID=2F6F1C677FC6AE524CE88CD44120D5AD; DokuWiki=5d2b2ea77997ce7cee2a7765004242aa; DW68700bfd16c2027de7de74a5a8202a6f=Z3JheQ%3D%3D%7C1%7CLdbykUFnANNJZ5pV3HtaAKvcJBM6E6QiP8zvSGS5HZk%3D"
+					},
+					{
+						"key": "host",
+						"value": "120.79.2.48:30001"
+					},
+					{
+						"key": "origin",
+						"value": "http://120.79.2.48:30001"
+					},
+					{
+						"key": "proxy-connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "referer",
+						"value": "http://120.79.2.48:30001/"
+					},
+					{
+						"key": "user-agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"id\":\"global__GATEWAY_URL\",\"defaultValue\":\"http://{{wecube_host}}:19110\",\"name\":\"GATEWAY_URL\",\"scope\":\"global\",\"source\":\"system\",\"status\":\"active\"}]"
+				},
+				"url": {
+					"raw": "http://{{domain}}/platform/v1/system-variables/update",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"v1",
+						"system-variables",
+						"update"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
