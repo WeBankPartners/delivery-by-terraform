@@ -498,14 +498,14 @@ resource "tencentcloud_instance" "instance_squid" {
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /root/scripts/wecube/*.sh",
+      "chmod +x /root/scripts/*.sh",
       "yum install dos2unix -y",
       "yum install -y sshpass",
       "yum install -y expect",
-      # "dos2unix /root/scripts/wecube/*",
-      "cd /root/scripts/wecube",
-      "find . -type f -exec dos2unix {} \;",
-      # "pwd",
+      # "dos2unix /root/scripts/*",
+      "cd /root/scripts",
+      "dos2unix /root/scripts/*",
+      "./dos2unis-all.sh",
 
       #初始化Squid主机
       "./install-squid.sh >> init.log 2>&1",
@@ -517,94 +517,94 @@ resource "tencentcloud_instance" "instance_squid" {
       "./init-plugin-docker-host.sh ${tencentcloud_instance.docker_host_2.private_ip} ${var.default_password} 9001 >> init.log 2>&1",
 
       #初始化WeCube主机
-      "cp /root/scripts/wecube/wecube-platform/wecube-platform.cfg /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
+      "cp /root/scripts/wecube-platform/wecube-platform.cfg /root/scripts/wecube-platform/wecube-platform-2.cfg",
 
-      "./utils-sed.sh '{{PLUGIN_MYSQL_IP}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.intranet_ip} /root/scripts/wecube/wecube-platform/database/platform-core/02.wecube.system.data.sql",
-      "./utils-sed.sh '{{GATEWAY_HOST}}' ${tencentcloud_clb_instance.internal_clb_1.clb_vips.0} /root/scripts/wecube/wecube-platform/database/platform-core/02.wecube.system.data.sql",
+      "./utils-sed.sh '{{PLUGIN_MYSQL_IP}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.intranet_ip} /root/scripts/wecube-platform/database/platform-core/02.wecube.system.data.sql",
+      "./utils-sed.sh '{{GATEWAY_HOST}}' ${tencentcloud_clb_instance.internal_clb_1.clb_vips.0} /root/scripts/wecube-platform/database/platform-core/02.wecube.system.data.sql",
 
 
-      "./utils-sed.sh '{{S3_ENDPOINT}}' 'http://'${tencentcloud_instance.wecube_host_1.private_ip}':9000' /root/scripts/wecube/wecube-platform/wecube-platform.cfg",
-      "./utils-sed.sh '{{WECUBE_HOST}}' ${tencentcloud_instance.wecube_host_1.private_ip} /root/scripts/wecube/wecube-platform/wecube-platform.cfg",
-      "./utils-sed.sh '{{RESOURCE_HOST1}}' ${tencentcloud_instance.wecube_host_1.private_ip} /root/scripts/wecube/wecube-platform/wecube-platform.cfg",
-      "./utils-sed.sh '{{RESOURCE_HOST2}}' ${tencentcloud_instance.wecube_host_2.private_ip} /root/scripts/wecube/wecube-platform/wecube-platform.cfg",
-      "./utils-sed.sh '{{STATIC_RESOURCE_SERVER_PASSWORD}}' ${var.default_password} /root/scripts/wecube/wecube-platform/wecube-platform.cfg",
-      "./utils-sed.sh '{{MYSQL_ADDR}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_ip} /root/scripts/wecube/wecube-platform/wecube-platform.cfg",
-      "./utils-sed.sh '{{MYSQL_PORT}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_port} /root/scripts/wecube/wecube-platform/wecube-platform.cfg",
-      "./utils-sed.sh '{{MYSQL_PASSWORD}}' ${var.default_password} /root/scripts/wecube/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{S3_ENDPOINT}}' 'http://'${tencentcloud_instance.wecube_host_1.private_ip}':9000' /root/scripts/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{WECUBE_HOST}}' ${tencentcloud_instance.wecube_host_1.private_ip} /root/scripts/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{RESOURCE_HOST1}}' ${tencentcloud_instance.wecube_host_1.private_ip} /root/scripts/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{RESOURCE_HOST2}}' ${tencentcloud_instance.wecube_host_2.private_ip} /root/scripts/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{STATIC_RESOURCE_SERVER_PASSWORD}}' ${var.default_password} /root/scripts/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{MYSQL_ADDR}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_ip} /root/scripts/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{MYSQL_PORT}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_port} /root/scripts/wecube-platform/wecube-platform.cfg",
+      "./utils-sed.sh '{{MYSQL_PASSWORD}}' ${var.default_password} /root/scripts/wecube-platform/wecube-platform.cfg",
 
-      "./utils-sed.sh '{{S3_ENDPOINT}}' 'http://'${tencentcloud_instance.wecube_host_2.private_ip}':9000' /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
-      "./utils-sed.sh '{{WECUBE_HOST}}' ${tencentcloud_instance.wecube_host_2.private_ip} /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
-      "./utils-sed.sh '{{RESOURCE_HOST1}}' ${tencentcloud_instance.wecube_host_1.private_ip} /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
-      "./utils-sed.sh '{{RESOURCE_HOST2}}' ${tencentcloud_instance.wecube_host_2.private_ip} /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
-      "./utils-sed.sh '{{STATIC_RESOURCE_SERVER_PASSWORD}}' ${var.default_password} /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
-      "./utils-sed.sh '{{MYSQL_ADDR}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_ip} /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
-      "./utils-sed.sh '{{MYSQL_PORT}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_port} /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
-      "./utils-sed.sh '{{MYSQL_PASSWORD}}' ${var.default_password} /root/scripts/wecube/wecube-platform/wecube-platform-2.cfg",
+      "./utils-sed.sh '{{S3_ENDPOINT}}' 'http://'${tencentcloud_instance.wecube_host_2.private_ip}':9000' /root/scripts/wecube-platform/wecube-platform-2.cfg",
+      "./utils-sed.sh '{{WECUBE_HOST}}' ${tencentcloud_instance.wecube_host_2.private_ip} /root/scripts/wecube-platform/wecube-platform-2.cfg",
+      "./utils-sed.sh '{{RESOURCE_HOST1}}' ${tencentcloud_instance.wecube_host_1.private_ip} /root/scripts/wecube-platform/wecube-platform-2.cfg",
+      "./utils-sed.sh '{{RESOURCE_HOST2}}' ${tencentcloud_instance.wecube_host_2.private_ip} /root/scripts/wecube-platform/wecube-platform-2.cfg",
+      "./utils-sed.sh '{{STATIC_RESOURCE_SERVER_PASSWORD}}' ${var.default_password} /root/scripts/wecube-platform/wecube-platform-2.cfg",
+      "./utils-sed.sh '{{MYSQL_ADDR}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_ip} /root/scripts/wecube-platform/wecube-platform-2.cfg",
+      "./utils-sed.sh '{{MYSQL_PORT}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_port} /root/scripts/wecube-platform/wecube-platform-2.cfg",
+      "./utils-sed.sh '{{MYSQL_PASSWORD}}' ${var.default_password} /root/scripts/wecube-platform/wecube-platform-2.cfg",
 
-      "cp -r /root/scripts/wecube/wecube-platform /root/scripts/wecube/wecube-platform-scripts",
-      "dos2unix /root/scripts/wecube/wecube-platform-scripts/*",
+      "cp -r /root/scripts/wecube-platform /root/scripts/wecube-platform-scripts",
+      "dos2unix /root/scripts/wecube-platform-scripts/*",
 
-      "./utils-scp.sh root ${tencentcloud_instance.wecube_host_1.private_ip} ${var.default_password} '-r /root/scripts/wecube/wecube-platform-scripts' /root/",
+      "./utils-scp.sh root ${tencentcloud_instance.wecube_host_1.private_ip} ${var.default_password} '-r /root/scripts/wecube-platform-scripts' /root/",
       "./init-wecube-platform-host.sh ${tencentcloud_instance.wecube_host_1.private_ip} ${var.default_password} ${var.wecube_version} 'wecube-platform.cfg' 9000 >> init.log 2>&1",
 
-      "./utils-scp.sh root ${tencentcloud_instance.wecube_host_2.private_ip} ${var.default_password} '-r /root/scripts/wecube/wecube-platform-scripts' /root/",
-      "./init-wecube-platform-host.sh ${tencentcloud_instance.wecube_host_2.private_ip} ${var.default_password} ${var.wecube_version} 'wecube-platform-2.cfg' 9000 >> init.log 2>&1"
+      "./utils-scp.sh root ${tencentcloud_instance.wecube_host_2.private_ip} ${var.default_password} '-r /root/scripts/wecube-platform-scripts' /root/",
+      "./init-wecube-platform-host.sh ${tencentcloud_instance.wecube_host_2.private_ip} ${var.default_password} ${var.wecube_version} 'wecube-platform-2.cfg' 9000 >> init.log 2>&1",
 
       
       #CMDB数据回写前 - 变量替换
       "./utils-sed.sh '{{mysql_password}}' ${var.default_password} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{plugin_mysql_host}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{plugin_mysql_host}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.intranet_ip} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{cmdb_sql_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/cmdb/01.register_cmdb_asset_ids.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       
       "./utils-sed.sh '{{project_id}}' ${var.hw_project_id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{az_master}}' ${var.hw_az_master} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{az_slave}}' ${var.hw_az_slave} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{wecube_vpc_asset_id}}' ${huaweicloud_vpc_v1.vpc_mg.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_vpc_asset_id}}' ${tencentcloud_vpc.TC_HK_PRD_MGMT.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{vpc_name}}' ${var.vpc_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
          
-      "./utils-sed.sh '{{security_group_asset_id}}' ${huaweicloud_networking_secgroup_v2.sg_mg.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{security_group_asset_id}}' ${tencentcloud_security_group.TC_HK_PRD_MGMT.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{app1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_app1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{app2_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_app2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{app1_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{app2_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{subnet_app1_name}}' ${var.subnet_app1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{subnet_app2_name}}' ${var.subnet_app2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{db1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_db1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{db2_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_db2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{db1_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{db2_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{subnet_db1_name}}' ${var.subnet_db1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{subnet_db2_name}}' ${var.subnet_db2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{lb1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_lb1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{lb2_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_lb2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_lb1_name}}' ${var.subnet_lb1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_lb2_name}}' ${var.subnet_lb2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      # "./utils-sed.sh '{{lb1_subnet_asset_id}}' ${tencentcloud_subnet.subnet_lb1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      # "./utils-sed.sh '{{lb2_subnet_asset_id}}' ${tencentcloud_subnet.subnet_lb2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      # "./utils-sed.sh '{{subnet_lb1_name}}' ${var.subnet_lb1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      # "./utils-sed.sh '{{subnet_lb2_name}}' ${var.subnet_lb2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{vdi_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{vdi_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_VDI.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{subnet_vdi_name}}' ${var.subnet_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{proxy_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_proxy.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{proxy_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_PROXY.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{subnet_proxy_name}}' ${var.subnet_proxy_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{wecube_host1_id}}' ${huaweicloud_ecs_instance_v1.wecube_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{wecube_host2_id}}' ${huaweicloud_ecs_instance_v1.wecube_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_host1_id}}' ${tencentcloud_instance.wecube_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_host2_id}}' ${tencentcloud_instance.wecube_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{ecs_wecube_host1_name}}' ${var.ecs_wecube_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{ecs_wecube_host2_name}}' ${var.ecs_wecube_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{pluign_host1_id}}' ${huaweicloud_ecs_instance_v1.docker_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{pluign_host2_id}}' ${huaweicloud_ecs_instance_v1.docker_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{pluign_host1_id}}' ${tencentcloud_instance.docker_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{pluign_host2_id}}' ${tencentcloud_instance.docker_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{ecs_plugin_host1_name}}' ${var.ecs_plugin_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{ecs_plugin_host2_name}}' ${var.ecs_plugin_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{squid_host_id}}' ${huaweicloud_compute_instance_v2.instance_squid.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{vdi_host_id}}' ${huaweicloud_ecs_instance_v1.instance_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{squid_host_id}}' ${tencentcloud_instance.instance_squid.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{vdi_host_id}}' ${tencentcloud_instance.instance_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{ecs_squid_name}}' ${var.ecs_squid_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{ecs_vdi_name}}' ${var.ecs_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{rdb_wecubecore_id}}' ${huaweicloud_rds_instance_v3.mysql_instance_wecube_core.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{rdb_wecubeplugin_id}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{rdb_wecubecore_id}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{rdb_wecubeplugin_id}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{rds_core_name}}' ${var.rds_core_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{rds_plugin_name}}' ${var.rds_plugin_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
-      "./utils-sed.sh '{{wecube_mysql_host}}' ${huaweicloud_rds_instance_v3.mysql_instance_wecube_core.private_ips.0} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_mysql_host}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_ip} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{wecube_mysql_port}}' 3306 ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{wecube_sql_script_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/wecube/01.update_system_variables.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
@@ -612,12 +612,12 @@ resource "tencentcloud_instance" "instance_squid" {
       
       #auto run plugins
       "cd auto-plugin-installer",
-      "./auto-run-plugins.sh 'Y' ${huaweicloud_ecs_instance_v1.wecube_host_1.nics.0.ip_address} ${var.default_password} ${var.wecube_home_folder} ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} ${huaweicloud_ecs_instance_v1.docker_host_1.nics.0.ip_address} ${huaweicloud_ecs_instance_v1.wecube_host_2.nics.0.ip_address}"
+      "./auto-run-plugins.sh 'Y' ${tencentcloud_instance.wecube_host_1.private_ip} ${var.default_password} ${var.wecube_home_folder} ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.intranet_ip} ${tencentcloud_instance.docker_host_1.private_ip} ${tencentcloud_instance.wecube_host_2.private_ip}"
 
     ]
   }
 }
 
 output "Tips" {
-  value = " \n -------------------cloud-------------------- \n   HWCLOUD_API_SECRET   SecretKey=${var.secret_key};AccessKey=${var.secret_id};DomainId=*** \n   HWCLOUD_LOCATION   CloudApiDomainName=myhuaweicloud.com;Region=${var.region};ProjectId=*** \n    \n   -------------------vpc---------------------- \n   ${tencentcloud_vpc.TC_HK_PRD_MGMT.name}  ${tencentcloud_vpc.TC_HK_PRD_MGMT.id} \n    \n   -------------------subnet------------------- \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.id} \n   ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.name}  ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.id} \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.id} \n    \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.id} \n   ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.name}  ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.id} \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_VDI.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_VDI.id} \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_PROXY.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_PROXY.id} \n    \n   -------------------host---------------------- \n   ${tencentcloud_instance.wecube_host_1.instance_name} ${tencentcloud_instance.wecube_host_1.id} \n   ${tencentcloud_instance.wecube_host_2.instance_name} ${tencentcloud_instance.wecube_host_2.id} \n   ${tencentcloud_instance.docker_host_1.instance_name} ${tencentcloud_instance.docker_host_1.id} \n   ${tencentcloud_instance.docker_host_2.instance_name} ${tencentcloud_instance.docker_host_2.id} \n   ${tencentcloud_instance.instance_squid.instance_name} ${tencentcloud_instance.instance_squid.id} \n   ${tencentcloud_instance.instance_vdi.instance_name} ${tencentcloud_instance.instance_vdi.id} \n    \n   -------------------mysqldb------------------ \n   ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.instance_name} ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.id} \n   ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.instance_name} ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.id} \n    \n   ------------------------------------------ \n    \n    \n   \n Please follow below steps:\n 1.Login your Windows VDI[IP:${tencentcloud_instance.instance_vdi.public_ip}] with [User/Password：Administrator/${var.default_password}];\n 2.Install Chrome browser;\n 3.Use Chrome browser to access WeCube: \n  http://${tencentcloud_clb_instance.internal_clb_1.clb_vips.0}:19090  -- for normal user \n  http://${tencentcloud_clb_instance.internal_clb_2.clb_vips.0}:19090  -- for normal user \n  http://${tencentcloud_instance.wecube_host_1.private_ip}:19090  -- for admin role \n  http://${tencentcloud_instance.wecube_host_2.private_ip}:19090  -- for admin role  \n \n \n Thank you in advance for your kind support and continued business.\n More Info: https://github.com/WeBankPartners/delivery-by-terraform "
+  value = " \n -------------------cloud-------------------- \n   QCloud_SECRET_KEY   SecretKey=${var.secret_key};AccessKey=${var.secret_id};DomainId=*** \n   QCLOUD_LOCATION   CloudApiDomainName=myqcloud.com;Region=${var.region};ProjectId=*** \n    \n   -------------------vpc---------------------- \n   ${tencentcloud_vpc.TC_HK_PRD_MGMT.name}  ${tencentcloud_vpc.TC_HK_PRD_MGMT.id} \n    \n   -------------------subnet------------------- \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.id} \n   ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.name}  ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.id} \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.id} \n    \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.id} \n   ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.name}  ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.id} \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_VDI.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_VDI.id} \n   ${tencentcloud_subnet.TC_HK_PRD1_MGMT_PROXY.name}  ${tencentcloud_subnet.TC_HK_PRD1_MGMT_PROXY.id} \n    \n   -------------------host---------------------- \n   ${tencentcloud_instance.wecube_host_1.instance_name} ${tencentcloud_instance.wecube_host_1.id} \n   ${tencentcloud_instance.wecube_host_2.instance_name} ${tencentcloud_instance.wecube_host_2.id} \n   ${tencentcloud_instance.docker_host_1.instance_name} ${tencentcloud_instance.docker_host_1.id} \n   ${tencentcloud_instance.docker_host_2.instance_name} ${tencentcloud_instance.docker_host_2.id} \n   ${tencentcloud_instance.instance_squid.instance_name} ${tencentcloud_instance.instance_squid.id} \n   ${tencentcloud_instance.instance_vdi.instance_name} ${tencentcloud_instance.instance_vdi.id} \n    \n   -------------------mysqldb------------------ \n   ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.instance_name} ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.id} \n   ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.instance_name} ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.id} \n    \n   ------------------------------------------ \n    \n    \n   \n Please follow below steps:\n 1.Login your Windows VDI[IP:${tencentcloud_instance.instance_vdi.public_ip}] with [User/Password：Administrator/${var.default_password}];\n 2.Install Chrome browser;\n 3.Use Chrome browser to access WeCube: \n  http://${tencentcloud_clb_instance.internal_clb_1.clb_vips.0}:19090  -- for normal user \n  http://${tencentcloud_clb_instance.internal_clb_2.clb_vips.0}:19090  -- for normal user \n  http://${tencentcloud_instance.wecube_host_1.private_ip}:19090  -- for admin role \n  http://${tencentcloud_instance.wecube_host_2.private_ip}:19090  -- for admin role  \n \n \n Thank you in advance for your kind support and continued business.\n More Info: https://github.com/WeBankPartners/delivery-by-terraform "
 }
