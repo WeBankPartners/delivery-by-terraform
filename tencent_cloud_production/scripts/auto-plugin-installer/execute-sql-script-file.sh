@@ -53,6 +53,12 @@ sed -i "s~{{rds_plugin_name}}~$rds_plugin_name~g" $cmdb_sql_file
 yum install -y mysql
 cat $cmdb_sql_file
 
+echo "plugin_mysql_host= ${plugin_mysql_host}"
+echo "plugin_mysql_port= ${plugin_mysql_port}"
+echo "mysql_user= ${mysql_user}"
+echo "mysql_password= ${mysql_password}"
+echo "cmdb_sql_file= ${cmdb_sql_file}"
+
 mysql -h${plugin_mysql_host} -P${plugin_mysql_port} -u${mysql_user} -p${mysql_password} -Dwecmdb_embedded -e "source  $cmdb_sql_file" 
 
 

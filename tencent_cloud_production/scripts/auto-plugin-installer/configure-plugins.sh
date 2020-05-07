@@ -14,7 +14,7 @@ echo -e "\nRegistering plugins, this may take a few minutes...\n"
 docker run --rm -t \
     -v "$COLLECTION_DIR:$COLLECTION_DIR" \
     -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
-    swr.ap-southeast-3.myhuaweicloud.com/webankpartners/newman \
+    ccr.ccs.tencentyun.com/webankpartners/newman \
     run "$COLLECTION_DIR/020_wecube_plugin_register.postman_collection.json" \
     --env-var "domain=$WECUBE_HOST:19090" \
     --env-var "username=umadmin" \
@@ -30,7 +30,7 @@ echo -e "\nConfiguring plugin WeCMDB...\n"
 docker run --rm -t \
     -v "$COLLECTION_DIR:$COLLECTION_DIR" \
     -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
-    swr.ap-southeast-3.myhuaweicloud.com/webankpartners/newman \
+    ccr.ccs.tencentyun.com/webankpartners/newman \
     run "$COLLECTION_DIR/022_wecube_sync_model.postman_collection.json" \
     --env-var "domain=$WECUBE_HOST:19090" \
     --env-var "username=umadmin" \
@@ -72,7 +72,7 @@ docker rm -f minio-client-upload2
 # docker run --rm -t \
 #     -v "$COLLECTION_DIR:$COLLECTION_DIR" \
 #     -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
-#     swr.ap-southeast-3.myhuaweicloud.com/webankpartners/newman \
+#     ccr.ccs.tencentyun.com/webankpartners/newman \
 #     run "$COLLECTION_DIR/021_wecube_init_plugin.postman_collection.json" \
 #     --env-var "domain=$WECUBE_HOST:19090" \
 #     --env-var "username=umadmin" \

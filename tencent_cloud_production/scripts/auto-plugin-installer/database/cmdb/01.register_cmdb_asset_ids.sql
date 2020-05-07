@@ -1,7 +1,7 @@
 SET NAMES utf8 ;
-update `wecmdb_embedded`.`data_center` set location = 'Region={{region}}' where key_name = {{region_name}};
-update `wecmdb_embedded`.`data_center` set location = 'Region={{region}};AvailableZone={{az_1}}' where key_name ={{az_1_name}};  
-update `wecmdb_embedded`.`data_center` set location = 'Region={{region}};AvailableZone={{az_2}}' where key_name ={{az_2_name}};
+update `wecmdb_embedded`.`data_center` set location = 'Region={{region}}' where key_name = '{{region_name}}';
+update `wecmdb_embedded`.`data_center` set location = 'Region={{region}};AvailableZone={{az_1}}' where key_name ='{{az_1_name}}';  
+update `wecmdb_embedded`.`data_center` set location = 'Region={{region}};AvailableZone={{az_2}}' where key_name ='{{az_2_name}}';
 
 update `wecmdb_embedded`.`network_segment` set vpc_asset_id= '{{wecube_vpc_asset_id}}' where key_name='{{vpc_name}}';
 update `wecmdb_embedded`.`network_segment` set security_group_asset_id= '{{security_group_asset_id}}' where  key_name='{{vpc_name}}';
@@ -10,9 +10,6 @@ update `wecmdb_embedded`.`network_segment` set route_table_asset_id= '{{route_ta
 update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{app1_subnet_asset_id}}' where  key_name='{{subnet_app1_name}}';
 update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{app2_subnet_asset_id}}' where  key_name='{{subnet_app2_name}}';
 update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{db1_subnet_asset_id}}' where  key_name='{{subnet_db1_name}}';
-update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{db2_subnet_asset_id}}' where  key_name='{{subnet_db2_name}}';
-update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{lb1_subnet_asset_id}}' where  key_name='{{subnet_lb1_name}}';
-update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{lb2_subnet_asset_id}}' where  key_name='{{subnet_lb2_name}}';
 update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{vdi_subnet_asset_id}}' where  key_name='{{subnet_vdi_name}}';
 update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{proxy_subnet_asset_id}}' where  key_name='{{subnet_proxy_name}}';
 

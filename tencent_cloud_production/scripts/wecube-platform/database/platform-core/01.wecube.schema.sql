@@ -817,6 +817,8 @@ CREATE TABLE `system_variables` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `favorites`;
+
 CREATE TABLE `favorites` (
 	`favorites_id` VARCHAR(255) NOT NULL,
 	`created_by` VARCHAR(255) NULL DEFAULT NULL,
@@ -830,6 +832,8 @@ CREATE TABLE `favorites` (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
+
+DROP TABLE IF EXISTS `favorites_role`;
 
 CREATE TABLE `favorites_role` (
 	`id` VARCHAR(255) NOT NULL,
