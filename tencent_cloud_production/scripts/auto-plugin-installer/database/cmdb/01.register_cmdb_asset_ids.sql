@@ -1,11 +1,11 @@
 SET NAMES utf8 ;
-update `wecmdb_embedded`.`data_center` set location = 'CloudApiDomainName=myhuaweicloud.com;Region=ap-southeast-3;ProjectId={{project_id}}' where key_name in ('PRD','PRD1','PRD2');
-
-update `wecmdb_embedded`.`data_center` set available_zone= '{{az_master}}' where  key_name='PRD1';
-update `wecmdb_embedded`.`data_center` set available_zone= '{{az_slave}}' where  key_name='PRD2';
+update `wecmdb_embedded`.`data_center` set location = 'Region={{region}}' where key_name = {{region_name}};
+update `wecmdb_embedded`.`data_center` set location = 'Region={{region}};AvailableZone={{az_1}}' where key_name ={{az_1_name}};  
+update `wecmdb_embedded`.`data_center` set location = 'Region={{region}};AvailableZone={{az_2}}' where key_name ={{az_2_name}};
 
 update `wecmdb_embedded`.`network_segment` set vpc_asset_id= '{{wecube_vpc_asset_id}}' where key_name='{{vpc_name}}';
 update `wecmdb_embedded`.`network_segment` set security_group_asset_id= '{{security_group_asset_id}}' where  key_name='{{vpc_name}}';
+update `wecmdb_embedded`.`network_segment` set route_table_asset_id= '{{route_table_asset_id}}' where  key_name='{{vpc_name}}';
 
 update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{app1_subnet_asset_id}}' where  key_name='{{subnet_app1_name}}';
 update `wecmdb_embedded`.`network_segment` set subnet_asset_id= '{{app2_subnet_asset_id}}' where  key_name='{{subnet_app2_name}}';

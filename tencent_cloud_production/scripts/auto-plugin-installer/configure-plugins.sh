@@ -50,35 +50,39 @@ curl -L $MONITOR_AGENT_URL -o $MONITOR_AGENT_PKG_FILE
 tar xzf $MONITOR_AGENT_PKG_FILE -C $PLUGIN_PKG_DIR
 pushd "$PLUGIN_PKG_DIR/node_exporter_v2.1" >/dev/null
 
+WECUBE_S3_URL1='http://'${WECUBE_HOST}':9000'
+WECUBE_S3_URL2='http://'${WECUBE_HOST2}':9000'
 docker run --name minio-client-upload1 -v /data/wecube/installer/wecube-plugin-installer/plugins:/plugins -itd --entrypoint=/bin/sh minio/mc
-docker exec minio-client-upload mc config host add wecubeS3 'http://${WECUBE_HOST}:9001' 'access_key' 'secret_key' 
-docker exec minio-client-upload mc cp /plugins/node_exporter_v2.1.tar.gz wecubeS3/wecube-agent
+docker exec minio-client-upload1 mc config host add wecubeS3 $WECUBE_S3_URL1 'access_key' 'secret_key' 
+docker exec minio-client-upload1 mc mb wecubeS3/wecube-agent
+docker exec minio-client-upload1 mc cp /plugins/node_exporter_v2.1.tar.gz wecubeS3/wecube-agent
 docker rm -f minio-client-upload1
 
 docker run --name minio-client-upload2 -v /data/wecube/installer/wecube-plugin-installer/plugins:/plugins -itd --entrypoint=/bin/sh minio/mc
-docker exec minio-client-upload mc config host add wecubeS3 'http://${WECUBE_HOST2}:9001' 'access_key' 'secret_key' 
-docker exec minio-client-upload mc cp /plugins/node_exporter_v2.1.tar.gz wecubeS3/wecube-agent
+docker exec minio-client-upload2 mc config host add wecubeS3 $WECUBE_S3_URL2 'access_key' 'secret_key' 
+docker exec minio-client-upload2 mc mb wecubeS3/wecube-agent
+docker exec minio-client-upload2 mc cp /plugins/node_exporter_v2.1.tar.gz wecubeS3/wecube-agent
 docker rm -f minio-client-upload2
 
-echo "Installing monitor agent..."
-sh ./start.sh
-popd >/dev/null
-./wait-for-it.sh -t 60 $WECUBE_HOST:$MONITOR_AGENT_PORT
+# echo "Installing monitor agent..."
+# sh ./start.sh
+# popd >/dev/null
+# ./wait-for-it.sh -t 60 $WECUBE_HOST:$MONITOR_AGENT_PORT
 
-docker run --rm -t \
-    -v "$COLLECTION_DIR:$COLLECTION_DIR" \
-    -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
-    swr.ap-southeast-3.myhuaweicloud.com/webankpartners/newman \
-    run "$COLLECTION_DIR/021_wecube_init_plugin.postman_collection.json" \
-    --env-var "domain=$WECUBE_HOST:19090" \
-    --env-var "username=umadmin" \
-    --env-var "password=umadmin" \
-    --env-var "wecube_host=$WECUBE_HOST" \
-    --env-var "plugin_host=$PLUGIN_HOST" \
-    --env-var "node_exporter_port=$MONITOR_AGENT_PORT" \
-    --env-var "plugin_mysql_port=3307" \
-    --env-var "plugin_mysql_user=root" \
-    --env-var "plugin_mysql_password=$MYSQL_PASSWORD" \
-    --delay-request 2000 --disable-unicode \
-    --reporters cli \
-    --reporter-cli-no-banner --reporter-cli-no-console
+# docker run --rm -t \
+#     -v "$COLLECTION_DIR:$COLLECTION_DIR" \
+#     -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
+#     swr.ap-southeast-3.myhuaweicloud.com/webankpartners/newman \
+#     run "$COLLECTION_DIR/021_wecube_init_plugin.postman_collection.json" \
+#     --env-var "domain=$WECUBE_HOST:19090" \
+#     --env-var "username=umadmin" \
+#     --env-var "password=umadmin" \
+#     --env-var "wecube_host=$WECUBE_HOST" \
+#     --env-var "plugin_host=$PLUGIN_HOST" \
+#     --env-var "node_exporter_port=$MONITOR_AGENT_PORT" \
+#     --env-var "plugin_mysql_port=3307" \
+#     --env-var "plugin_mysql_user=root" \
+#     --env-var "plugin_mysql_password=$MYSQL_PASSWORD" \
+#     --delay-request 2000 --disable-unicode \
+#     --reporters cli \
+#     --reporter-cli-no-banner --reporter-cli-no-console

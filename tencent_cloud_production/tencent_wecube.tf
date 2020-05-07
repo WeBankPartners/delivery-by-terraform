@@ -1,32 +1,3 @@
-#全局变量
-variable "secret_id" {
-}
-variable "secret_key" {
-}
-variable "region" {
-  default = ""
-}
-variable "default_password" {
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_default_password'"
-  default     = "Wecube@123456"
-}
-variable "wecube_version" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default     = "v2.1.1"
-}
-variable "availability_zone_1" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_availability_zone_1'"
-  default     = "ap-guangzhou-4"
-}
-variable "availability_zone_2" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_availability_zone_2'"
-  default     = "ap-guangzhou-3"
-}
-variable "current_ip" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_availability_zone_2'"
-  default     = "127.0.0.1"
-}
-
 provider "tencentcloud" {
   secret_id  = var.secret_id
   secret_key = var.secret_key
@@ -37,6 +8,11 @@ provider "tencentcloud" {
 resource "tencentcloud_vpc" "TC_HK_PRD_MGMT" {
   name       = "TC_HK_PRD_MGMT"
   cidr_block = "10.40.192.0/19"
+}
+
+resource "tencentcloud_route_table" "default_route_table" {
+  vpc_id = tencentcloud_vpc.TC_HK_PRD_MGMT.id
+  name   = "default_route_table"
 }
 
 #创建子网 - TC_HK_PRD1_MGMT_VDI
@@ -421,11 +397,11 @@ resource "tencentcloud_clb_attachment" "http_listener_gateway2_rule_attachment2"
 
 #创建VDI-windows主机
 resource "tencentcloud_instance" "instance_vdi" {
-  availability_zone          = "${var.availability_zone_1}"
-  security_groups            = ["${tencentcloud_security_group.TC_HK_PRD_MGMT.id}"]
-  instance_type              = "S2.MEDIUM4"
-  image_id                   = "img-9id7emv7"
-  #image_id                   = "img-nmgxso98"
+  availability_zone = "${var.availability_zone_1}"
+  security_groups   = ["${tencentcloud_security_group.TC_HK_PRD_MGMT.id}"]
+  instance_type     = "S2.MEDIUM4"
+  # image_id          = "img-9id7emv7"
+  image_id                   = "img-nmgxso98"
   instance_name              = "TC_HK_PRD_MGMT_1M1_VDI1__mgmtvdi01"
   vpc_id                     = "${tencentcloud_vpc.TC_HK_PRD_MGMT.id}"
   subnet_id                  = "${tencentcloud_subnet.TC_HK_PRD1_MGMT_VDI.id}"
@@ -503,9 +479,18 @@ resource "tencentcloud_instance" "instance_squid" {
       "yum install -y sshpass",
       "yum install -y expect",
       # "dos2unix /root/scripts/*",
-      "cd /root/scripts",
       "dos2unix /root/scripts/*",
-      "./dos2unis-all.sh",
+      "dos2unix /root/scripts/wecube-platform/*",
+      "dos2unix /root/scripts/auto-plugin-installer/*",
+      "mkdir -p ${var.wecube_home_folder}",
+      "cp -r /root/scripts/* ${var.wecube_home_folder}",
+      "chmod -R +x ${var.wecube_home_folder}/*",
+      "cd ${var.wecube_home_folder}",
+
+
+      # "cd /root/scripts",
+      # "dos2unix /root/scripts/*",
+      # "./dos2unis-all.sh",
 
       #初始化Squid主机
       "./install-squid.sh >> init.log 2>&1",
@@ -550,66 +535,64 @@ resource "tencentcloud_instance" "instance_squid" {
       "./utils-scp.sh root ${tencentcloud_instance.wecube_host_2.private_ip} ${var.default_password} '-r /root/scripts/wecube-platform-scripts' /root/",
       "./init-wecube-platform-host.sh ${tencentcloud_instance.wecube_host_2.private_ip} ${var.default_password} ${var.wecube_version} 'wecube-platform-2.cfg' 9000 >> init.log 2>&1",
 
-      
+
       #CMDB数据回写前 - 变量替换
-      "./utils-sed.sh '{{mysql_password}}' ${var.default_password} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{plugin_mysql_host}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.intranet_ip} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{cmdb_sql_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/cmdb/01.register_cmdb_asset_ids.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      
-      "./utils-sed.sh '{{project_id}}' ${var.hw_project_id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{az_master}}' ${var.hw_az_master} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{az_slave}}' ${var.hw_az_slave} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{wecube_vpc_asset_id}}' ${tencentcloud_vpc.TC_HK_PRD_MGMT.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{vpc_name}}' ${var.vpc_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-         
-      "./utils-sed.sh '{{security_group_asset_id}}' ${tencentcloud_security_group.TC_HK_PRD_MGMT.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{mysql_password}}' ${var.default_password} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{plugin_mysql_host}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.intranet_ip} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{cmdb_sql_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/cmdb/01.register_cmdb_asset_ids.sql' ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      "./utils-sed.sh '{{app1_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{app2_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_app1_name}}' ${var.subnet_app1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_app2_name}}' ${var.subnet_app2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{region_name}}' ${var.region_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{region}}' ${var.region} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{az_1}}' ${var.availability_zone_1} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{az_2}}' ${var.availability_zone_2} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{az_1_name}}' ${var.az_1_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{az_2_name}}' ${var.az_2_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{wecube_vpc_asset_id}}' ${tencentcloud_vpc.TC_HK_PRD_MGMT.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{vpc_name}}' ${var.vpc_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      "./utils-sed.sh '{{db1_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{db2_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_db1_name}}' ${var.subnet_db1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_db2_name}}' ${var.subnet_db2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{security_group_asset_id}}' ${tencentcloud_security_group.TC_HK_PRD_MGMT.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{route_table_asset_id}}' ${tencentcloud_route_table.default_route_table.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      # "./utils-sed.sh '{{lb1_subnet_asset_id}}' ${tencentcloud_subnet.subnet_lb1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      # "./utils-sed.sh '{{lb2_subnet_asset_id}}' ${tencentcloud_subnet.subnet_lb2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      # "./utils-sed.sh '{{subnet_lb1_name}}' ${var.subnet_lb1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      # "./utils-sed.sh '{{subnet_lb2_name}}' ${var.subnet_lb2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{app1_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_APP.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{app2_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD2_MGMT_APP.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{subnet_app1_name}}' ${var.subnet_app1_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{subnet_app2_name}}' ${var.subnet_app2_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      "./utils-sed.sh '{{vdi_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_VDI.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_vdi_name}}' ${var.subnet_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{proxy_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_PROXY.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{subnet_proxy_name}}' ${var.subnet_proxy_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{db1_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{db2_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_DB.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{subnet_db1_name}}' ${var.subnet_db1_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      "./utils-sed.sh '{{wecube_host1_id}}' ${tencentcloud_instance.wecube_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{wecube_host2_id}}' ${tencentcloud_instance.wecube_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{ecs_wecube_host1_name}}' ${var.ecs_wecube_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{ecs_wecube_host2_name}}' ${var.ecs_wecube_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{vdi_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_VDI.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{subnet_vdi_name}}' ${var.subnet_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{proxy_subnet_asset_id}}' ${tencentcloud_subnet.TC_HK_PRD1_MGMT_PROXY.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{subnet_proxy_name}}' ${var.subnet_proxy_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      "./utils-sed.sh '{{pluign_host1_id}}' ${tencentcloud_instance.docker_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{pluign_host2_id}}' ${tencentcloud_instance.docker_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{ecs_plugin_host1_name}}' ${var.ecs_plugin_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{ecs_plugin_host2_name}}' ${var.ecs_plugin_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{wecube_host1_id}}' ${tencentcloud_instance.wecube_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{wecube_host2_id}}' ${tencentcloud_instance.wecube_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{ecs_wecube_host1_name}}' ${var.ecs_wecube_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{ecs_wecube_host2_name}}' ${var.ecs_wecube_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      "./utils-sed.sh '{{squid_host_id}}' ${tencentcloud_instance.instance_squid.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{vdi_host_id}}' ${tencentcloud_instance.instance_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{ecs_squid_name}}' ${var.ecs_squid_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{ecs_vdi_name}}' ${var.ecs_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{pluign_host1_id}}' ${tencentcloud_instance.docker_host_1.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{pluign_host2_id}}' ${tencentcloud_instance.docker_host_2.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{ecs_plugin_host1_name}}' ${var.ecs_plugin_host1_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{ecs_plugin_host2_name}}' ${var.ecs_plugin_host2_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      "./utils-sed.sh '{{rdb_wecubecore_id}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{rdb_wecubeplugin_id}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{rds_core_name}}' ${var.rds_core_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{rds_plugin_name}}' ${var.rds_plugin_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{squid_host_id}}' ${tencentcloud_instance.instance_squid.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{vdi_host_id}}' ${tencentcloud_instance.instance_vdi.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{ecs_squid_name}}' ${var.ecs_squid_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{ecs_vdi_name}}' ${var.ecs_vdi_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      "./utils-sed.sh '{{wecube_mysql_host}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_ip} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{wecube_mysql_port}}' 3306 ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      "./utils-sed.sh '{{wecube_sql_script_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/wecube/01.update_system_variables.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+      "./utils-sed.sh '{{rdb_wecubecore_id}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{rdb_wecubeplugin_id}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.id} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{rds_core_name}}' ${var.rds_core_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{rds_plugin_name}}' ${var.rds_plugin_name} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-      "./utils-sed.sh '{{WECUBE_VERSION}}' 3306 ${var.wecube_version}/auto-plugin-installer/db.cfg",
-      
+      "./utils-sed.sh '{{wecube_mysql_host}}' ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubecore.intranet_ip} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{wecube_mysql_port}}' 3306 ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{wecube_sql_script_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/wecube/01.update_system_variables.sql' ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+
+      "./utils-sed.sh '{{WECUBE_VERSION}}' ${var.wecube_version} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+
       #auto run plugins
       "cd auto-plugin-installer",
       "./auto-run-plugins.sh 'Y' ${tencentcloud_instance.wecube_host_1.private_ip} ${var.default_password} ${var.wecube_home_folder} ${tencentcloud_mysql_instance.TC_HK_PRD1_MGMT_DB_wecubeplugin.intranet_ip} ${tencentcloud_instance.docker_host_1.private_ip} ${tencentcloud_instance.wecube_host_2.private_ip}"

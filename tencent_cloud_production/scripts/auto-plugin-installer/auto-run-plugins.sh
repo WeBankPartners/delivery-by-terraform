@@ -22,6 +22,10 @@ if [ ${is_install_plugins} != "Y" ];then
   exit;
 fi
 
+yum install -y mysql
+cat $wecube_sql_script_file
+mysql -h${wecube_mysql_host} -P${wecube_mysql_port} -u${mysql_user} -p${mysql_password} -Dwecube -e "source  $wecube_sql_script_file" 
+
 echo "Starting install plugins ..."
 
 yum install docker -y
@@ -64,8 +68,9 @@ sh download-plugin.sh "$PLUGINS_BUCKET_URL/$WECUBE_VERSION" $PKG_ARTIFACTS ${PLU
 #run service-mgmt
 sh download-plugin.sh "$PLUGINS_BUCKET_URL/$WECUBE_VERSION" $PKG_SERVICE_MGMT ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
 
-
-sh `pwd`/configure-plugins.sh $wecube_host "wecube-auto-master" $PLUGIN_PKG_DIR $plugin_mysql_pwd ${plugin_host} ${wecube_host2}
+current_pwd=`pwd`
+sh `pwd`/configure-plugins.sh $wecube_host "${current_pwd}/wecube-auto-master" $PLUGIN_PKG_DIR $plugin_mysql_pwd ${plugin_host} ${wecube_host2}
+#sh `pwd`/configure-plugins.sh 10.40.200.2 /data/wecube/auto-plugin-installer/wecube-auto-master /data/wecube/installer/wecube-plugin-installer/plugins Wecube@123456 10.40.200.3 10.40.201.2
 
 echo -e "\nRegistering CMDB asset Ids..."
 sh `pwd`/execute-sql-script-file.sh 
