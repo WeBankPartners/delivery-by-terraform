@@ -25,7 +25,7 @@ mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mys
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -e "CREATE DATABASE IF NOT EXISTS ${auth_server_database_name}"
 
 mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${auth_server_database_name} -e "source /root/wecube-platform-scripts/database/auth-server/01.auth_init.sql" 
- 
+
 yum install docker-compose -y
 ./wecube-platform-generate-compose-yml.sh $1 ${wecube_version}
 
@@ -50,7 +50,6 @@ docker run --name minio-client-mb -itd --entrypoint=/bin/sh ccr.ccs.tencentyun.c
 docker exec minio-client-mb mc config host add wecubeS3 $s3_url $s3_access_key $s3_secret_key wecubeS3
 docker exec minio-client-mb mc mb wecubeS3/wecube-plugin-package-bucket
 docker rm -f minio-client-mb
-
 
 cat > /etc/systemd/system/docker.service.d/https-proxy.conf << EOF
 EOF
