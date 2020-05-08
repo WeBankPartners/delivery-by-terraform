@@ -40,13 +40,10 @@ fi
 #插件自动上传并注册
 echo -e "\nNow starting to launch plugins...\n"
 
-PLUGINS_BUCKET_URL="https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com"
-
-
 PLUGIN_INSTALLER_DIR="$INSTALLER_DIR/wecube-plugin-installer"
 mkdir -p "$PLUGIN_INSTALLER_DIR"
 
-echo -e "\nFetching plugin packages...."
+echo -e "\nFetching plugin packages from "
 PLUGIN_PKG_DIR="$PLUGIN_INSTALLER_DIR/plugins"
 mkdir -p "$PLUGIN_PKG_DIR"
 PLUGIN_LIST_CSV="$PLUGIN_PKG_DIR/plugin-list.csv"
@@ -54,19 +51,19 @@ echo "plugin_package_path" > $PLUGIN_LIST_CSV
 
 
 #run wecmdb
-sh download-plugin.sh "$PLUGINS_BUCKET_URL/$WECUBE_VERSION" $PKG_WECMDB ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
+sh download-plugin.sh "$WECUBE_PLUGIN_URL_PREFIX" $PKG_WECMDB ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
 #run qcloud
-sh download-plugin.sh "$PLUGINS_BUCKET_URL/$WECUBE_VERSION" $PKG_QCLOUD ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
+sh download-plugin.sh "$WECUBE_PLUGIN_URL_PREFIX" $PKG_QCLOUD ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
 #run qcloud
-sh download-plugin.sh "$PLUGINS_BUCKET_URL/$WECUBE_VERSION" $PKG_SALTSTACK ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
+sh download-plugin.sh "$WECUBE_PLUGIN_URL_PREFIX" $PKG_SALTSTACK ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
 #run notifications
-sh download-plugin.sh "$PLUGINS_BUCKET_URL/$WECUBE_VERSION" $PKG_NOTIFICATIONS ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
+sh download-plugin.sh "$WECUBE_PLUGIN_URL_PREFIX" $PKG_NOTIFICATIONS ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
 #run monitor
-sh download-plugin.sh "$PLUGINS_BUCKET_URL/$WECUBE_VERSION" $PKG_MONITOR ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
+sh download-plugin.sh "$WECUBE_PLUGIN_URL_PREFIX" $PKG_MONITOR ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
 #run artifacts
-sh download-plugin.sh "$PLUGINS_BUCKET_URL/$WECUBE_VERSION" $PKG_ARTIFACTS ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
+sh download-plugin.sh "$WECUBE_PLUGIN_URL_PREFIX" $PKG_ARTIFACTS ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
 #run service-mgmt
-sh download-plugin.sh "$PLUGINS_BUCKET_URL/$WECUBE_VERSION" $PKG_SERVICE_MGMT ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
+sh download-plugin.sh "$WECUBE_PLUGIN_URL_PREFIX" $PKG_SERVICE_MGMT ${PLUGIN_PKG_DIR} $PLUGIN_LIST_CSV
 
 current_pwd=`pwd`
 sh `pwd`/configure-plugins.sh $wecube_host "${current_pwd}/wecube-auto-master" $PLUGIN_PKG_DIR $plugin_mysql_pwd ${plugin_host} ${wecube_host2}

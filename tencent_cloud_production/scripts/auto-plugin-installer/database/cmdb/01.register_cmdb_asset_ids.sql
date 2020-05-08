@@ -22,5 +22,9 @@ update `wecmdb_embedded`.`host_resource_instance` set asset_id= '{{pluign_host2_
 update `wecmdb_embedded`.`host_resource_instance` set asset_id= '{{squid_host_id}}' where  key_name='{{ecs_squid_name}}';
 update `wecmdb_embedded`.`host_resource_instance` set asset_id= '{{vdi_host_id}}' where  key_name='{{ecs_vdi_name}}';
 
-update `wecmdb_embedded`.`rdb_resource_instance` set asset_id= '{{rdb_wecubecore_id}}' where  key_name='{{rds_core_name}}';
-update `wecmdb_embedded`.`rdb_resource_instance` set asset_id= '{{rdb_wecubeplugin_id}}' where  key_name='{{rds_plugin_name}}';
+update `wecmdb_embedded`.`rdb_resource_instance` set asset_id= '{{rdb_wecubecore_id}}',ip_address='{{rdb_wecubecore_ip}}' where  key_name='{{rds_core_name}}';
+update `wecmdb_embedded`.`rdb_resource_instance` set asset_id= '{{rdb_wecubeplugin_id}}',ip_address='{{rdb_wecubeplugin_ip}}' where  key_name='{{rds_plugin_name}}';
+
+update `wecmdb_embedded`.`lb_resource_instance` set asset_id= '{{lb1_asset_id}}',ip_address='{{lb1_ip}}'  where  key_name='{{lb1_name}}';
+update `wecmdb_embedded`.`lb_resource_instance` set asset_id= '{{lb2_asset_id}}',ip_address='{{lb2_ip}}'  where  key_name='{{lb2_name}}';
+

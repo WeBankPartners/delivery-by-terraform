@@ -65,3 +65,13 @@ variable "ecs_squid_name" {}
 variable "ecs_vdi_name" {}
 variable "lb1_name" {}
 variable "lb2_name" {}
+
+#自动注册插件包信息，若不需要自动注册插件包，则以下参数无意义
+variable "WECUBE_PLUGIN_URL_PREFIX" {}
+variable "PKG_WECMDB" {}
+variable "PKG_QCLOUD" {}
+variable "PKG_SALTSTACK" {}
+variable "PKG_NOTIFICATIONS" {}
+variable "PKG_MONITOR" {}
+variable "PKG_ARTIFACTS" {}
+variable "PKG_SERVICE_MGMT" {}

@@ -50,6 +50,15 @@ sed -i "s~{{rdb_wecubeplugin_id}}~$rdb_wecubeplugin_id~g" $cmdb_sql_file
 sed -i "s~{{rds_core_name}}~$rds_core_name~g" $cmdb_sql_file
 sed -i "s~{{rds_plugin_name}}~$rds_plugin_name~g" $cmdb_sql_file
 
+sed -i "s~{{rdb_wecubecore_ip}}~$rdb_wecubecore_ip~g" $cmdb_sql_file
+sed -i "s~{{rdb_wecubeplugin_ip}}~$rdb_wecubeplugin_ip~g" $cmdb_sql_file
+sed -i "s~{{lb1_asset_id}}~$lb1_asset_id~g" $cmdb_sql_file
+sed -i "s~{{lb2_asset_id}}~$lb2_asset_id~g" $cmdb_sql_file
+sed -i "s~{{lb1_ip}}~$lb1_ip~g" $cmdb_sql_file
+sed -i "s~{{lb2_ip}}~$lb2_ip~g" $cmdb_sql_file
+sed -i "s~{{lb1_name}}~$lb1_name~g" $cmdb_sql_file
+sed -i "s~{{lb2_name}}~$lb2_name~g" $cmdb_sql_file
+
 yum install -y mysql
 cat $cmdb_sql_file
 
