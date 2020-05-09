@@ -1,5 +1,3 @@
-SET NAMES utf8 ;
-
 SET FOREIGN_KEY_CHECKS = 0;
 /*Table structure for table `act_ge_bytearray` */
 
