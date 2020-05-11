@@ -35,14 +35,14 @@ fi
 echo -e "\nNow starting to configure plugins...\n"
 
 PLUGIN_INSTALLER_URL="https://github.com/kanetz/wecube-auto/archive/master.zip"
-PLUGINS_BUCKET_URL="https://wecube-plugins.obs.ap-southeast-3.myhuaweicloud.com"
+PLUGINS_BUCKET_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.3.1"
 PLUGIN_PKGS=(
-    "wecube-plugins-wecmdb-v1.4.3.2.zip"
-    "wecube-plugins-huaweicloud-v1.1.4.9.zip"
-    "wecube-plugins-saltstack-v1.8.4.zip"
+    "wecube-plugins-wecmdb-v1.4.4.zip"
+    "wecube-plugins-huaweicloud-v1.2.0.zip"
+    "wecube-plugins-saltstack-v1.8.5.zip"
     "wecube-plugins-notifications-v0.1.0.zip"
-    "wecube-monitor-v1.3.4.zip"
-    "wecube-plugins-artifacts-v0.2.0.zip"
+    "wecube-plugins-monitor-v1.3.5.zip"
+    "wecube-plugins-artifacts-v0.2.5.zip"
     "wecube-plugins-service-mgmt-v0.4.1.zip"
 )
 PLUGIN_INSTALLER_PKG="$INSTALLER_DIR/wecube-plugin-installer.zip"
@@ -60,7 +60,7 @@ mkdir -p "$PLUGIN_PKG_DIR"
 PLUGIN_LIST_CSV="$PLUGIN_PKG_DIR/plugin-list.csv"
 echo "plugin_package_path" > $PLUGIN_LIST_CSV
 for PLUGIN_PKG in "${PLUGIN_PKGS[@]}"; do
-    PLUGIN_URL="$PLUGINS_BUCKET_URL/v2.3.0/$PLUGIN_PKG"
+    PLUGIN_URL="$PLUGINS_BUCKET_URL/$PLUGIN_PKG"
     PLUGIN_PKG_FILE="$PLUGIN_PKG_DIR/$PLUGIN_PKG"
     echo -e "\nFetching from $PLUGIN_URL"
     curl -L $PLUGIN_URL -o $PLUGIN_PKG_FILE
