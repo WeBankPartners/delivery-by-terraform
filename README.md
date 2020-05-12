@@ -27,6 +27,8 @@ $git clone https://github.com/WeBankPartners/delivery-by-terraform.git
 ### 4. 运行Terraform部署WeCube
 为方便用户体验，我们提供了单机版和生产基础版两种部署方案。
 
+其中，单机版适合体验WeCube，生产版为高可用加带有安全规则的WeCube部署方案，这两种方案为最佳实践推荐，项目的实际实施过程中可自行定制部署方案，这两种方案仅作为参考实现。  
+
 [单机版](#5-单机版)  
 [生产版](#6-生产版)
 
@@ -173,6 +175,10 @@ tencentcloud_cos_bucket | 1 | wecube-bucket-[APPID] | APPID请在腾讯云上查
 10.128.199.3 | 1C1G |  PRD1_MG_PROXY |  运行Squid  |  
 10.128.192.3 | 2C4G | PRD1_MG_VDI  | 运行Windows VDI主机 |  
   
+
+> squid 的代理规则可根据实际项目需要自行更改
+
+
 6.变量配置   
 部署之前，可以修改terraform.tfvars文件中变量值，否则会使用默认值；   
 
@@ -274,6 +280,12 @@ PluginDbInstance | rds.mysql.c2.large.ha（2核4GB） | 40GB | subnet_db  |  sg_
 10.128.194.2 | 4C8G | subnet_app  |  sg_group_wecube_app |  Squid  |  
 10.128.195.2 | 4C8G | subnet_vdi  |  sg_group_wecube_vdi |  Windows VDI主机 |    
     
+
+
+> squid 的代理规则可根据实际项目需要自行更改
+
+
+
 7.变量配置：   
 **部署之前，可以修改下面terraform变量值，否则会使用默认值**   
 变量名 | 默认值 |  描述  
