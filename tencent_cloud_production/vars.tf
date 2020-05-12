@@ -34,7 +34,7 @@ variable "wecube_home_folder" {
 #If "Y", it will auto launch plugins;
 variable "is_install_plugins" {
   description = "You can override the value by setup os env variable - 'TF_VAR_is_install_plugins'"
-   default     = "Y"
+  default     = "Y"
 }
 
 #please input your ip which run 'terraform apply'

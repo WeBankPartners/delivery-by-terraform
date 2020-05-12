@@ -50,36 +50,39 @@ variable "hw_tenant_name" {
   description = "Specified tenant name"
 }
 
-#Specified password of ECS/RDS
 variable "default_password" {
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_default_password'"
-  default     = "Wecube@123456"
+  default = "Wecube@123456"
 }
 
-#Specified WeCube version
 variable "wecube_version" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default     = "20200424131349-c32549a"
+  default = "20200424131349-c32549a"
 }
 
-#Specified the WeCube install home folder
 variable "wecube_home_folder" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_wecube_install_folder'"
-  default     = "/data/wecube"
+  default = "/data/wecube"
 }
 
-#If "Y", it will auto launch plugins;
 variable "is_install_plugins" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_is_install_plugins'"
-#  default     = "Y"
+  description = "Only 'Y' will be accepted to auto install plugins"
+  #  default     = "Y"
 }
 
-#please input your ip which run 'terraform apply'
 variable "current_ip" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_current_ip'"
-#  default     = "127.0.0.1"
+  description = "Please input your current ip or network segment(CIDR)"
+  #  default     = "127.0.0.1"
 }
 
+
+
+#自动注册插件包信息，若不需要自动注册插件包，则以下参数无意义
+variable "WECUBE_PLUGIN_URL_PREFIX" {}
+variable "PKG_WECMDB" {}
+variable "PKG_HUAWEICLOUD" {}
+variable "PKG_SALTSTACK" {}
+variable "PKG_NOTIFICATIONS" {}
+variable "PKG_MONITOR" {}
+variable "PKG_ARTIFACTS" {}
+variable "PKG_SERVICE_MGMT" {}
 
 #for resource name
 variable "vpc_name" {}
