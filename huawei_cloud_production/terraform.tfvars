@@ -25,13 +25,17 @@ ecs_squid_name        = "PRD1_MG_PROXY_wecubesquid"
 ecs_vdi_name          = "PRD1_MG_OVDI_wecubevdi"
 #lb
 lb1_name           = "PRD1_MG_LB_1"
-lb1_listener1_name = "http_listener_portal1"
-lb1_listener2_name = "http_listener_gateway1"
-lb1_listener3_name = "http_listener_core1"
-lb1_listener4_name = "http_listener_auth1"
 lb2_name           = "PRD2_MG_LB_2"
-lb2_listener1_name = "http_listener_portal2"
-lb2_listener2_name = "http_listener_gateway2"
-lb2_listener3_name = "http_listener_core2"
-lb2_listener4_name = "http_listener_auth2"
+
+#自动注册插件包信息，若不需要自动注册插件包，则以下参数无意义
+#插件包所在地址前缀
+WECUBE_PLUGIN_URL_PREFIX="https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.3.0"
+#各个插件包包名
+PKG_WECMDB="wecube-plugins-wecmdb-v1.4.3.26.zip"
+PKG_QCLOUD="wecube-plugins-qcloud-v1.8.4.zip"
+PKG_SALTSTACK="wecube-plugins-saltstack-v1.8.4.zip"
+PKG_NOTIFICATIONS="wecube-plugins-notifications-v0.1.0.zip"
+PKG_MONITOR="wecube-monitor-v1.3.4.zip"
+PKG_ARTIFACTS="wecube-plugins-artifacts-v0.2.0.zip"
+PKG_SERVICE_MGMT="wecube-plugins-service-mgmt-v0.4.1.zip"
 
