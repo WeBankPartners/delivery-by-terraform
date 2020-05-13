@@ -18,7 +18,7 @@ if [ ${init_db} == "Y" ];then
   mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -e "CREATE DATABASE IF NOT EXISTS ${mysql_server_database_name}"
 
   mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/01.wecube.schema.sql" 
-  mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/03.core_flow_engine_init.sql"
+  mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/03.wecube.flow_engine.schema.sql"
   mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -D${mysql_server_database_name} -e "source /root/wecube-platform-scripts/database/platform-core/02.wecube.system.data.sql" 
 
   mysql -h${mysql_server_addr} -P${mysql_server_port} -u${mysql_user_name} -p${mysql_user_password} -e "CREATE DATABASE IF NOT EXISTS ${auth_server_database_name}"

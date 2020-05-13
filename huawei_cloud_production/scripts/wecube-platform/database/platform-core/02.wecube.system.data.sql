@@ -39,6 +39,8 @@ INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_v
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__ENCRYPT_SEED', NULL, 'ENCRYPT_SEED', NULL, 'seed-wecube2.1-2020', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__CALLBACK_URL', NULL, 'CALLBACK_URL', NULL, '/platform/v1/process/instances/callback', 'global', 'system', 'active');
 INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('global__GATEWAY_URL', NULL, 'GATEWAY_URL', NULL, 'http://{{GATEWAY_IP}}:19110', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__HTTP_PROXY', NULL, 'HTTP_PROXY', NULL, 'http://10.128.199.3:3128', 'global', 'system', 'active');
+INSERT INTO `system_variables` (`id`,`package_name`, `name`, `value`, `default_value`, `scope`, `source`, `status`) VALUES ('system__global__HTTPS_PROXY', NULL, 'HTTPS_PROXY', NULL, 'http://10.128.199.3:3128', 'global', 'system', 'active');
 
 
 INSERT INTO `resource_server` (`id`,`created_by`, `created_date`, `host`, `is_allocated`, `login_password`, `login_username`, `name`, `port`, `purpose`, `status`, `type`, `updated_by`,`updated_date`) VALUES ('{{MYSQL_RESOURCE_SERVER_IP}}__mysql__mysqlHost','umadmin','2020-01-21 12:37:03','{{MYSQL_RESOURCE_SERVER_IP}}',1,'eNgy+i8zfJOUHeCS3te+UA==','root','mysqlHost','3306','ss','active','mysql','umadmin','2020-01-21 12:37:03');
