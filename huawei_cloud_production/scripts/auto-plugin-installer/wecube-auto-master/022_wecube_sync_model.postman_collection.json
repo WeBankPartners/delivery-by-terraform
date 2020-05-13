@@ -1,0 +1,245 @@
+{
+	"info": {
+		"_postman_id": "9bc6bc32-191f-407e-a707-337d312c4a7f",
+		"name": "022_wecube_sync_model",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c9c21754-dc6e-48af-ba46-ebff205a11a2",
+						"exec": [
+							"pm.test(\"login\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"    pm.environment.set(\"authorization\", postman.getResponseHeader(\"Authorization\"));",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Origin",
+						"value": "http://111.230.161.237:29090"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"{{username}}\",\"password\":\"{{password}}\"}"
+				},
+				"url": {
+					"raw": "http://{{domain}}/auth/v1/api/login",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"auth",
+						"v1",
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sync_plugin_model",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "27c0edbe-faa6-4109-ba07-6878b357f857",
+						"exec": [
+							"pm.test(\"sync plugin data model\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"    var model = jsonData.data;",
+							"    model.id = \"DataModel__wecmdb__\" + model.version;",
+							"    pm.collectionVariables.set(\"plugin_model\", JSON.stringify(model));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "accept-encoding",
+						"value": "gzip, deflate"
+					},
+					{
+						"key": "accept-language",
+						"value": "en,zh-CN;q=0.9,zh;q=0.8"
+					},
+					{
+						"key": "authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "cache-control",
+						"value": "no-cache"
+					},
+					{
+						"key": "pragma",
+						"value": "no-cache"
+					},
+					{
+						"key": "proxy-connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "user-agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					}
+				],
+				"url": {
+					"raw": "http://{{domain}}/platform/v1/models/package/wecmdb",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"v1",
+						"models",
+						"package",
+						"wecmdb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "apply_plugin_data_model",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "36f81a8e-2c09-497a-abbe-0fce1c9570d2",
+						"exec": [
+							"//pm.request.body.raw = pm.collectionVariables.get(\"plugin_model\");",
+							"//console.log(pm.collectionVariables.get(\"plugin_model\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "accept-encoding",
+						"value": "gzip, deflate"
+					},
+					{
+						"key": "accept-language",
+						"value": "en,zh-CN;q=0.9,zh;q=0.8"
+					},
+					{
+						"key": "authorization",
+						"value": "{{authorization}}"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json;charset=UTF-8"
+					},
+					{
+						"key": "cookie",
+						"value": "JSESSIONID=6CE6E84E1A39B24729BD824B310824A6; DW68700bfd16c2027de7de74a5a8202a6f=Z3JheQ%3D%3D%7C1%7C7qv4%2FejRF9t%2BBSBLpTCXCkXadTayMKwIRLzMiCD93xg%3D; refreshToken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU4NDM0MzYwMywidHlwZSI6InJlZnJlc2hUb2tlbiIsImNsaWVudFR5cGUiOiJVU0VSIiwiZXhwIjoxNTg0MzQ1NDAzfQ.CLWDlg7UTxlM5oV1srrHGzzNd_TYOuo6Jhs65s-zu8VXQDlE4tBE9aQ76kRq7twqsxLmJjgwHECWqLUMUsEFeQ; refreshTokenExpirationTime=1584345403236; accessToken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU4NDM0MzYwMywidHlwZSI6ImFjY2Vzc1Rva2VuIiwiY2xpZW50VHlwZSI6IlVTRVIiLCJleHAiOjE1ODQzNDQyMDMsImF1dGhvcml0eSI6IltTVVBFUl9BRE1JTixJTVBMRU1FTlRBVElPTl9XT1JLRkxPV19FWEVDVVRJT04sSU1QTEVNRU5UQVRJT05fQkFUQ0hfRVhFQ1VUSU9OLElNUExFTUVOVEFUSU9OX0FSVElGQUNUX01BTkFHRU1FTlQsTU9OSVRPUl9NQUlOX0RBU0hCT0FSRCxNT05JVE9SX01FVFJJQ19DT05GSUcsTU9OSVRPUl9DVVNUT01fREFTSEJPQVJELE1PTklUT1JfQUxBUk1fQ09ORklHLE1PTklUT1JfQUxBUk1fTUFOQUdFTUVOVCxDT0xMQUJPUkFUSU9OX1BMVUdJTl9NQU5BR0VNRU5ULENPTExBQk9SQVRJT05fV09SS0ZMT1dfT1JDSEVTVFJBVElPTixBRE1JTl9TWVNURU1fUEFSQU1TLEFETUlOX1JFU09VUkNFU19NQU5BR0VNRU5ULEFETUlOX1VTRVJfUk9MRV9NQU5BR0VNRU5ULEFETUlOX0NNREJfTU9ERUxfTUFOQUdFTUVOVCxDTURCX0FETUlOX0JBU0VfREFUQV9NQU5BR0VNRU5ULEFETUlOX1FVRVJZX0xPRyxNRU5VX0FETUlOX1BFUk1JU1NJT05fTUFOQUdFTUVOVCxNRU5VX0RFU0lHTklOR19DSV9EQVRBX01BTkFHRU1FTlQsTUVOVV9BRE1JTl9DTURCX01PREVMX01BTkFHRU1FTlQsTUVOVV9BUFBMSUNBVElPTl9BUkNISVRFQ1RVUkVfREVTSUdOLE1FTlVfSURDX1BMQU5OSU5HX0RFU0lHTixNRU5VX0FETUlOX1FVRVJZX0xPRyxNRU5VX0NNREJfREVTSUdOSU5HX0VOVU1fRU5RVUlSWSxNRU5VX0NNREJfREVTSUdOSU5HX0VOVU1fTUFOQUdFTUVOVCxNRU5VX0RFU0lHTklOR19DSV9JTlRFR1JBVEVEX1FVRVJZX0VYRUNVVElPTixNRU5VX0FQUExJQ0FUSU9OX0RFUExPWU1FTlRfREVTSUdOLE1FTlVfQ01EQl9BRE1JTl9CQVNFX0RBVEFfTUFOQUdFTUVOVCxNRU5VX0RFU0lHTklOR19DSV9EQVRBX0VOUVVJUlksTUVOVV9ERVNJR05JTkdfQ0lfSU5URUdSQVRFRF9RVUVSWV9NQU5BR0VNRU5ULE1FTlVfSURDX1JFU09VUkNFX1BMQU5OSU5HLEpPQlNfVEFTS19NQU5BR0VNRU5ULEpPQlNfU0VSVklDRV9DQVRBTE9HX01BTkFHRU1FTlRdIn0.hAV7DLUABkuIKK_IHipubgkF_WbnVBSG_kdBxwB-oCH4nuLwHwBSp3pPv24_MlMXW2KQ-qhIldNWLaaxeLwkOw; accessTokenExpirationTime=1584344203236"
+					},
+					{
+						"key": "proxy-connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "user-agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{plugin_model}}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "http://{{domain}}/platform/v1/models",
+					"protocol": "http",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"platform",
+						"v1",
+						"models"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "abca35e0-cb45-42b7-b857-971646106450",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1aa7cf4a-8556-4517-944f-c56657a685bb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "08bda6f3-8f3d-43b9-a937-ab64d66466b6",
+			"key": "plugin_model",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

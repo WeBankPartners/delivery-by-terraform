@@ -33,9 +33,9 @@ sed -i "1i\acl wecubehosts src 10.40.192.0/19      #vpc" /etc/squid/squid.conf
 sed -i "1i\# squid config for WeCube" /etc/squid/squid.conf
 
 service squid reload
-squid -z
+# squid -z
 
-squid -k reconfigure
+# squid -k reconfigure
 
 systemctl start squid.service
 systemctl enable squid.service

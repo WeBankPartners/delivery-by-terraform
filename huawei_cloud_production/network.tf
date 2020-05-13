@@ -110,14 +110,14 @@ resource "huaweicloud_networking_secgroup_rule_v2" "allow_all_mg_tcp_out" {
   port_range_max    = 65535
 }
 #for LB health-check
-resource "huaweicloud_networking_secgroup_rule_v2" "allow_lb_tcp_in19090" {
+resource "huaweicloud_networking_secgroup_rule_v2" "allow_lb_tcp_in1-65535" {
   security_group_id = "${huaweicloud_networking_secgroup_v2.sg_mg.id}"
   direction         = "ingress"
   remote_ip_prefix  = "100.125.0.0/16"
   protocol          = "tcp"
   ethertype         = "IPv4"
-  port_range_min    = 19090
-  port_range_max    = 19090
+  port_range_min    = 1
+  port_range_max    = 65535
 }
 
 

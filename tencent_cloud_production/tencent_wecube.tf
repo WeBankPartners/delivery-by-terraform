@@ -596,11 +596,11 @@ resource "tencentcloud_instance" "instance_squid" {
       "./utils-sed.sh '{{lb1_ip}}' ${tencentcloud_clb_instance.internal_clb_1.clb_vips.0} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
       "./utils-sed.sh '{{lb2_ip}}' ${tencentcloud_clb_instance.internal_clb_2.clb_vips.0} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
-     "./utils-sed.sh '{{WECUBE_PLUGIN_URL_PREFIX}}' ${var.WECUBE_PLUGIN_URL_PREFIX} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{WECUBE_PLUGIN_URL_PREFIX}}' ${var.WECUBE_PLUGIN_URL_PREFIX} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
       "./utils-sed.sh '{{PKG_WECMDB}}' ${var.PKG_WECMDB} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
       "./utils-sed.sh '{{PKG_QCLOUD}}' ${var.PKG_QCLOUD} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
       "./utils-sed.sh '{{PKG_SALTSTACK}}' ${var.PKG_SALTSTACK} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
-     "./utils-sed.sh '{{PKG_NOTIFICATIONS}}' ${var.PKG_NOTIFICATIONS} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{PKG_NOTIFICATIONS}}' ${var.PKG_NOTIFICATIONS} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
       "./utils-sed.sh '{{PKG_MONITOR}}' ${var.PKG_MONITOR} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
       "./utils-sed.sh '{{PKG_ARTIFACTS}}' ${var.PKG_ARTIFACTS} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
       "./utils-sed.sh '{{PKG_SERVICE_MGMT}}' ${var.PKG_SERVICE_MGMT} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",

@@ -54,5 +54,9 @@ sed -i "s~{{rds_core_name}}~$rds_core_name~g" $cmdb_sql_file
 sed -i "s~{{rds_plugin_name}}~$rds_plugin_name~g" $cmdb_sql_file
 
 yum install -y mysql
-mysql -h${plugin_mysql_host} -P${plugin_mysql_port} -u${mysql_user} -p${mysql_password} -Dwecmdb_embedded -e "source  $cmdb_sql_file" 
-mysql -h${wecube_mysql_host} -P${wecube_mysql_port} -u${mysql_user} -p${mysql_password} -Dwecube -e "source  $wecube_sql_script_file" 
+
+cat $cmdb_sql_file
+mysql -h${plugin_mysql_host} -P${plugin_mysql_port} -u${mysql_user} -p${mysql_password} -Dwecmdb_embedded -e "source  $cmdb_sql_file"
+
+cat $wecube_sql_script_file
+mysql -h${wecube_mysql_host} -P${wecube_mysql_port} -u${mysql_user} -p${mysql_password} -Dwecube -e "source  $wecube_sql_script_file"

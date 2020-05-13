@@ -53,26 +53,3 @@ docker run --name minio-client-upload -v /data/wecube/installer/wecube-plugin-in
 docker exec minio-client-upload mc config host add wecubeS3 'http://10.128.202.3:9001' 'access_key' 'secret_key' 
 docker exec minio-client-upload mc cp /plugins/node_exporter_v2.1.tar.gz wecubeS3/wecube-agent
 docker rm -f minio-client-upload
-
-echo "Installing monitor agent..."
-sh ./start.sh
-popd >/dev/null
-./wait-for-it.sh -t 60 $WECUBE_HOST:$MONITOR_AGENT_PORT
-
-docker run --rm -t \
-    -v "$COLLECTION_DIR:$COLLECTION_DIR" \
-    -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
-    swr.ap-southeast-3.myhuaweicloud.com/webankpartners/newman \
-    run "$COLLECTION_DIR/021_wecube_init_plugin.postman_collection.json" \
-    --env-var "domain=$WECUBE_HOST:19090" \
-    --env-var "username=umadmin" \
-    --env-var "password=umadmin" \
-    --env-var "wecube_host=$WECUBE_HOST" \
-    --env-var "plugin_host=$PLUGIN_HOST" \
-    --env-var "node_exporter_port=$MONITOR_AGENT_PORT" \
-    --env-var "plugin_mysql_port=3307" \
-    --env-var "plugin_mysql_user=root" \
-    --env-var "plugin_mysql_password=$MYSQL_PASSWORD" \
-    --delay-request 2000 --disable-unicode \
-    --reporters cli \
-    --reporter-cli-no-banner --reporter-cli-no-console

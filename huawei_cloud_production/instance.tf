@@ -164,7 +164,7 @@ resource "huaweicloud_lb_listener_v2" "http_listener_portal1" {
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb1_portal" {
-  name = "WeCube-Portal"
+  name        = "WeCube-Portal"
   protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_portal1.id}"
@@ -204,7 +204,7 @@ resource "huaweicloud_lb_listener_v2" "http_listener_gateway1" {
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb1_gateway" {
-  name = "WeCube-Gateway"
+  name        = "WeCube-Gateway"
   protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_gateway1.id}"
@@ -234,7 +234,7 @@ resource "huaweicloud_lb_listener_v2" "http_listener_core1" {
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb1_core" {
-  name = "WeCube-Core"
+  name        = "WeCube-Core"
   protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_core1.id}"
@@ -264,7 +264,7 @@ resource "huaweicloud_lb_listener_v2" "http_listener_auth1" {
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb1_auth" {
-  name = "WeCube-Auth"
+  name        = "WeCube-Auth"
   protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_auth1.id}"
@@ -302,7 +302,7 @@ resource "huaweicloud_lb_listener_v2" "http_listener_portal2" {
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb2_portal" {
-  name = "WeCube-Portal"
+  name        = "WeCube-Portal"
   protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_portal2.id}"
@@ -342,7 +342,7 @@ resource "huaweicloud_lb_listener_v2" "http_listener_gateway2" {
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb2_gateway" {
-  name = "WeCube-Gateway"
+  name        = "WeCube-Gateway"
   protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_gateway2.id}"
@@ -372,7 +372,7 @@ resource "huaweicloud_lb_listener_v2" "http_listener_core2" {
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb2_core" {
-  name = "WeCube-Core"
+  name        = "WeCube-Core"
   protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_core2.id}"
@@ -402,7 +402,7 @@ resource "huaweicloud_lb_listener_v2" "http_listener_auth2" {
 }
 #创建后端服务组
 resource "huaweicloud_lb_pool_v2" "pool_lb2_auth" {
-  name = "WeCube-Auth"
+  name        = "WeCube-Auth"
   protocol    = "HTTP"
   lb_method   = "ROUND_ROBIN"
   listener_id = "${huaweicloud_lb_listener_v2.http_listener_auth2.id}"
@@ -548,13 +548,13 @@ resource "null_resource" "null_instance" {
       "./utils-sed.sh '{{mysql_password}}' ${var.default_password} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{plugin_mysql_host}}' ${huaweicloud_rds_instance_v3.mysql_instance_plugin.private_ips.0} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{cmdb_sql_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/cmdb/01.register_cmdb_asset_ids.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-      
+
       "./utils-sed.sh '{{project_id}}' ${var.hw_project_id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{az_master}}' ${var.hw_az_master} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{az_slave}}' ${var.hw_az_slave} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{wecube_vpc_asset_id}}' ${huaweicloud_vpc_v1.vpc_mg.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{vpc_name}}' ${var.vpc_name} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
-         
+
       "./utils-sed.sh '{{security_group_asset_id}}' ${huaweicloud_networking_secgroup_v2.sg_mg.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
 
       "./utils-sed.sh '{{app1_subnet_asset_id}}' ${huaweicloud_vpc_subnet_v1.subnet_app1.id} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
@@ -600,6 +600,15 @@ resource "null_resource" "null_instance" {
       "./utils-sed.sh '{{wecube_mysql_host}}' ${huaweicloud_rds_instance_v3.mysql_instance_wecube_core.private_ips.0} ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{wecube_mysql_port}}' 3306 ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
       "./utils-sed.sh '{{wecube_sql_script_file}}' '${var.wecube_home_folder}/auto-plugin-installer/database/wecube/01.update_system_variables.sql' ${var.wecube_home_folder}/auto-plugin-installer/db.cfg",
+
+      "./utils-sed.sh '{{WECUBE_PLUGIN_URL_PREFIX}}' ${var.WECUBE_PLUGIN_URL_PREFIX} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{PKG_WECMDB}}' ${var.PKG_WECMDB} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{PKG_HUAWEICLOUD}}' ${var.PKG_HUAWEICLOUD} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{PKG_SALTSTACK}}' ${var.PKG_SALTSTACK} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{PKG_NOTIFICATIONS}}' ${var.PKG_NOTIFICATIONS} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{PKG_MONITOR}}' ${var.PKG_MONITOR} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{PKG_ARTIFACTS}}' ${var.PKG_ARTIFACTS} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
+      "./utils-sed.sh '{{PKG_SERVICE_MGMT}}' ${var.PKG_SERVICE_MGMT} ${var.wecube_home_folder}/auto-plugin-installer/auto-run.cfg",
 
       #初始化Squid主机
       "./utils-scp.sh root ${huaweicloud_compute_instance_v2.instance_squid.network.0.fixed_ip_v4} ${var.default_password} '-r ${var.wecube_home_folder}/auto-plugin-installer' /root/",
