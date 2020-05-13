@@ -1,46 +1,47 @@
 variable "secret_id" {
+  description = "Please input your Tencent cloud Secret ID"
 }
 variable "secret_key" {
+  description = "Please input your Tencent cloud Secret Key"
 }
 variable "region" { default = "ap-hongkong" }
 
 variable "availability_zone_1" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_availability_zone_1'"
+  description = "Specified master availability zone for resource creation"
   default     = "ap-hongkong-1"
 }
 variable "availability_zone_2" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_availability_zone_2'"
+  description = "Specified slave availability zone for resource creation"
   default     = "ap-hongkong-2"
 }
 
 #Specified password of ECS/RDS
 variable "default_password" {
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_default_password'"
-  default     = "Wecube@123456"
+  description = "Please input your password of CVM/RDB and other resources"
 }
 
 #Specified WeCube version
 variable "wecube_version" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
+  description = "Specified WeCube version"
   default     = "20200424131349-c32549a"
 }
 
 #Specified the WeCube install home folder
 variable "wecube_home_folder" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_wecube_install_folder'"
+  description = "Specified WeCube install folder"
   default     = "/data/wecube"
 }
 
 #If "Y", it will auto launch plugins;
 variable "is_install_plugins" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_is_install_plugins'"
-  default     = "Y"
+  description = "Only 'Y' will be accepted to auto install plugins"
+  #default     = "Y"
 }
 
 #please input your ip which run 'terraform apply'
 variable "current_ip" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_current_ip'"
-  default     = "0.0.0.0/0"
+  description = "Please input your current ip or network segment(CIDR)"
+  #default     = "0.0.0.0/0"
 }
 
 

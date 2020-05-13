@@ -1,22 +1,20 @@
 variable "hw_access_key" {
-  # Warn: please input it command line or setup real password by using os env variable - 'TF_VAR_hw_access_key'
   description = "Please input your Huawei cloud Access_key"
 }
 variable "hw_secret_key" {
-  # Warn: to be safety, please input it command line or setup real password by using os env variable - 'TF_VAR_hw_secret_key'
   description = "Please input your Huawei cloud Secret_key"
 }
 
 #Your Domain ID(Account ID)
 variable "hw_domain_id" {
   default     = "hw_domain_id"
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_secret_key'"
+  description = "Just for output, not for other purposes"
 }
 
 #Your Project ID
 variable "hw_project_id" {
   default     = "hw_project_id"
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_hw_secret_key'"
+  description = "Just for output, not for other purposes"
 }
 
 #Specified the region which wecube deployed
@@ -51,15 +49,17 @@ variable "hw_tenant_name" {
 }
 
 variable "default_password" {
-  default = "Wecube@123456"
+  description = "Please input your password of ECS/RDS and other resources"
 }
 
 variable "wecube_version" {
-  default = "20200424131349-c32549a"
+  description = "Specified WeCube version"
+  default     = "20200424131349-c32549a"
 }
 
 variable "wecube_home_folder" {
-  default = "/data/wecube"
+  description = "Specified WeCube install folder"
+  default     = "/data/wecube"
 }
 
 variable "is_install_plugins" {
@@ -94,7 +94,6 @@ variable "subnet_app1_name" {}
 variable "subnet_app2_name" {}
 variable "subnet_db1_name" {}
 variable "subnet_db2_name" {}
-
 
 variable "rds_parametergroup_name" {}
 variable "rds_core_name" {}

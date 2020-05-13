@@ -13,7 +13,7 @@ hw_az_master = "ap-southeast-3b"
 hw_az_slave  = "ap-southeast-3c"
 
 #(Required) Specified password of ECS/RDS
-default_password = "Wecube@123456"
+#default_password = "Wecube@123456"
 
 #(Required) Specified the WeCube install home folder
 wecube_home_folder = "/data/wecube"
@@ -22,10 +22,10 @@ wecube_home_folder = "/data/wecube"
 wecube_version = "20200424131349-c32549a"
 
 #(Optional) Your Domain ID(Account ID)
-hw_domain_id = "hw_domain_id"
+#hw_domain_id = "hw_domain_id"
 
 #(Optional) Your Project ID
-hw_project_id = "hw_project_id"
+#hw_project_id = "hw_project_id"
 
 #自动注册插件包信息，若不需要自动注册插件包，则以下参数无意义
 #插件包所在地址前缀
