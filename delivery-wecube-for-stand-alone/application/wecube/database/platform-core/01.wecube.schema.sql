@@ -666,7 +666,7 @@ CREATE TABLE `plugin_package_runtime_resources_docker` (
   `plugin_package_id` varchar(255) NOT NULL,
   `image_name` varchar(256) NOT NULL,
   `container_name` varchar(128) NOT NULL,
-  `port_bindings` varchar(64) NOT NULL,
+  `port_bindings` varchar(1024) NOT NULL,
   `volume_bindings` varchar(1024) NOT NULL,
   `env_variables` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -738,7 +738,7 @@ DROP TABLE IF EXISTS `resource_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `resource_item` (
-  `id` varchar(64) NOT NULL,
+  `id` varchar(255) NOT NULL,
   `additional_properties` varchar(2048) DEFAULT NULL,
   `created_by` varchar(255) DEFAULT NULL,
   `created_date` datetime DEFAULT NULL,
