@@ -1,12 +1,12 @@
-SET NAMES utf8 ;
-
 SET FOREIGN_KEY_CHECKS = 0;
-
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 DROP TABLE IF EXISTS `act_ge_bytearray`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ge_bytearray` (
+CREATE TABLE IF NOT EXISTS `act_ge_bytearray` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -25,46 +25,25 @@ CREATE TABLE `act_ge_bytearray` (
   KEY `ACT_IDX_BYTEARRAY_NAME` (`NAME_`),
   CONSTRAINT `ACT_FK_BYTEARR_DEPL` FOREIGN KEY (`DEPLOYMENT_ID_`) REFERENCES `act_re_deployment` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ge_property`
---
 
 DROP TABLE IF EXISTS `act_ge_property`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ge_property` (
+CREATE TABLE IF NOT EXISTS `act_ge_property` (
   `NAME_` varchar(64) COLLATE utf8_bin NOT NULL,
   `VALUE_` varchar(300) COLLATE utf8_bin DEFAULT NULL,
   `REV_` int(11) DEFAULT NULL,
   PRIMARY KEY (`NAME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ge_schema_log`
---
 
 DROP TABLE IF EXISTS `act_ge_schema_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ge_schema_log` (
+CREATE TABLE IF NOT EXISTS `act_ge_schema_log` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `TIMESTAMP_` datetime(3) DEFAULT NULL,
   `VERSION_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_actinst`
---
 
 DROP TABLE IF EXISTS `act_hi_actinst`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_actinst` (
+CREATE TABLE IF NOT EXISTS `act_hi_actinst` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `PARENT_ACT_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   `PROC_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -98,16 +77,9 @@ CREATE TABLE `act_hi_actinst` (
   KEY `ACT_IDX_HI_AI_PDEFID_END_TIME` (`PROC_DEF_ID_`,`END_TIME_`),
   KEY `ACT_IDX_HI_ACT_INST_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_attachment`
---
 
 DROP TABLE IF EXISTS `act_hi_attachment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_attachment` (
+CREATE TABLE IF NOT EXISTS `act_hi_attachment` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -129,16 +101,9 @@ CREATE TABLE `act_hi_attachment` (
   KEY `ACT_IDX_HI_ATTACHMENT_TASK` (`TASK_ID_`),
   KEY `ACT_IDX_HI_ATTACHMENT_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_batch`
---
 
 DROP TABLE IF EXISTS `act_hi_batch`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_batch` (
+CREATE TABLE IF NOT EXISTS `act_hi_batch` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `TOTAL_JOBS_` int(11) DEFAULT NULL,
@@ -155,16 +120,9 @@ CREATE TABLE `act_hi_batch` (
   PRIMARY KEY (`ID_`),
   KEY `ACT_HI_BAT_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_caseactinst`
---
 
 DROP TABLE IF EXISTS `act_hi_caseactinst`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_caseactinst` (
+CREATE TABLE IF NOT EXISTS `act_hi_caseactinst` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `PARENT_ACT_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   `CASE_DEF_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
@@ -188,16 +146,9 @@ CREATE TABLE `act_hi_caseactinst` (
   KEY `ACT_IDX_HI_CAS_A_I_CASEINST` (`CASE_INST_ID_`,`CASE_ACT_ID_`),
   KEY `ACT_IDX_HI_CAS_A_I_TENANT_ID` (`TENANT_ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_caseinst`
---
 
 DROP TABLE IF EXISTS `act_hi_caseinst`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_caseinst` (
+CREATE TABLE IF NOT EXISTS `act_hi_caseinst` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `CASE_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `BUSINESS_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -216,16 +167,9 @@ CREATE TABLE `act_hi_caseinst` (
   KEY `ACT_IDX_HI_CAS_I_BUSKEY` (`BUSINESS_KEY_`),
   KEY `ACT_IDX_HI_CAS_I_TENANT_ID` (`TENANT_ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_comment`
---
 
 DROP TABLE IF EXISTS `act_hi_comment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_comment` (
+CREATE TABLE IF NOT EXISTS `act_hi_comment` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `TIME_` datetime(3) NOT NULL,
@@ -244,79 +188,9 @@ CREATE TABLE `act_hi_comment` (
   KEY `ACT_IDX_HI_COMMENT_PROCINST` (`PROC_INST_ID_`),
   KEY `ACT_IDX_HI_COMMENT_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_dec_in`
---
-
-DROP TABLE IF EXISTS `act_hi_dec_in`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_dec_in` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `DEC_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `CLAUSE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `CLAUSE_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `VAR_TYPE_` varchar(100) COLLATE utf8_bin DEFAULT NULL,
-  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `DOUBLE_` double DEFAULT NULL,
-  `LONG_` bigint(20) DEFAULT NULL,
-  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TENANT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `CREATE_TIME_` datetime(3) DEFAULT NULL,
-  `ROOT_PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `REMOVAL_TIME_` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_HI_DEC_IN_INST` (`DEC_INST_ID_`),
-  KEY `ACT_IDX_HI_DEC_IN_CLAUSE` (`DEC_INST_ID_`,`CLAUSE_ID_`),
-  KEY `ACT_IDX_HI_DEC_IN_ROOT_PI` (`ROOT_PROC_INST_ID_`),
-  KEY `ACT_IDX_HI_DEC_IN_RM_TIME` (`REMOVAL_TIME_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_dec_out`
---
-
-DROP TABLE IF EXISTS `act_hi_dec_out`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_dec_out` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `DEC_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `CLAUSE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `CLAUSE_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `RULE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `RULE_ORDER_` int(11) DEFAULT NULL,
-  `VAR_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `VAR_TYPE_` varchar(100) COLLATE utf8_bin DEFAULT NULL,
-  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `DOUBLE_` double DEFAULT NULL,
-  `LONG_` bigint(20) DEFAULT NULL,
-  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TENANT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `CREATE_TIME_` datetime(3) DEFAULT NULL,
-  `ROOT_PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `REMOVAL_TIME_` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_HI_DEC_OUT_INST` (`DEC_INST_ID_`),
-  KEY `ACT_IDX_HI_DEC_OUT_RULE` (`RULE_ORDER_`,`CLAUSE_ID_`),
-  KEY `ACT_IDX_HI_DEC_OUT_ROOT_PI` (`ROOT_PROC_INST_ID_`),
-  KEY `ACT_IDX_HI_DEC_OUT_RM_TIME` (`REMOVAL_TIME_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_decinst`
---
 
 DROP TABLE IF EXISTS `act_hi_decinst`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_decinst` (
+CREATE TABLE IF NOT EXISTS `act_hi_decinst` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `DEC_DEF_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `DEC_DEF_KEY_` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -353,16 +227,58 @@ CREATE TABLE `act_hi_decinst` (
   KEY `ACT_IDX_HI_DEC_INST_ROOT_PI` (`ROOT_PROC_INST_ID_`),
   KEY `ACT_IDX_HI_DEC_INST_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `act_hi_detail`
---
+DROP TABLE IF EXISTS `act_hi_dec_in`;
+CREATE TABLE IF NOT EXISTS `act_hi_dec_in` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `DEC_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `CLAUSE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `CLAUSE_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `VAR_TYPE_` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `DOUBLE_` double DEFAULT NULL,
+  `LONG_` bigint(20) DEFAULT NULL,
+  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TENANT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `CREATE_TIME_` datetime(3) DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `REMOVAL_TIME_` datetime(3) DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_HI_DEC_IN_INST` (`DEC_INST_ID_`),
+  KEY `ACT_IDX_HI_DEC_IN_CLAUSE` (`DEC_INST_ID_`,`CLAUSE_ID_`),
+  KEY `ACT_IDX_HI_DEC_IN_ROOT_PI` (`ROOT_PROC_INST_ID_`),
+  KEY `ACT_IDX_HI_DEC_IN_RM_TIME` (`REMOVAL_TIME_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+DROP TABLE IF EXISTS `act_hi_dec_out`;
+CREATE TABLE IF NOT EXISTS `act_hi_dec_out` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `DEC_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `CLAUSE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `CLAUSE_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `RULE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `RULE_ORDER_` int(11) DEFAULT NULL,
+  `VAR_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `VAR_TYPE_` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `DOUBLE_` double DEFAULT NULL,
+  `LONG_` bigint(20) DEFAULT NULL,
+  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TENANT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `CREATE_TIME_` datetime(3) DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `REMOVAL_TIME_` datetime(3) DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_HI_DEC_OUT_INST` (`DEC_INST_ID_`),
+  KEY `ACT_IDX_HI_DEC_OUT_RULE` (`RULE_ORDER_`,`CLAUSE_ID_`),
+  KEY `ACT_IDX_HI_DEC_OUT_ROOT_PI` (`ROOT_PROC_INST_ID_`),
+  KEY `ACT_IDX_HI_DEC_OUT_RM_TIME` (`REMOVAL_TIME_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DROP TABLE IF EXISTS `act_hi_detail`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_detail` (
+CREATE TABLE IF NOT EXISTS `act_hi_detail` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
   `PROC_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -405,16 +321,9 @@ CREATE TABLE `act_hi_detail` (
   KEY `ACT_IDX_HI_DETAIL_RM_TIME` (`REMOVAL_TIME_`),
   KEY `ACT_IDX_HI_DETAIL_TASK_BYTEAR` (`BYTEARRAY_ID_`,`TASK_ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_ext_task_log`
---
 
 DROP TABLE IF EXISTS `act_hi_ext_task_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_ext_task_log` (
+CREATE TABLE IF NOT EXISTS `act_hi_ext_task_log` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `TIMESTAMP_` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `EXT_TASK_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
@@ -443,16 +352,9 @@ CREATE TABLE `act_hi_ext_task_log` (
   KEY `ACT_IDX_HI_EXTTASKLOG_ERRORDET` (`ERROR_DETAILS_ID_`),
   KEY `ACT_HI_EXT_TASK_LOG_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_identitylink`
---
 
 DROP TABLE IF EXISTS `act_hi_identitylink`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_identitylink` (
+CREATE TABLE IF NOT EXISTS `act_hi_identitylink` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `TIMESTAMP_` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -476,16 +378,9 @@ CREATE TABLE `act_hi_identitylink` (
   KEY `ACT_IDX_HI_IDENT_LINK_RM_TIME` (`REMOVAL_TIME_`),
   KEY `ACT_IDX_HI_IDENT_LNK_TIMESTAMP` (`TIMESTAMP_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_incident`
---
 
 DROP TABLE IF EXISTS `act_hi_incident`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_incident` (
+CREATE TABLE IF NOT EXISTS `act_hi_incident` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `PROC_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -511,16 +406,9 @@ CREATE TABLE `act_hi_incident` (
   KEY `ACT_IDX_HI_INCIDENT_PROCINST` (`PROC_INST_ID_`),
   KEY `ACT_IDX_HI_INCIDENT_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_job_log`
---
 
 DROP TABLE IF EXISTS `act_hi_job_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_job_log` (
+CREATE TABLE IF NOT EXISTS `act_hi_job_log` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `TIMESTAMP_` datetime(3) NOT NULL,
   `JOB_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
@@ -553,16 +441,9 @@ CREATE TABLE `act_hi_job_log` (
   KEY `ACT_IDX_HI_JOB_LOG_EX_STACK` (`JOB_EXCEPTION_STACK_ID_`),
   KEY `ACT_IDX_HI_JOB_LOG_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_op_log`
---
 
 DROP TABLE IF EXISTS `act_hi_op_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_op_log` (
+CREATE TABLE IF NOT EXISTS `act_hi_op_log` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `DEPLOYMENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -600,16 +481,9 @@ CREATE TABLE `act_hi_op_log` (
   KEY `ACT_IDX_HI_OP_LOG_OP_TYPE` (`OPERATION_TYPE_`),
   KEY `ACT_IDX_HI_OP_LOG_ENTITY_TYPE` (`ENTITY_TYPE_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_procinst`
---
 
 DROP TABLE IF EXISTS `act_hi_procinst`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_procinst` (
+CREATE TABLE IF NOT EXISTS `act_hi_procinst` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `PROC_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `BUSINESS_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -640,16 +514,9 @@ CREATE TABLE `act_hi_procinst` (
   KEY `ACT_IDX_HI_PRO_INST_ROOT_PI` (`ROOT_PROC_INST_ID_`),
   KEY `ACT_IDX_HI_PRO_INST_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_taskinst`
---
 
 DROP TABLE IF EXISTS `act_hi_taskinst`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_taskinst` (
+CREATE TABLE IF NOT EXISTS `act_hi_taskinst` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `TASK_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `PROC_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -686,16 +553,9 @@ CREATE TABLE `act_hi_taskinst` (
   KEY `ACT_IDX_HI_TASK_INST_START` (`START_TIME_`),
   KEY `ACT_IDX_HI_TASK_INST_END` (`END_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_hi_varinst`
---
 
 DROP TABLE IF EXISTS `act_hi_varinst`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_hi_varinst` (
+CREATE TABLE IF NOT EXISTS `act_hi_varinst` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `PROC_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -730,32 +590,18 @@ CREATE TABLE `act_hi_varinst` (
   KEY `ACT_IDX_HI_VARINST_BYTEAR` (`BYTEARRAY_ID_`),
   KEY `ACT_IDX_HI_VARINST_RM_TIME` (`REMOVAL_TIME_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_id_group`
---
 
 DROP TABLE IF EXISTS `act_id_group`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_id_group` (
+CREATE TABLE IF NOT EXISTS `act_id_group` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_id_info`
---
 
 DROP TABLE IF EXISTS `act_id_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_id_info` (
+CREATE TABLE IF NOT EXISTS `act_id_info` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `USER_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -766,16 +612,9 @@ CREATE TABLE `act_id_info` (
   `PARENT_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_id_membership`
---
 
 DROP TABLE IF EXISTS `act_id_membership`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_id_membership` (
+CREATE TABLE IF NOT EXISTS `act_id_membership` (
   `USER_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `GROUP_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`USER_ID_`,`GROUP_ID_`),
@@ -783,31 +622,17 @@ CREATE TABLE `act_id_membership` (
   CONSTRAINT `ACT_FK_MEMB_GROUP` FOREIGN KEY (`GROUP_ID_`) REFERENCES `act_id_group` (`ID_`),
   CONSTRAINT `ACT_FK_MEMB_USER` FOREIGN KEY (`USER_ID_`) REFERENCES `act_id_user` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_id_tenant`
---
 
 DROP TABLE IF EXISTS `act_id_tenant`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_id_tenant` (
+CREATE TABLE IF NOT EXISTS `act_id_tenant` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_id_tenant_member`
---
 
 DROP TABLE IF EXISTS `act_id_tenant_member`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_id_tenant_member` (
+CREATE TABLE IF NOT EXISTS `act_id_tenant_member` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `TENANT_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `USER_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -821,16 +646,9 @@ CREATE TABLE `act_id_tenant_member` (
   CONSTRAINT `ACT_FK_TENANT_MEMB_GROUP` FOREIGN KEY (`GROUP_ID_`) REFERENCES `act_id_group` (`ID_`),
   CONSTRAINT `ACT_FK_TENANT_MEMB_USER` FOREIGN KEY (`USER_ID_`) REFERENCES `act_id_user` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_id_user`
---
 
 DROP TABLE IF EXISTS `act_id_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_id_user` (
+CREATE TABLE IF NOT EXISTS `act_id_user` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `FIRST_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -843,16 +661,9 @@ CREATE TABLE `act_id_user` (
   `PICTURE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_re_case_def`
---
 
 DROP TABLE IF EXISTS `act_re_case_def`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_re_case_def` (
+CREATE TABLE IF NOT EXISTS `act_re_case_def` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -867,16 +678,9 @@ CREATE TABLE `act_re_case_def` (
   PRIMARY KEY (`ID_`),
   KEY `ACT_IDX_CASE_DEF_TENANT_ID` (`TENANT_ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_re_decision_def`
---
 
 DROP TABLE IF EXISTS `act_re_decision_def`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_re_decision_def` (
+CREATE TABLE IF NOT EXISTS `act_re_decision_def` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -896,16 +700,9 @@ CREATE TABLE `act_re_decision_def` (
   KEY `ACT_IDX_DEC_DEF_REQ_ID` (`DEC_REQ_ID_`),
   CONSTRAINT `ACT_FK_DEC_REQ` FOREIGN KEY (`DEC_REQ_ID_`) REFERENCES `act_re_decision_req_def` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_re_decision_req_def`
---
 
 DROP TABLE IF EXISTS `act_re_decision_req_def`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_re_decision_req_def` (
+CREATE TABLE IF NOT EXISTS `act_re_decision_req_def` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -919,16 +716,9 @@ CREATE TABLE `act_re_decision_req_def` (
   PRIMARY KEY (`ID_`),
   KEY `ACT_IDX_DEC_REQ_DEF_TENANT_ID` (`TENANT_ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_re_deployment`
---
 
 DROP TABLE IF EXISTS `act_re_deployment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_re_deployment` (
+CREATE TABLE IF NOT EXISTS `act_re_deployment` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `DEPLOY_TIME_` datetime(3) DEFAULT NULL,
@@ -938,16 +728,9 @@ CREATE TABLE `act_re_deployment` (
   KEY `ACT_IDX_DEPLOYMENT_NAME` (`NAME_`),
   KEY `ACT_IDX_DEPLOYMENT_TENANT_ID` (`TENANT_ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_re_procdef`
---
 
 DROP TABLE IF EXISTS `act_re_procdef`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_re_procdef` (
+CREATE TABLE IF NOT EXISTS `act_re_procdef` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -968,16 +751,9 @@ CREATE TABLE `act_re_procdef` (
   KEY `ACT_IDX_PROCDEF_TENANT_ID` (`TENANT_ID_`),
   KEY `ACT_IDX_PROCDEF_VER_TAG` (`VERSION_TAG_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_authorization`
---
 
 DROP TABLE IF EXISTS `act_ru_authorization`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_authorization` (
+CREATE TABLE IF NOT EXISTS `act_ru_authorization` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) NOT NULL,
   `TYPE_` int(11) NOT NULL,
@@ -992,16 +768,9 @@ CREATE TABLE `act_ru_authorization` (
   KEY `ACT_IDX_AUTH_GROUP_ID` (`GROUP_ID_`),
   KEY `ACT_IDX_AUTH_RESOURCE_ID` (`RESOURCE_ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_batch`
---
 
 DROP TABLE IF EXISTS `act_ru_batch`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_batch` (
+CREATE TABLE IF NOT EXISTS `act_ru_batch` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) NOT NULL,
   `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -1024,16 +793,9 @@ CREATE TABLE `act_ru_batch` (
   CONSTRAINT `ACT_FK_BATCH_MONITOR_JOB_DEF` FOREIGN KEY (`MONITOR_JOB_DEF_ID_`) REFERENCES `act_ru_jobdef` (`ID_`),
   CONSTRAINT `ACT_FK_BATCH_SEED_JOB_DEF` FOREIGN KEY (`SEED_JOB_DEF_ID_`) REFERENCES `act_ru_jobdef` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_case_execution`
---
 
 DROP TABLE IF EXISTS `act_ru_case_execution`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_case_execution` (
+CREATE TABLE IF NOT EXISTS `act_ru_case_execution` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `CASE_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -1057,16 +819,9 @@ CREATE TABLE `act_ru_case_execution` (
   CONSTRAINT `ACT_FK_CASE_EXE_CASE_INST` FOREIGN KEY (`CASE_INST_ID_`) REFERENCES `act_ru_case_execution` (`ID_`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ACT_FK_CASE_EXE_PARENT` FOREIGN KEY (`PARENT_ID_`) REFERENCES `act_ru_case_execution` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_case_sentry_part`
---
 
 DROP TABLE IF EXISTS `act_ru_case_sentry_part`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_case_sentry_part` (
+CREATE TABLE IF NOT EXISTS `act_ru_case_sentry_part` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `CASE_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -1086,16 +841,9 @@ CREATE TABLE `act_ru_case_sentry_part` (
   CONSTRAINT `ACT_FK_CASE_SENTRY_CASE_EXEC` FOREIGN KEY (`CASE_EXEC_ID_`) REFERENCES `act_ru_case_execution` (`ID_`),
   CONSTRAINT `ACT_FK_CASE_SENTRY_CASE_INST` FOREIGN KEY (`CASE_INST_ID_`) REFERENCES `act_ru_case_execution` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_event_subscr`
---
 
 DROP TABLE IF EXISTS `act_ru_event_subscr`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_event_subscr` (
+CREATE TABLE IF NOT EXISTS `act_ru_event_subscr` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `EVENT_TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -1113,16 +861,9 @@ CREATE TABLE `act_ru_event_subscr` (
   KEY `ACT_IDX_EVENT_SUBSCR_EVT_NAME` (`EVENT_NAME_`),
   CONSTRAINT `ACT_FK_EVENT_EXEC` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_execution`
---
 
 DROP TABLE IF EXISTS `act_ru_execution`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_execution` (
+CREATE TABLE IF NOT EXISTS `act_ru_execution` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `ROOT_PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -1156,16 +897,9 @@ CREATE TABLE `act_ru_execution` (
   CONSTRAINT `ACT_FK_EXE_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ACT_FK_EXE_SUPER` FOREIGN KEY (`SUPER_EXEC_`) REFERENCES `act_ru_execution` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_ext_task`
---
 
 DROP TABLE IF EXISTS `act_ru_ext_task`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_ext_task` (
+CREATE TABLE IF NOT EXISTS `act_ru_ext_task` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) NOT NULL,
   `WORKER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -1192,16 +926,9 @@ CREATE TABLE `act_ru_ext_task` (
   CONSTRAINT `ACT_FK_EXT_TASK_ERROR_DETAILS` FOREIGN KEY (`ERROR_DETAILS_ID_`) REFERENCES `act_ge_bytearray` (`ID_`),
   CONSTRAINT `ACT_FK_EXT_TASK_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_filter`
---
 
 DROP TABLE IF EXISTS `act_ru_filter`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_filter` (
+CREATE TABLE IF NOT EXISTS `act_ru_filter` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) NOT NULL,
   `RESOURCE_TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -1211,16 +938,9 @@ CREATE TABLE `act_ru_filter` (
   `PROPERTIES_` longtext COLLATE utf8_bin,
   PRIMARY KEY (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_identitylink`
---
 
 DROP TABLE IF EXISTS `act_ru_identitylink`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_identitylink` (
+CREATE TABLE IF NOT EXISTS `act_ru_identitylink` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `GROUP_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -1237,16 +957,9 @@ CREATE TABLE `act_ru_identitylink` (
   CONSTRAINT `ACT_FK_ATHRZ_PROCEDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`),
   CONSTRAINT `ACT_FK_TSKASS_TASK` FOREIGN KEY (`TASK_ID_`) REFERENCES `act_ru_task` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_incident`
---
 
 DROP TABLE IF EXISTS `act_ru_incident`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_incident` (
+CREATE TABLE IF NOT EXISTS `act_ru_incident` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) NOT NULL,
   `INCIDENT_TIMESTAMP_` datetime(3) NOT NULL,
@@ -1277,16 +990,9 @@ CREATE TABLE `act_ru_incident` (
   CONSTRAINT `ACT_FK_INC_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`),
   CONSTRAINT `ACT_FK_INC_RCAUSE` FOREIGN KEY (`ROOT_CAUSE_INCIDENT_ID_`) REFERENCES `act_ru_incident` (`ID_`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_job`
---
 
 DROP TABLE IF EXISTS `act_ru_job`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_job` (
+CREATE TABLE IF NOT EXISTS `act_ru_job` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -1321,16 +1027,9 @@ CREATE TABLE `act_ru_job` (
   KEY `ACT_IDX_JOB_HANDLER_TYPE` (`HANDLER_TYPE_`),
   CONSTRAINT `ACT_FK_JOB_EXCEPTION` FOREIGN KEY (`EXCEPTION_STACK_ID_`) REFERENCES `act_ge_bytearray` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_jobdef`
---
 
 DROP TABLE IF EXISTS `act_ru_jobdef`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_jobdef` (
+CREATE TABLE IF NOT EXISTS `act_ru_jobdef` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -1345,16 +1044,9 @@ CREATE TABLE `act_ru_jobdef` (
   KEY `ACT_IDX_JOBDEF_TENANT_ID` (`TENANT_ID_`),
   KEY `ACT_IDX_JOBDEF_PROC_DEF_ID` (`PROC_DEF_ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_meter_log`
---
 
 DROP TABLE IF EXISTS `act_ru_meter_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_meter_log` (
+CREATE TABLE IF NOT EXISTS `act_ru_meter_log` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `NAME_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REPORTER_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -1368,16 +1060,9 @@ CREATE TABLE `act_ru_meter_log` (
   KEY `ACT_IDX_METER_LOG_TIME` (`TIMESTAMP_`),
   KEY `ACT_IDX_METER_LOG` (`NAME_`,`TIMESTAMP_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_procinst_status`
---
 
 DROP TABLE IF EXISTS `act_ru_procinst_status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_procinst_status` (
+CREATE TABLE IF NOT EXISTS `act_ru_procinst_status` (
   `id` varchar(255) NOT NULL,
   `created_by` varchar(255) DEFAULT NULL,
   `created_time` datetime DEFAULT NULL,
@@ -1393,16 +1078,9 @@ CREATE TABLE `act_ru_procinst_status` (
   `proc_inst_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_srvnode_status`
---
 
 DROP TABLE IF EXISTS `act_ru_srvnode_status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_srvnode_status` (
+CREATE TABLE IF NOT EXISTS `act_ru_srvnode_status` (
   `id` varchar(255) NOT NULL,
   `created_by` varchar(255) DEFAULT NULL,
   `created_time` datetime DEFAULT NULL,
@@ -1420,16 +1098,9 @@ CREATE TABLE `act_ru_srvnode_status` (
   `try_times` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_task`
---
 
 DROP TABLE IF EXISTS `act_ru_task`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_task` (
+CREATE TABLE IF NOT EXISTS `act_ru_task` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
@@ -1466,16 +1137,9 @@ CREATE TABLE `act_ru_task` (
   CONSTRAINT `ACT_FK_TASK_PROCDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`),
   CONSTRAINT `ACT_FK_TASK_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `act_ru_variable`
---
 
 DROP TABLE IF EXISTS `act_ru_variable`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `act_ru_variable` (
+CREATE TABLE IF NOT EXISTS `act_ru_variable` (
   `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
   `REV_` int(11) DEFAULT NULL,
   `TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -1509,10 +1173,148 @@ CREATE TABLE `act_ru_variable` (
   CONSTRAINT `ACT_FK_VAR_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`),
   CONSTRAINT `ACT_FK_VAR_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
-drop table if exists `core_ru_proc_exec_binding_tmp`;
-CREATE TABLE `core_ru_proc_exec_binding_tmp` (
+DROP TABLE IF EXISTS `core_operation_event`;
+CREATE TABLE IF NOT EXISTS `core_operation_event` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `event_seq_no` varchar(255) DEFAULT NULL,
+  `event_type` varchar(255) DEFAULT NULL,
+  `is_notified` bit(1) DEFAULT NULL,
+  `notify_endpoint` varchar(255) DEFAULT NULL,
+  `is_notify_required` bit(1) DEFAULT NULL,
+  `oper_data` varchar(255) DEFAULT NULL,
+  `oper_key` varchar(255) DEFAULT NULL,
+  `oper_user` varchar(255) DEFAULT NULL,
+  `proc_def_id` varchar(255) DEFAULT NULL,
+  `proc_inst_id` varchar(255) DEFAULT NULL,
+  `src_sub_system` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `priority` int(11) DEFAULT NULL,
+  `proc_inst_key` varchar(255) DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_re_proc_def_info`;
+CREATE TABLE IF NOT EXISTS `core_re_proc_def_info` (
+  `id` varchar(255) NOT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `active` bit(1) DEFAULT NULL,
+  `rev` int(11) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `proc_def_data` text,
+  `proc_def_data_fmt` varchar(255) DEFAULT NULL,
+  `proc_def_kernel_id` varchar(255) DEFAULT NULL,
+  `proc_def_key` varchar(255) DEFAULT NULL,
+  `proc_def_name` varchar(255) DEFAULT NULL,
+  `proc_def_ver` int(11) DEFAULT NULL,
+  `root_entity` varchar(255) DEFAULT NULL,
+  `is_deleted` bit(1) DEFAULT NULL,
+  `owner` varchar(255) DEFAULT NULL,
+  `owner_grp` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_re_task_node_def_info`;
+CREATE TABLE IF NOT EXISTS `core_re_task_node_def_info` (
+  `id` varchar(255) NOT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `active` bit(1) DEFAULT NULL,
+  `rev` int(11) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `node_id` varchar(255) DEFAULT NULL,
+  `node_name` varchar(2048) DEFAULT NULL,
+  `node_type` varchar(255) DEFAULT NULL,
+  `ordered_no` varchar(255) DEFAULT NULL,
+  `prev_node_ids` varchar(255) DEFAULT NULL,
+  `proc_def_id` varchar(255) DEFAULT NULL,
+  `proc_def_kernel_id` varchar(255) DEFAULT NULL,
+  `proc_def_key` varchar(255) DEFAULT NULL,
+  `proc_def_ver` int(11) DEFAULT NULL,
+  `routine_exp` varchar(255) DEFAULT NULL,
+  `routine_raw` varchar(255) DEFAULT NULL,
+  `service_id` varchar(255) DEFAULT NULL,
+  `service_name` varchar(255) DEFAULT NULL,
+  `succeed_node_ids` varchar(255) DEFAULT NULL,
+  `timeout_exp` varchar(255) DEFAULT NULL,
+  `task_category` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_re_task_node_param`;
+CREATE TABLE IF NOT EXISTS `core_re_task_node_param` (
+  `id` varchar(255) NOT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `active` bit(1) DEFAULT NULL,
+  `rev` int(11) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `bind_node_id` varchar(255) DEFAULT NULL,
+  `bind_param_name` varchar(255) DEFAULT NULL,
+  `bind_param_type` varchar(255) DEFAULT NULL,
+  `node_id` varchar(255) DEFAULT NULL,
+  `param_name` varchar(255) DEFAULT NULL,
+  `proc_def_id` varchar(255) DEFAULT NULL,
+  `task_node_def_id` varchar(255) DEFAULT NULL,
+  `bind_type` varchar(255) DEFAULT NULL,
+  `bind_val` varchar(1024) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_ru_graph_node`;
+CREATE TABLE IF NOT EXISTS `core_ru_graph_node` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `data_id` varchar(255) DEFAULT NULL,
+  `display_name` varchar(255) DEFAULT NULL,
+  `entity_name` varchar(255) DEFAULT NULL,
+  `g_node_id` varchar(255) DEFAULT NULL,
+  `pkg_name` varchar(255) DEFAULT NULL,
+  `prev_ids` text,
+  `proc_inst_id` int(11) DEFAULT NULL,
+  `proc_sess_id` varchar(255) DEFAULT NULL,
+  `succ_ids` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_ru_proc_exec_binding`;
+CREATE TABLE IF NOT EXISTS `core_ru_proc_exec_binding` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `bind_type` varchar(255) DEFAULT NULL,
+  `entity_id` varchar(255) DEFAULT NULL,
+  `node_def_id` varchar(255) DEFAULT NULL,
+  `proc_def_id` varchar(255) DEFAULT NULL,
+  `proc_inst_id` int(11) DEFAULT NULL,
+  `task_node_inst_id` int(11) DEFAULT NULL,
+  `entity_data_id` varchar(255) DEFAULT NULL,
+  `entity_type_id` varchar(255) DEFAULT NULL,
+  `entity_data_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_ru_proc_exec_binding_tmp`;
+CREATE TABLE IF NOT EXISTS `core_ru_proc_exec_binding_tmp` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `created_by` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `created_time` datetime DEFAULT NULL,
@@ -1526,7 +1328,119 @@ CREATE TABLE `core_ru_proc_exec_binding_tmp` (
   `ordered_no` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `proc_def_id` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `proc_session_id` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `entity_data_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+DROP TABLE IF EXISTS `core_ru_proc_inst_info`;
+CREATE TABLE IF NOT EXISTS `core_ru_proc_inst_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `oper` varchar(255) DEFAULT NULL,
+  `oper_grp` varchar(255) DEFAULT NULL,
+  `rev` int(11) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `proc_def_id` varchar(255) DEFAULT NULL,
+  `proc_def_key` varchar(255) DEFAULT NULL,
+  `proc_def_name` varchar(255) DEFAULT NULL,
+  `proc_inst_kernel_id` varchar(255) DEFAULT NULL,
+  `proc_inst_key` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_ru_proc_role_binding`;
+CREATE TABLE IF NOT EXISTS `core_ru_proc_role_binding` (
+  `id` varchar(255) NOT NULL,
+  `proc_id` varchar(255) NOT NULL,
+  `role_id` varchar(64) NOT NULL,
+  `role_name` varchar(64) NOT NULL,
+  `permission` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_ru_task_node_exec_param`;
+CREATE TABLE IF NOT EXISTS `core_ru_task_node_exec_param` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `obj_id` varchar(255) DEFAULT NULL,
+  `param_data_type` varchar(255) DEFAULT NULL,
+  `param_data_value` varchar(10255) DEFAULT NULL,
+  `param_name` varchar(255) DEFAULT NULL,
+  `param_type` varchar(255) DEFAULT NULL,
+  `req_id` varchar(255) DEFAULT NULL,
+  `root_entity_id` varchar(255) DEFAULT NULL,
+  `entity_data_id` varchar(255) DEFAULT NULL,
+  `entity_type_id` varchar(255) DEFAULT NULL,
+  `is_sensitive` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_ru_task_node_exec_req`;
+CREATE TABLE IF NOT EXISTS `core_ru_task_node_exec_req` (
+  `req_id` varchar(255) NOT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `is_completed` bit(1) DEFAULT NULL,
+  `is_current` bit(1) DEFAULT NULL,
+  `err_code` varchar(255) DEFAULT NULL,
+  `err_msg` varchar(255) DEFAULT NULL,
+  `node_inst_id` int(11) DEFAULT NULL,
+  `req_url` varchar(255) DEFAULT NULL,
+  `execution_id` varchar(255) DEFAULT NULL,
+  `node_id` varchar(255) DEFAULT NULL,
+  `node_name` varchar(255) DEFAULT NULL,
+  `proc_def_kernel_id` varchar(255) DEFAULT NULL,
+  `proc_def_kernel_key` varchar(255) DEFAULT NULL,
+  `proc_def_ver` int(11) DEFAULT NULL,
+  `proc_inst_kernel_id` varchar(255) DEFAULT NULL,
+  `proc_inst_kernel_key` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`req_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `core_ru_task_node_inst_info`;
+CREATE TABLE IF NOT EXISTS `core_ru_task_node_inst_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_by` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  `updated_time` datetime DEFAULT NULL,
+  `oper` varchar(255) DEFAULT NULL,
+  `oper_grp` varchar(255) DEFAULT NULL,
+  `rev` int(11) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `node_def_id` varchar(255) DEFAULT NULL,
+  `node_id` varchar(255) DEFAULT NULL,
+  `node_name` varchar(255) DEFAULT NULL,
+  `node_type` varchar(255) DEFAULT NULL,
+  `ordered_no` varchar(255) DEFAULT NULL,
+  `proc_def_id` varchar(255) DEFAULT NULL,
+  `proc_def_key` varchar(255) DEFAULT NULL,
+  `proc_inst_id` int(11) DEFAULT NULL,
+  `proc_inst_key` varchar(255) DEFAULT NULL,
+  `err_msg` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+
+delete from `act_ge_property`;
+INSERT INTO `act_ge_property` (`NAME_`,`VALUE_`,`REV_`) VALUES ('deployment.lock','0',1);
+INSERT INTO `act_ge_property` (`NAME_`,`VALUE_`,`REV_`) VALUES ('history.cleanup.job.lock','0',1);
+INSERT INTO `act_ge_property` (`NAME_`,`VALUE_`,`REV_`) VALUES ('historyLevel','3',1);
+INSERT INTO `act_ge_property` (`NAME_`,`VALUE_`,`REV_`) VALUES ('next.dbid','1',1);
+INSERT INTO `act_ge_property` (`NAME_`,`VALUE_`,`REV_`) VALUES ('schema.history','create(fox)',1);
+INSERT INTO `act_ge_property` (`NAME_`,`VALUE_`,`REV_`) VALUES ('schema.version','fox',1);
+INSERT INTO `act_ge_property` (`NAME_`,`VALUE_`,`REV_`) VALUES ('startup.lock','0',1);
 
 SET FOREIGN_KEY_CHECKS = 1;

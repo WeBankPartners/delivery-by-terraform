@@ -1,6 +1,7 @@
 yum install git -y
 yum install docker -y
 yum install docker-compose -y
+yum install unzip -y
 
 echo "OPTIONS=-H unix:///var/run/docker.sock -H tcp://0.0.0.0:2375" >> /etc/sysconfig/docker
 

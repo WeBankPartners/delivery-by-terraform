@@ -1,17 +1,31 @@
 #全局变量
 variable "instance_root_password" {
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_instance_root_password'"
   default = "WeCube1qazXSW@"
 }
 
 variable "mysql_root_password" {
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_mysql_root_password'"
   default = "WeCube1qazXSW@"
 }
 
 variable "wecube_version" {
-  description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
   default = "v2.1.1"
+}
+
+variable "wecube_home" {
+  default = "/data/wecube"
+}
+variable "region" {
+  default = "cn-hangzhou"
+}
+variable "access_key" {
+}
+variable "secret_key" {
+}
+
+provider "alicloud" {
+  access_key = "${var.access_key}"
+  secret_key = "${var.secret_key}"
+  region     = "${var.region}"
 }
 
 #创建VPC
@@ -41,7 +55,7 @@ resource "alicloud_security_group_rule" "allow_19090_tcp" {
   ip_protocol       = "tcp"
   nic_type          = "intranet"
   policy            = "accept"
-  port_range        = "19090"
+  port_range        = "19090/19090"
   priority          = 1
   security_group_id = "${alicloud_security_group.sc_group.id}"
   cidr_ip           = "0.0.0.0/0"
@@ -51,7 +65,7 @@ resource "alicloud_security_group_rule" "allow_22_tcp" {
   ip_protocol       = "tcp"
   nic_type          = "intranet"
   policy            = "accept"
-  port_range        = "22"
+  port_range        = "22/22"
   priority          = 2
   security_group_id = "${alicloud_security_group.sc_group.id}"
   cidr_ip           = "0.0.0.0/0"
@@ -61,7 +75,7 @@ resource "alicloud_security_group_rule" "allow_9000_tcp" {
   ip_protocol       = "tcp"
   nic_type          = "intranet"
   policy            = "accept"
-  port_range        = "9000"
+  port_range        = "9000/9000"
   priority          = 3
   security_group_id = "${alicloud_security_group.sc_group.id}"
   cidr_ip           = "0.0.0.0/0"
@@ -84,7 +98,6 @@ resource "alicloud_instance" "instance_wecube_platform" {
   availability_zone = "cn-hangzhou-b"  
   security_groups   = "${alicloud_security_group.sc_group.*.id}"
   instance_type              = "ecs.g6.xlarge"
-  #image_id          = "centos_8_0_x64_20G_alibase_20191225.vhd"
   image_id          = "centos_7_7_x64_20G_alibase_20191225.vhd"
   system_disk_category       = "cloud_efficiency"
   instance_name              = "instance_wecube_platform"
@@ -110,13 +123,25 @@ resource "alicloud_instance" "instance_wecube_platform" {
     destination = "/root/application"
   }
 
+  
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /root/application/wecube/*.sh",
+      "mkdir -p ${var.wecube_home}/installer"
+    ]
+  }
+
+  provisioner "file" {
+    source      = "../application/"
+    destination = "${var.wecube_home}/installer"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+    "chmod +x ${var.wecube_home}/installer/wecube/*.sh",
 	  "yum install dos2unix -y",
-      "dos2unix /root/application/wecube/*",
-	  "cd /root/application/wecube",
-	  "./install-wecube.sh ${alicloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version}"
+    "dos2unix ${var.wecube_home}/installer/wecube/*",
+	  "cd ${var.wecube_home}/installer/wecube",
+	  "./install-wecube.sh ${alicloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_home}"
     ]
   }
 

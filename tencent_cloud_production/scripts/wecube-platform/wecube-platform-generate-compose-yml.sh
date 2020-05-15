@@ -62,3 +62,6 @@ sed -i "s~{{WECUBE_CORE_HOST}}~$wecube_core_host~g" docker-compose.yml
 sed -i "s~{{AUTH_SERVER_HOST}}~$auth_server_host~g" docker-compose.yml
 sed -i "s~{{WECUBE_SERVER_JMX_PORT}}~$wecube_server_jmx_port~g" docker-compose.yml
 sed -i "s~{{WECUBE_BUCKET}}~$wecube_bucket~g" docker-compose.yml
+sed -i "s~{{APP_LOG_PATH}}~$app_log_path~g" docker-compose.yml
+sed -i "s~{{AUTH_SERVER_LOG_PATH}}~$auth_server_log_path~g" docker-compose.yml
+sed -i "s~{{WECUBE_GATEWAY_LOG_PATH}}~$wecube_gateway_log_path~g" docker-compose.yml

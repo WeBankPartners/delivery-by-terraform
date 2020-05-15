@@ -9,6 +9,7 @@ echo "Starting wecube platform ..."
 
 echo "${mysql_user_name}@${mysql_server_addr}:${mysql_server_port}  ${mysql_user_password}"
 yum install docker -y
+yum install unzip -y
 
 systemctl start docker.service
 systemctl enable docker.service
