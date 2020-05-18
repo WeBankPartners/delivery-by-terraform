@@ -71,3 +71,5 @@ sed -i "s~{{WECUBE_BUCKET}}~$wecube_bucket~g" docker-compose.yml
 sed -i "s~{{APP_LOG_PATH}}~$app_log_path~g" docker-compose.yml
 sed -i "s~{{AUTH_SERVER_LOG_PATH}}~$auth_server_log_path~g" docker-compose.yml
 sed -i "s~{{WECUBE_GATEWAY_LOG_PATH}}~$wecube_gateway_log_path~g" docker-compose.yml
+sed -i "s~{{USER_ACCESS_TOKEN}}~$user_access_token~g" docker-compose.yml
+sed -i "s~{{USER_REFRESH_TOKEN}}~$user_refresh_token~g" docker-compose.yml
