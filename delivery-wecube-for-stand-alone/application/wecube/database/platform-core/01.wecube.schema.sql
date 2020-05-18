@@ -666,7 +666,7 @@ CREATE TABLE `plugin_package_runtime_resources_docker` (
   `plugin_package_id` varchar(255) NOT NULL,
   `image_name` varchar(256) NOT NULL,
   `container_name` varchar(128) NOT NULL,
-  `port_bindings` varchar(64) NOT NULL,
+  `port_bindings` varchar(1024) NOT NULL,
   `volume_bindings` varchar(1024) NOT NULL,
   `env_variables` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`id`),

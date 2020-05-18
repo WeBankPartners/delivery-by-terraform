@@ -1,5 +1,6 @@
 #!/bin/sh
 
+yum install unzip -y
 install_target_host=$1
 mysql_password=$2
 wecube_version=$3
