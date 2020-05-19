@@ -56,7 +56,7 @@ if [ ${is_install_plugins} != "Y" ];then
 fi
 
 echo -e "\nNow starting to configure plugins...\n"
-PLUGIN_INSTALLER_URL="https://github.com/kanetz/wecube-auto/archive/master.zip"
+PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
 PLUGINS_BUCKET_URL="https://wecube-plugins-1259008868.cos.ap-guangzhou.myqcloud.com"
 PLUGIN_PKGS=(
     "wecube-plugins-wecmdb-v1.4.2.18.zip"

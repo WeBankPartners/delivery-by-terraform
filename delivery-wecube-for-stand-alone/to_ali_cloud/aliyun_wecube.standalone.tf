@@ -8,7 +8,7 @@ variable "mysql_root_password" {
 }
 
 variable "wecube_version" {
-  default = "v2.1.1"
+  default = "v2.3.1"
 }
 
 variable "wecube_home" {
@@ -41,7 +41,7 @@ resource "alicloud_vswitch" "switch_app" {
   name              = "HZPB_MGMT_MT_APP"
   vpc_id            = "${alicloud_vpc.vpc.id}"
   cidr_block        = "10.128.202.0/25"
-  availability_zone = "cn-hangzhou-b"
+  availability_zone = "cn-hangzhou-i"
 }
 
 #创建安全组
@@ -97,7 +97,7 @@ resource "alicloud_security_group_rule" "allow_all_tcp_out" {
 
 #创建WeCube Platform主机
 resource "alicloud_instance" "instance_wecube_platform" {
-  availability_zone = "cn-hangzhou-b"  
+  availability_zone = "cn-hangzhou-i"  
   security_groups   = "${alicloud_security_group.sc_group.*.id}"
   instance_type              = "ecs.g6.xlarge"
   image_id          = "centos_7_7_x64_20G_alibase_20191225.vhd"
@@ -115,16 +115,6 @@ resource "alicloud_instance" "instance_wecube_platform" {
     password = "${var.instance_root_password}"
     host     = "${alicloud_instance.instance_wecube_platform.public_ip}"
   }
-
-  provisioner "local-exec" {
-    command = "cp -r ../application application"
-  }
-
-  provisioner "file" {
-    source      = "../application"
-    destination = "/root/application"
-  }
-
   
   provisioner "remote-exec" {
     inline = [
