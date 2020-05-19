@@ -25,7 +25,7 @@ services:
     depends_on:
       - platform-core
     volumes:
-      - /data/wecube-gateway/log:/log/ 
+      - /data/wecube-gateway/log:{{WECUBE_GATEWAY_LOG_PATH}}
       - /etc/localtime:/etc/localtime
     ports:
       - {{GATEWAY_PORT}}:8080
@@ -42,7 +42,7 @@ services:
     image: {{WECUBE_IMAGE_NAME}}:{{WECUBE_IMAGE_VERSION}}
     restart: always
     volumes:
-      - /data/wecube/log:/log/ 
+      - /data/wecube/log:{{APP_LOG_PATH}}
       - /etc/localtime:/etc/localtime
     ports:
       - {{WECUBE_SERVER_PORT}}:8080
@@ -82,7 +82,7 @@ services:
     image: {{AUTH_SERVER_IMAGE_NAME}}:{{AUTH_SERVER_IMAGE_VERSION}}
     restart: always
     volumes:
-      - /data/auth_server/log:/log/ 
+      - /data/auth_server/log:{{AUTH_SERVER_LOG_PATH}}
       - /etc/localtime:/etc/localtime
     ports:
       - {{AUTH_SERVER_PORT}}:8080
