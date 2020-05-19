@@ -21,6 +21,8 @@ variable "access_key" {
 }
 variable "secret_key" {
 }
+variable "is_install_plugins" {
+}
 
 provider "alicloud" {
   access_key = "${var.access_key}"
@@ -141,7 +143,7 @@ resource "alicloud_instance" "instance_wecube_platform" {
 	  "yum install dos2unix -y",
     "dos2unix ${var.wecube_home}/installer/wecube/*",
 	  "cd ${var.wecube_home}/installer/wecube",
-	  "./install-wecube.sh ${alicloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_home}"
+	  "./install-wecube.sh ${alicloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_home} ${var.is_install_plugins}"
     ]
   }
 

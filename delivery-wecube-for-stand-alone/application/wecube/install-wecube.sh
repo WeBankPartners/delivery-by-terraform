@@ -6,6 +6,7 @@ mysql_password=$2
 wecube_version=$3
 wecube_home=${4:-/data/wecube}
 INSTALLER_DIR="$wecube_home/installer"
+is_install_plugins=${5:-Y}
 
 # 移除已安装的旧版本Docker
 yum remove docker \
@@ -49,6 +50,10 @@ EOF
 sysctl -p /etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf
 
 ./setup-wecube-containers.sh $install_target_host $mysql_password $wecube_version $wecube_home
+
+if [ ${is_install_plugins} != "Y" ];then
+  exit;
+fi
 
 echo -e "\nNow starting to configure plugins...\n"
 PLUGIN_INSTALLER_URL="https://github.com/kanetz/wecube-auto/archive/master.zip"
