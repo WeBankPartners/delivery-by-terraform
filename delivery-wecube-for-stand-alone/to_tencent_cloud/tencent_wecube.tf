@@ -17,7 +17,7 @@ variable "wecube_home" {
   default = "/data/wecube"
 }
 
-variable "access_key" {
+variable "secret_id" {
 }
 variable "secret_key" {
 }
