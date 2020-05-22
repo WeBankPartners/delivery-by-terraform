@@ -1,22 +1,37 @@
 #全局变量
 variable "instance_root_password" {
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_instance_root_password'"
   default = "Wecube@123456"
 }
 
 variable "mysql_root_password" {
-  description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_mysql_root_password'"
   default = "Wecube@123456"
 }
 
 variable "wecube_version" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default = "v2.1.1"
+  default = "v2.3.1"
 }
 
 variable "wecube_home" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_home'"
   default = "/data/wecube"
+}
+
+variable "secret_id" {
+}
+variable "secret_key" {
+}
+variable "is_install_plugins" {
+  description = "Only 'Y' will be accepted to auto install plugins"
+}
+variable "region" {
+  default = "ap-guangzhou"
+}
+
+provider "tencentcloud" {
+  secret_id  = var.secret_id
+  secret_key = var.secret_key
+  region     = var.region
 }
 
 #创建VPC
@@ -126,7 +141,7 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
     inline = [
       "cd ${var.wecube_home}/installer/wecube",
       "chmod +x *.sh",
-      "./install-wecube.sh ${tencentcloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_home}"
+      "./install-wecube.sh ${tencentcloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_home} ${var.is_install_plugins}"
     ]
   }
 }
