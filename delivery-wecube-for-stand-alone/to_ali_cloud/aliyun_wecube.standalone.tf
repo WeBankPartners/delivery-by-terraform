@@ -1,10 +1,10 @@
 #全局变量
 variable "instance_root_password" {
-  default = "Wecube@123456"
+  # default = "Wecube@123456"
 }
 
 variable "mysql_root_password" {
-  default = "Wecube@123456"
+  # default = "Wecube@123456"
 }
 
 variable "wecube_version" {
@@ -22,7 +22,6 @@ variable "access_key" {
 variable "secret_key" {
 }
 variable "is_install_plugins" {
-  default = "N"
 }
 
 provider "alicloud" {
