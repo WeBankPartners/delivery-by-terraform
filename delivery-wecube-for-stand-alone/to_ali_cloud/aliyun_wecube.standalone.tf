@@ -22,7 +22,7 @@ variable "access_key" {
 variable "secret_key" {
 }
 variable "is_install_plugins" {
-  default = "N"
+    description = "Only 'Y' will be accepted to auto install plugins"
 }
 
 provider "alicloud" {

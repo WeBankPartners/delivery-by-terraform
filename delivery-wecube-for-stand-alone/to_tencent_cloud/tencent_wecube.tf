@@ -1,12 +1,12 @@
 #全局变量
 variable "instance_root_password" {
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_instance_root_password'"
-  default = "WeCube1qazXSW@"
+  default = "Wecube@123456"
 }
 
 variable "mysql_root_password" {
   description = "Warn: to be safety, please setup real password by using os env variable - 'TF_VAR_mysql_root_password'"
-  default = "WeCube1qazXSW@"
+  default = "Wecube@123456"
 }
 
 variable "wecube_version" {
