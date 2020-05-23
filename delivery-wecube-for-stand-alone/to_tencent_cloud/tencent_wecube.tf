@@ -122,12 +122,12 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
   }
 
   provisioner "file" {
-    source      = "../application/"
+    source      = "../application-for-tencentcloud/"
     destination = "${var.wecube_home}/installer"
   }
 
   provisioner "file" {
-    content = templatefile("${path.module}/../application/wecube/database/cmdb/01.register_cmdb_asset_ids.sql.tpl", {
+    content = templatefile("${path.module}/../application-for-tencentcloud/wecube/database/cmdb/01.register_cmdb_asset_ids.sql.tpl", {
         wecube_vpc_asset_id = tencentcloud_vpc.vpc.id
         wecube_subnet_asset_id = tencentcloud_subnet.subnet_app.id
         wecube_route_table_asset_id = tencentcloud_subnet.subnet_app.route_table_id
@@ -139,6 +139,8 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
 
   provisioner "remote-exec" {
     inline = [
+      "yum install dos2unix -y",
+      "dos2unix ${var.wecube_home}/installer/wecube/*",
       "cd ${var.wecube_home}/installer/wecube",
       "chmod +x *.sh",
       "./install-wecube.sh ${tencentcloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_home} ${var.is_install_plugins}"
