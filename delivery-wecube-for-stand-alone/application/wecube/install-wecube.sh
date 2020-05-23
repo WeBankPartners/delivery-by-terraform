@@ -83,7 +83,7 @@ for PLUGIN_PKG in "${PLUGIN_PKGS[@]}"; do
     PLUGIN_URL="$PLUGINS_BUCKET_URL/$PLUGIN_PKG"
     PLUGIN_PKG_FILE="$PLUGIN_PKG_DIR/$PLUGIN_PKG"
     echo -e "\nFetching from $PLUGIN_URL"
-    curl -#L $PLUGIN_URL -o $PLUGIN_PKG_FILE
+    curl -L $PLUGIN_URL -o $PLUGIN_PKG_FILE
     echo $PLUGIN_PKG_FILE >> $PLUGIN_LIST_CSV
 done
 

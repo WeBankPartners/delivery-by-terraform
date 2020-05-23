@@ -22,7 +22,7 @@ variable "access_key" {
 variable "secret_key" {
 }
 variable "is_install_plugins" {
-  default = "N"
+    description = "Only 'Y' will be accepted to auto install plugins"
 }
 
 provider "alicloud" {
@@ -124,8 +124,19 @@ resource "alicloud_instance" "instance_wecube_platform" {
   }
 
   provisioner "file" {
-    source      = "../application/"
+    source      = "../application-for-alicloud/"
     destination = "${var.wecube_home}/installer"
+  }
+
+  provisioner "file" {
+    content = templatefile("${path.module}/../application-for-alicloud/wecube/database/cmdb/01.register_cmdb_asset_ids.sql.tpl", {
+        wecube_vpc_asset_id = alicloud_vpc.vpc.id
+        wecube_subnet_asset_id = alicloud_vswitch.switch_app.id
+        wecube_route_table_asset_id = alicloud_vpc.vpc.route_table_id
+        wecube_host_asset_id = alicloud_instance.instance_wecube_platform.id
+      }
+    )
+    destination = "${var.wecube_home}/installer/wecube/database/cmdb/01.register_cmdb_asset_ids.sql"
   }
 
   provisioner "remote-exec" {
