@@ -57,15 +57,15 @@ fi
 
 echo -e "\nNow starting to configure plugins...\n"
 PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
-PLUGINS_BUCKET_URL="https://wecube-plugins-1259008868.cos.ap-guangzhou.myqcloud.com"
+PLUGINS_BUCKET_URL="https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.3.0/"
 PLUGIN_PKGS=(
-    "wecube-plugins-wecmdb-v1.4.2.18.zip"
-    "wecube-plugins-qcloud-v1.8.3.2.zip"
-    "wecube-plugins-saltstack-v1.8.4.zip"
+    "wecube-plugins-wecmdb-v1.4.4.13.zip"
+    "wecube-plugins-qcloud-v1.8.5.6.zip"
+    "wecube-plugins-saltstack-v1.8.6.zip"
     "wecube-plugins-notifications-v0.1.0.zip"
-    "wecube-monitor-v1.3.3.6.zip"
-    "wecube-plugins-artifacts-v0.2.0.zip"
-    "wecube-plugins-service-mgmt-v0.4.1.zip"
+    "wecube-plugins-monitor-v1.5.0.zip"
+    "wecube-plugins-artifacts-v0.2.5.zip"
+    "wecube-plugins-service-mgmt-v0.5.0.zip"
 )
 PLUGIN_INSTALLER_PKG="$INSTALLER_DIR/wecube-plugin-installer.zip"
 PLUGIN_INSTALLER_DIR="$INSTALLER_DIR/wecube-plugin-installer"
@@ -91,3 +91,6 @@ done
 
 echo -e "\nRegistering CMDB asset Ids..."
 ./execute_sql_script_file.sh $install_target_host 3307 wecmdb_embedded root $mysql_password "$INSTALLER_DIR/wecube/database/cmdb/01.register_cmdb_asset_ids.sql"
+
+echo -e "\nRegistering WeCube all plugin services ..."
+./execute_sql_script_file.sh $install_target_host 3307 wecube root $mysql_password "$INSTALLER_DIR/wecube/database/platform-core/04.update_sys_var_for_deployment.sql"
