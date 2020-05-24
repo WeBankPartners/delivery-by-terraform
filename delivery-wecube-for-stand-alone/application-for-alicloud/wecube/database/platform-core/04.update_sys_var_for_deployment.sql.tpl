@@ -20,3 +20,5 @@ WHERE `id`='10.128.202.3__s3__s3Host' AND `name`='s3Host';
 
 UPDATE `system_variables` SET `value`='http://{{GATEWAY_HOST}}:19090'
 WHERE `id`='system__global__GATEWAY_URL' AND `name`='GATEWAY_URL';
+
+update `plugin_configs` set status = 'ENABLED' where register_name !='';

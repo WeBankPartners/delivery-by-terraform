@@ -51,6 +51,11 @@ sh ./start.sh
 popd >/dev/null
 ./wait-for-it.sh -t 60 $WECUBE_HOST:$MONITOR_AGENT_PORT
 
+docker run --name minio-client-upload -v $PLUGIN_PKG_DIR:/plugins -itd --entrypoint=/bin/sh minio/mc
+docker exec minio-client-upload mc config host add wecubeS3 'http://10.128.202.3:9000' 'access_key' 'secret_key'
+docker exec minio-client-upload mc cp /plugins/node_exporter_v2.1.tar.gz wecubeS3/wecube-agent
+docker rm -f minio-client-upload
+
 docker run --rm -t \
     -v "$COLLECTION_DIR:$COLLECTION_DIR" \
     -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \

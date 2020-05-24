@@ -9,7 +9,7 @@ variable "mysql_root_password" {
 
 variable "wecube_version" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default = "v2.3.1"
+  default = "20200523134047-f821290"
 }
 
 variable "wecube_home" {
@@ -25,7 +25,7 @@ variable "is_install_plugins" {
   description = "Only 'Y' will be accepted to auto install plugins"
 }
 variable "region" {
-  default = "ap-guangzhou"
+  default = "ap-beijing"
 }
 
 provider "tencentcloud" {
@@ -36,21 +36,21 @@ provider "tencentcloud" {
 
 #创建VPC
 resource "tencentcloud_vpc" "vpc" {
-  name       = "GZ_MGMT"
-  cidr_block = "10.128.192.0/19"
+  name       = "TX_BJ_PRD_MGMT"
+  cidr_block = "10.128.200.0/22"
 }
 
 #创建交换机（子网）- Wecube Platform组件运行的实例
 resource "tencentcloud_subnet" "subnet_app" {
-  name              = "GZP2_MGMT_MT_APP"
+  name              = "TX_BJ_PRD1_MGMT_APP"
   vpc_id            = tencentcloud_vpc.vpc.id
-  cidr_block        = "10.128.202.0/25"
-  availability_zone = "ap-guangzhou-4"
+  cidr_block        = "10.128.202.0/24"
+  availability_zone = "ap-beijing-4"
 }
 
 #创建安全组
 resource "tencentcloud_security_group" "sc_group" {
-  name        = "SG_WECUBE"
+  name        = "TX_BJ_PRD_MGMT_TMP"
   description = "Wecube Security Group"
 }
 
@@ -73,6 +73,7 @@ resource "tencentcloud_security_group_rule" "allow_22_tcp" {
   policy            = "accept"
 }
 
+
 resource "tencentcloud_security_group_rule" "allow_9000_tcp" {
   security_group_id = tencentcloud_security_group.sc_group.id
   type              = "ingress"
@@ -94,7 +95,7 @@ resource "tencentcloud_security_group_rule" "allow_all_tcp_out" {
 
 #创建WeCube Platform主机
 resource "tencentcloud_instance" "instance_wecube_platform" {
-  availability_zone = "ap-guangzhou-4"  
+  availability_zone = "ap-beijing-4"  
   security_groups   = tencentcloud_security_group.sc_group.*.id
   instance_type     = "S5.LARGE16"
   image_id          = "img-oikl1tzv"

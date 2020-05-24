@@ -22,7 +22,7 @@ variable "access_key" {
 variable "secret_key" {
 }
 variable "is_install_plugins" {
-    description = "Only 'Y' will be accepted to auto install plugins"
+  description = "Only 'Y' will be accepted to auto install plugins"
 }
 
 provider "alicloud" {
@@ -98,25 +98,25 @@ resource "alicloud_security_group_rule" "allow_all_tcp_out" {
 
 #创建WeCube Platform主机
 resource "alicloud_instance" "instance_wecube_platform" {
-  availability_zone = "cn-hangzhou-i"  
-  security_groups   = "${alicloud_security_group.sc_group.*.id}"
+  availability_zone          = "cn-hangzhou-i"
+  security_groups            = "${alicloud_security_group.sc_group.*.id}"
   instance_type              = "ecs.g6.xlarge"
-  image_id          = "centos_7_7_x64_20G_alibase_20191225.vhd"
+  image_id                   = "centos_7_7_x64_20G_alibase_20191225.vhd"
   system_disk_category       = "cloud_efficiency"
   instance_name              = "instance_wecube_platform"
   vswitch_id                 = "${alicloud_vswitch.switch_app.id}"
-  private_ip         ="10.128.202.3"
+  private_ip                 = "10.128.202.3"
   internet_max_bandwidth_out = 10
-  password ="${var.instance_root_password}"
+  password                   = "${var.instance_root_password}"
 
-#初始化配置
+  #初始化配置
   connection {
     type     = "ssh"
     user     = "root"
     password = "${var.instance_root_password}"
     host     = "${alicloud_instance.instance_wecube_platform.public_ip}"
   }
-  
+
   provisioner "remote-exec" {
     inline = [
       "mkdir -p ${var.wecube_home}/installer"
@@ -130,10 +130,10 @@ resource "alicloud_instance" "instance_wecube_platform" {
 
   provisioner "file" {
     content = templatefile("${path.module}/../application-for-alicloud/wecube/database/cmdb/01.register_cmdb_asset_ids.sql.tpl", {
-        wecube_vpc_asset_id = alicloud_vpc.vpc.id
-        wecube_subnet_asset_id = alicloud_vswitch.switch_app.id
-        wecube_route_table_asset_id = alicloud_vpc.vpc.route_table_id
-        wecube_host_asset_id = alicloud_instance.instance_wecube_platform.id
+      wecube_vpc_asset_id         = alicloud_vpc.vpc.id
+      wecube_subnet_asset_id      = alicloud_vswitch.switch_app.id
+      wecube_route_table_asset_id = alicloud_vpc.vpc.route_table_id
+      wecube_host_asset_id        = alicloud_instance.instance_wecube_platform.id
       }
     )
     destination = "${var.wecube_home}/installer/wecube/database/cmdb/01.register_cmdb_asset_ids.sql"
@@ -141,11 +141,11 @@ resource "alicloud_instance" "instance_wecube_platform" {
 
   provisioner "remote-exec" {
     inline = [
-    "chmod +x ${var.wecube_home}/installer/wecube/*.sh",
-	  "yum install dos2unix -y",
-    "dos2unix ${var.wecube_home}/installer/wecube/*",
-	  "cd ${var.wecube_home}/installer/wecube",
-	  "./install-wecube.sh ${alicloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_home} ${var.is_install_plugins}"
+      "chmod +x ${var.wecube_home}/installer/wecube/*.sh",
+      "yum install dos2unix -y",
+      "dos2unix ${var.wecube_home}/installer/wecube/*",
+      "cd ${var.wecube_home}/installer/wecube",
+      "./install-wecube.sh ${alicloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_home} ${var.is_install_plugins}"
     ]
   }
 
@@ -155,5 +155,5 @@ resource "alicloud_instance" "instance_wecube_platform" {
 }
 
 output "wecube_website" {
-  value="http://${alicloud_instance.instance_wecube_platform.public_ip}:19090"
+  value = "http://${alicloud_instance.instance_wecube_platform.public_ip}:19090"
 }
