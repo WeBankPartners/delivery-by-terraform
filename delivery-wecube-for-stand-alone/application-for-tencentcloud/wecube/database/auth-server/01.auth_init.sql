@@ -150,6 +150,8 @@ CREATE TABLE `auth_sys_user` (
   `password` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
+  `auth_ctx` varchar(512) DEFAULT NULL,
+  `auth_src` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -217,8 +219,8 @@ INSERT INTO `auth_sys_sub_system` (`id`, `created_by`, `created_time`, `updated_
 -- ----------------------------
 -- Records of auth_sys_user
 -- ----------------------------
-INSERT INTO `auth_sys_user` VALUES ('2c9280827019695c017019a2d5ac001b', 'system', '2020-02-06 12:05:03', null, null, '', '\0', '13912345678', '\0', 'OPT', null, 'UM ADMIN', 'UM管理员', '0755-12345678', '$2a$10$XH7kL/aIjCKwZZ2CXd5Nk.dFxyP4UubHa7vqekT1IYB1dX./0Hr8m', '运维岗', 'umadmin');
-INSERT INTO `auth_sys_user` VALUES ('2c9280827019695c017019dac0ea0040', 'umadmin', '2020-02-06 17:35:31', null, null, '', '\0', null, '\0', null, null, 'ADMIN', '管理员', null, '$2a$10$YOyZUonK23qiPS03MeZQL.T.4LHje8FRbp6dhV2wHBGeVWdm9hwtu', null, 'admin');
+INSERT INTO `auth_sys_user` (`id`, `created_by`, `created_time`, `updated_by`, `updated_time`, `is_active`, `is_blocked`, `cell_phone_no`, `is_deleted`, `dept`, `email_addr`, `english_name`, `local_name`, `office_tel_no`, `password`, `title`, `username`, `auth_ctx`, `auth_src`) VALUES ('2c9280827019695c017019a2d5ac001b', 'system', '2020-02-06 12:05:03', NULL, NULL, b'1', b'0', '13912345678', b'0', 'OPT', NULL, 'UM ADMIN', 'UM管理员', '0755-12345678', '$2a$10$XH7kL/aIjCKwZZ2CXd5Nk.dFxyP4UubHa7vqekT1IYB1dX./0Hr8m', '运维岗', 'umadmin', NULL, NULL);
+INSERT INTO `auth_sys_user` (`id`, `created_by`, `created_time`, `updated_by`, `updated_time`, `is_active`, `is_blocked`, `cell_phone_no`, `is_deleted`, `dept`, `email_addr`, `english_name`, `local_name`, `office_tel_no`, `password`, `title`, `username`, `auth_ctx`, `auth_src`) VALUES ('2c9280827019695c017019dac0ea0040', 'umadmin', '2020-02-06 17:35:31', NULL, NULL, b'1', b'0', NULL, b'0', NULL, NULL, 'ADMIN', '管理员', NULL, '$2a$10$YOyZUonK23qiPS03MeZQL.T.4LHje8FRbp6dhV2wHBGeVWdm9hwtu', NULL, 'admin', NULL, NULL);
 
 -- ----------------------------
 -- Records of auth_sys_user_role

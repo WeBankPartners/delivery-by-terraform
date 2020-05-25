@@ -8,7 +8,7 @@ variable "mysql_root_password" {
 }
 
 variable "wecube_version" {
-  default = "v2.3.1"
+  default = "20200523134047-f821290"
 }
 
 variable "wecube_home" {
@@ -33,21 +33,21 @@ provider "alicloud" {
 
 #创建VPC
 resource "alicloud_vpc" "vpc" {
-  name       = "HZ_MGMT"
-  cidr_block = "10.128.192.0/19"
+  name       = "ALI_HZ_PRD_MGMT"
+  cidr_block = "10.128.200.0/22"
 }
 
 #创建交换机（子网）- Wecube Platform组件运行的实例
 resource "alicloud_vswitch" "switch_app" {
-  name              = "HZPB_MGMT_MT_APP"
+  name              = "ALI_HZ_PRD1_MGMT_APP"
   vpc_id            = "${alicloud_vpc.vpc.id}"
-  cidr_block        = "10.128.202.0/25"
-  availability_zone = "cn-hangzhou-i"
+  cidr_block        = "10.128.202.0/24"
+  availability_zone = "cn-hangzhou-h"
 }
 
 #创建安全组
 resource "alicloud_security_group" "sc_group" {
-  name        = "SG_WECUBE"
+  name        = "ALI_HZ_PRD_MGMT_TMP"
   description = "Wecube Security Group"
   vpc_id      = "${alicloud_vpc.vpc.id}"
 }
@@ -98,7 +98,7 @@ resource "alicloud_security_group_rule" "allow_all_tcp_out" {
 
 #创建WeCube Platform主机
 resource "alicloud_instance" "instance_wecube_platform" {
-  availability_zone          = "cn-hangzhou-i"
+  availability_zone          = "cn-hangzhou-h"
   security_groups            = "${alicloud_security_group.sc_group.*.id}"
   instance_type              = "ecs.g6.xlarge"
   image_id                   = "centos_7_7_x64_20G_alibase_20191225.vhd"

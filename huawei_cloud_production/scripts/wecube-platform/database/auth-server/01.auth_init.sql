@@ -153,6 +153,8 @@ CREATE TABLE `auth_sys_user` (
   `password` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
+  `auth_ctx` varchar(512) DEFAULT NULL,
+  `auth_src` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
