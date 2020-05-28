@@ -9,7 +9,7 @@ variable "mysql_root_password" {
 
 variable "wecube_version" {
   description = "You can override the value by setup os env variable - 'TF_VAR_wecube_version'"
-  default = "20200523134047-f821290"
+  default = "latest"
 }
 
 variable "wecube_home" {
@@ -97,7 +97,7 @@ resource "tencentcloud_security_group_rule" "allow_all_tcp_out" {
 resource "tencentcloud_instance" "instance_wecube_platform" {
   availability_zone = "ap-beijing-4"  
   security_groups   = tencentcloud_security_group.sc_group.*.id
-  instance_type     = "S5.LARGE16"
+  instance_type     = "S4.LARGE16"
   image_id          = "img-oikl1tzv"
   instance_name     = "instance_wecube_platform"
   vpc_id            = tencentcloud_vpc.vpc.id
