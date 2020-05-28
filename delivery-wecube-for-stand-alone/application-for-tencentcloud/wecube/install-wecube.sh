@@ -87,10 +87,10 @@ for PLUGIN_PKG in "${PLUGIN_PKGS[@]}"; do
     echo $PLUGIN_PKG_FILE >> $PLUGIN_LIST_CSV
 done
 
+echo -e "\nRegistering WeCube all plugin services ..."
+./execute_sql_script_file.sh $install_target_host 3307 wecube root $mysql_password "$INSTALLER_DIR/wecube/database/platform-core/04.update_sys_var_for_deployment.sql"
+
 ./configure-plugins.sh $install_target_host "$PLUGIN_INSTALLER_DIR/wecube-auto-master" $PLUGIN_PKG_DIR $mysql_password
 
 echo -e "\nRegistering CMDB asset Ids..."
 ./execute_sql_script_file.sh $install_target_host 3307 wecmdb_embedded root $mysql_password "$INSTALLER_DIR/wecube/database/cmdb/01.register_cmdb_asset_ids.sql"
-
-echo -e "\nRegistering WeCube all plugin services ..."
-./execute_sql_script_file.sh $install_target_host 3307 wecube root $mysql_password "$INSTALLER_DIR/wecube/database/platform-core/04.update_sys_var_for_deployment.sql"

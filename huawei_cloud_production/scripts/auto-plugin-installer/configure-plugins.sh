@@ -42,7 +42,7 @@ docker run --rm -t \
 
 echo -e "\nConfiguring plugin Open-Monitor...\n"
 echo "Fetching monitor agent package..."
-MONITOR_AGENT_URL="https://wecube-plugins-1259008868.cos.ap-guangzhou.myqcloud.com/node_exporter_v2.1.tar.gz"
+MONITOR_AGENT_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/monitor_agent/node_exporter_v2.1.tar.gz"
 MONITOR_AGENT_PKG_FILE="$PLUGIN_PKG_DIR/node_exporter_v2.1.tar.gz"
 MONITOR_AGENT_PORT=9100
 curl -L $MONITOR_AGENT_URL -o $MONITOR_AGENT_PKG_FILE
