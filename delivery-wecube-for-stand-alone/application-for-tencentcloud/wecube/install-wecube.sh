@@ -55,46 +55,53 @@ docker-compose version || (echo 'Docker Compose is not installed!' && exit 1)
 curl -sSlf http://127.0.0.1:2375/version || (echo 'Docker Engine is not listening on TCP port 2375!' && exit 1)
 echo -e "\nCongratulations, Docker is properly installed.\n"
 
-GITHUB_RELEASE_URL="https://api.github.com/repos/WeBankPartners/wecube-platform/releases/$wecube_version"
-GITHUB_RELEASE_JSON=""
-RETRIES=30
-echo -e "\nFetching release info for $wecube_version from $GITHUB_RELEASE_URL..."
-while [ $RETRIES -gt 0 ] && [ -z "$GITHUB_RELEASE_JSON" ]; do
-    RETRIES=$((RETRIES - 1))
-    GITHUB_RELEASE_JSON=$(curl -sSfl "$GITHUB_RELEASE_URL")
-    if [ -z "$GITHUB_RELEASE_JSON" ]; then
-        echo "Retry in 1 second..."
-        sleep 1
-    else
-        break
-    fi
-done
-[ -z "$GITHUB_RELEASE_JSON" ] && echo -e "\nFailed to fetch release info from $GITHUB_RELEASE_URL\nInstallation aborted." && exit 1
+if [ -f "$wecube_version" ]; then
+    echo "Reading customized WeCube version specs from $wecube_version..."
+    PATH="$PATH:." source "$wecube_version"
+else
+  GITHUB_RELEASE_URL="https://api.github.com/repos/WeBankPartners/wecube-platform/releases/$wecube_version"
+  GITHUB_RELEASE_JSON=""
+  RETRIES=30
+  echo -e "\nFetching release info for $wecube_version from $GITHUB_RELEASE_URL..."
+  while [ $RETRIES -gt 0 ] && [ -z "$GITHUB_RELEASE_JSON" ]; do
+      RETRIES=$((RETRIES - 1))
+      GITHUB_RELEASE_JSON=$(curl -sSfl "$GITHUB_RELEASE_URL")
+      if [ -z "$GITHUB_RELEASE_JSON" ]; then
+          PAUSE=$(( ( RANDOM % 5 ) + 1 ))
+          echo "Retry in $PAUSE second..."
+          sleep "$PAUSE"
+      else
+          break
+      fi
+  done
+  [ -z "$GITHUB_RELEASE_JSON" ] && echo -e "\nFailed to fetch release info from $GITHUB_RELEASE_URL\nInstallation aborted." && exit 1
 
-RELEASE_TAG_NAME=$(grep -o '"tag_name":[ ]*"[^"]*"' <<< "$GITHUB_RELEASE_JSON" | grep -o 'v[[:digit:]\.]*')
-[ -z "$RELEASE_TAG_NAME" ] && echo -e "\nFailed to fetch release tag name!\Installation aborted." && exit 1
-echo "wecube_release_tag_name=$RELEASE_TAG_NAME"
+  wecube_image_version=""
+  PLUGIN_PKGS=()
+  COMPONENT_TABLE_MD=$(grep -o '|[ ]*wecube image[ ]*|.*|\\r\\n' <<< "$GITHUB_RELEASE_JSON" | sed -e 's/[ ]*|[ ]*/|/g')
+  while [[ $COMPONENT_TABLE_MD ]]; do
+      COMPONENT=${COMPONENT_TABLE_MD%%"\r\n"*}
+      COMPONENT_TABLE_MD=${COMPONENT_TABLE_MD#*"\r\n"}
 
-wecube_image_version="$wecube_version"
-PLUGIN_PKGS=()
-COMPONENT_TABLE_MD=$(grep -o '|[ ]*wecube image[ ]*|.*|\\r\\n' <<< "$GITHUB_RELEASE_JSON" | sed -e 's/[ ]*|[ ]*/|/g')
-while [[ $COMPONENT_TABLE_MD ]]; do
-    COMPONENT=${COMPONENT_TABLE_MD%%"\r\n"*}
-    COMPONENT_TABLE_MD=${COMPONENT_TABLE_MD#*"\r\n"}
+      COMPONENT=${COMPONENT#"|"}
+      COMPONENT_NAME=${COMPONENT%%"|"*}
 
-    COMPONENT=${COMPONENT#"|"}
-    COMPONENT_NAME=${COMPONENT%%"|"*}
+      COMPONENT=${COMPONENT#*"|"}
+      COMPONENT_VERSION=${COMPONENT%%"|"*}
 
-    COMPONENT=${COMPONENT#*"|"}
-    COMPONENT_VERSION=${COMPONENT%%"|"*}
+      COMPONENT=${COMPONENT#*"|"}
+      COMPONENT_LINK=${COMPONENT%%"|"*}
 
-    if [ "$COMPONENT_NAME" == 'wecube image' ]; then
-        wecube_image_version="$COMPONENT_VERSION"
-    elif [ "$COMPONENT_NAME" ]; then
-        PLUGIN_PKGS+=("$COMPONENT_NAME-$COMPONENT_VERSION.zip")
-    fi
-done
-echo "wecube_image_version=$wecube_image_version"
+      if [ "$COMPONENT_NAME" == 'wecube image' ]; then
+          wecube_image_version="$COMPONENT_VERSION"
+      elif [ "$COMPONENT_NAME" ]; then
+          PLUGIN_PKGS+=("$COMPONENT_LINK")
+      fi
+  done
+fi
+
+echo "wecube_image_version: $wecube_image_version"
+[ -z "$wecube_image_version" ] && echo -e "\nFailed to determine WeCube image version! Installation aborted." && exit 1
 
 ./setup-wecube-containers.sh $install_target_host $mysql_password $wecube_image_version $wecube_home
 
@@ -102,8 +109,9 @@ if [ ${is_install_plugins} != "Y" ];then
   exit;
 fi
 
-echo "wecube_plugins=(${PLUGIN_PKGS[@]})"
-[ ${#PLUGIN_PKGS[@]} == 0 ] && echo -e "\nFailed to fetch component versions from $GITHUB_RELEASE_URL\nInstallation aborted." && exit 1
+echo "wecube_plugins:"
+printf '  %s\n' "${PLUGIN_PKGS[@]}"
+[ ${#PLUGIN_PKGS[@]} == 0 ] && echo -e "\nFailed to fetch component versions! Installation aborted." && exit 1
 
 echo -e "\nNow starting to configure plugins...\n"
 PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
@@ -121,9 +129,8 @@ PLUGIN_PKG_DIR="$PLUGIN_INSTALLER_DIR/plugins"
 mkdir -p "$PLUGIN_PKG_DIR"
 PLUGIN_LIST_CSV="$PLUGIN_PKG_DIR/plugin-list.csv"
 echo "plugin_package_path" > $PLUGIN_LIST_CSV
-for PLUGIN_PKG in "${PLUGIN_PKGS[@]}"; do
-    PLUGIN_URL="$PLUGINS_BUCKET_URL/$RELEASE_TAG_NAME/$PLUGIN_PKG"
-    PLUGIN_PKG_FILE="$PLUGIN_PKG_DIR/$PLUGIN_PKG"
+for PLUGIN_URL in "${PLUGIN_PKGS[@]}"; do
+    PLUGIN_PKG_FILE="$PLUGIN_PKG_DIR/${PLUGIN_URL##*'/'}"
     echo -e "\nFetching from $PLUGIN_URL"
     curl -L $PLUGIN_URL -o $PLUGIN_PKG_FILE
     echo $PLUGIN_PKG_FILE >> $PLUGIN_LIST_CSV
