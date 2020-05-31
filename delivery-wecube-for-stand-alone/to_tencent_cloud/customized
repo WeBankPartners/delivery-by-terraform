@@ -1,0 +1,8 @@
+# Version of WeCube platform docker image
+wecube_image_version=""
+
+# Versions of WeCube plugin packages
+PLUGIN_PKGS=(
+#  "*package download link*"
+#  "*another package download link*"
+)
