@@ -7,6 +7,10 @@ COLLECTION_DIR=$2
 PLUGIN_PKG_DIR=$3
 MYSQL_PASSWORD=$4
 
+PLUGIN_HOST="$WECUBE_HOST"
+MINIO_HOST="$WECUBE_HOST"
+MINIO_PORT=9000
+
 echo -e "\nRegistering plugins, this may take a few minutes...\n"
 docker run --rm -t \
     -v "$COLLECTION_DIR:$COLLECTION_DIR" \
@@ -17,7 +21,7 @@ docker run --rm -t \
     --env-var "username=umadmin" \
     --env-var "password=umadmin" \
     --env-var "wecube_host=$WECUBE_HOST" \
-    --env-var "plugin_host=$WECUBE_HOST" \
+    --env-var "plugin_host=$PLUGIN_HOST" \
     -d "$PLUGIN_PKG_DIR/plugin-list.csv" \
     --delay-request 2000 --disable-unicode \
     --reporters cli \
@@ -33,7 +37,7 @@ docker run --rm -t \
     --env-var "username=umadmin" \
     --env-var "password=umadmin" \
     --env-var "wecube_host=$WECUBE_HOST" \
-    --env-var "plugin_host=$WECUBE_HOST" \
+    --env-var "plugin_host=$PLUGIN_HOST" \
     --delay-request 2000 --disable-unicode \
     --reporters cli \
     --reporter-cli-no-banner --reporter-cli-no-console
@@ -51,13 +55,7 @@ sh ./start.sh
 popd >/dev/null
 ./wait-for-it.sh -t 60 $WECUBE_HOST:$MONITOR_AGENT_PORT
 
-MINIO_CONTAINER_NAME="wecube_wecube-minio_1"
-MINIO_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$MINIO_CONTAINER_NAME")
-docker run --name minio-client-upload -v $PLUGIN_PKG_DIR:/plugins -itd --entrypoint=/bin/sh minio/mc
-docker exec minio-client-upload mc config host add wecubeS3 "http://$MINIO_IP:9000" 'access_key' 'secret_key'
-docker exec minio-client-upload mc cp /plugins/node_exporter_v2.1.tar.gz wecubeS3/wecube-agent
-docker rm -f minio-client-upload
-
+echo "Configuring monitoring objects..."
 docker run --rm -t \
     -v "$COLLECTION_DIR:$COLLECTION_DIR" \
     -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
@@ -67,7 +65,7 @@ docker run --rm -t \
     --env-var "username=umadmin" \
     --env-var "password=umadmin" \
     --env-var "wecube_host=$WECUBE_HOST" \
-    --env-var "plugin_host=$WECUBE_HOST" \
+    --env-var "plugin_host=$PLUGIN_HOST" \
     --env-var "node_exporter_port=$MONITOR_AGENT_PORT" \
     --env-var "plugin_mysql_port=3307" \
     --env-var "plugin_mysql_user=root" \
@@ -75,3 +73,12 @@ docker run --rm -t \
     --delay-request 2000 --disable-unicode \
     --reporters cli \
     --reporter-cli-no-banner --reporter-cli-no-console
+
+echo "Uploading monitor agent package for future use..."
+docker run --rm -t \
+    -v "$PLUGIN_PKG_DIR/node_exporter_v2.1.tar.gz:/node_exporter_v2.1.tar.gz" \
+    --entrypoint=/bin/sh \
+    minio/mc -c """
+        mc config host add wecubeS3 http://$MINIO_HOST:$MINIO_PORT access_key secret_key && \
+        mc cp /node_exporter_v2.1.tar.gz wecubeS3/wecube-agent
+    """
