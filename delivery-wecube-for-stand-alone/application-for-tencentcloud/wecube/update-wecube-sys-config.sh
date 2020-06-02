@@ -3,11 +3,12 @@
 set -e
 
 CONFIG_FILE=$1
-SQL_FILE_TEMPLATE="$installer_dir/wecube/database/platform-core/04.update_sys_var_for_deployment.sql.tpl"
-SQL_FILE="$installer_dir/wecube/database/platform-core/04.update_sys_var_for_deployment.sql"
 
+[ ! -f $CONFIG_FILE ] && echo "Invalid configuration file: $CONFIG_FILE" && exit 1
 source $CONFIG_FILE
 
+SQL_FILE_TEMPLATE="$installer_dir/wecube/database/platform-core/04.update_sys_var_for_deployment.sql.tpl"
+SQL_FILE="$installer_dir/wecube/database/platform-core/04.update_sys_var_for_deployment.sql"
 cp $SQL_FILE_TEMPLATE $SQL_FILE
 sed -i "s~{{WECUBE_HOME}}~$wecube_home~g" $SQL_FILE
 sed -i "s~{{WECUBE_PLUGIN_HOSTS}}~$wecube_plugin_hosts~g" $SQL_FILE
