@@ -1,6 +1,10 @@
 SET NAMES utf8 ;
 
-UPDATE `network_segment` SET `vpc_asset_id`='${wecube_vpc_asset_id}' WHERE `name`='TX_BJ_PRD_MGMT';
+UPDATE `network_segment` 
+SET `vpc_asset_id`='${wecube_vpc_asset_id}',
+    `route_table_asset_id`='${wecube_route_table_asset_id}',
+    `security_group_asset_id`='${wecube_security_group_id}'
+WHERE `name`='TX_BJ_PRD_MGMT';
 
 UPDATE `network_segment` SET `route_table_asset_id`='${wecube_route_table_asset_id}' WHERE `name`='TX_BJ_PRD_MGMT';
 

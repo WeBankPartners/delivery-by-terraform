@@ -27,7 +27,7 @@ else
       GITHUB_RELEASE_JSON=$(curl -sSfl "$GITHUB_RELEASE_URL")
       if [ -z "$GITHUB_RELEASE_JSON" ]; then
           PAUSE=$(( ( RANDOM % 5 ) + 1 ))
-          echo "Retry in $PAUSE second..."
+          echo "Retry in $PAUSE seconds..."
           sleep "$PAUSE"
       else
           break
