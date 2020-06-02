@@ -128,8 +128,8 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
   }
 
   provisioner "file" {
-    source      = "./"
-    destination = "${var.wecube_home}/installer/wecube"
+    source      = fileexists("./${var.wecube_version}") ? "./${var.wecube_version}" : "./tencent_wecube.tf"
+    destination = "${var.wecube_home}/installer/wecube/"
   }
 
   provisioner "file" {
@@ -150,7 +150,6 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
       "dos2unix ${var.wecube_home}/installer/wecube/*",
       "cd ${var.wecube_home}/installer/wecube",
       "chmod +x *.sh",
-      "./install-prerequisites.sh",
       "./install-wecube.sh ${tencentcloud_instance.instance_wecube_platform.private_ip} ${var.mysql_root_password} ${var.wecube_version} ${var.wecube_home} ${var.is_install_plugins}"
     ]
   }
