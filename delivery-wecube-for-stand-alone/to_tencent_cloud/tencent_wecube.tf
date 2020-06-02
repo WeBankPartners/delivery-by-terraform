@@ -34,6 +34,13 @@ provider "tencentcloud" {
   region     = var.region
 }
 
+#复制自定义版本信息(如存在)到WeCube安装源目录
+resource "local_file" "version_spec" {
+    count    = fileexists("${path.module}/${var.wecube_version}") ? 1 : 0
+    content  = file("${path.module}/${var.wecube_version}")
+    filename = "${path.module}/../application-for-tencentcloud/wecube/${var.wecube_version}"
+}
+
 #创建VPC
 resource "tencentcloud_vpc" "vpc" {
   name       = "TX_BJ_PRD_MGMT"
@@ -125,11 +132,6 @@ resource "tencentcloud_instance" "instance_wecube_platform" {
   provisioner "file" {
     source      = "../application-for-tencentcloud/"
     destination = "${var.wecube_home}/installer"
-  }
-
-  provisioner "file" {
-    source      = fileexists("./${var.wecube_version}") ? "./${var.wecube_version}" : "./tencent_wecube.tf"
-    destination = "${var.wecube_home}/installer/wecube/"
   }
 
   provisioner "file" {
