@@ -71,10 +71,11 @@ if [[ $should_install_plugins =~ ^[Yy]$ ]]; then
   [ ${#PLUGIN_PKGS[@]} == 0 ] && echo -e "\nFailed to fetch component versions! Installation aborted." && exit 1
 fi
 
+echo -e "\nInstalling WeCube with above versions...\n"
 CONFIG_FILE="wecube.cfg"
 ./apply-configurations.sh $CONFIG_FILE $install_target_host $mysql_password $wecube_home
 ./setup-wecube-containers.sh $CONFIG_FILE $wecube_image_version
 
 [[ ! $should_install_plugins =~ ^[Yy]$ ]] && echo -e "\nSkipped plugin installation as requested.\n" && exit 0;
 
-./configure-plugins.sh $CONFIG_FILE $PLUGIN_PKGS
+./configure-plugins.sh $CONFIG_FILE "${PLUGIN_PKGS[@]}"

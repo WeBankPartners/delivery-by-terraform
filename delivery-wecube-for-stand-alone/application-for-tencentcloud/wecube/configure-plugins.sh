@@ -2,8 +2,8 @@
 
 set -e
 
-CONFIG_FILE=$1
-PLUGIN_PKGS=$2
+CONFIG_FILE=$1; shift
+PLUGIN_PKGS=( "$@" )
 
 [ ! -f $CONFIG_FILE ] && echo "Invalid configuration file: $CONFIG_FILE" && exit 1
 source $CONFIG_FILE
