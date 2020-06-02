@@ -9,6 +9,10 @@ WHERE `id`='system__global__CORE_ADDR' AND `name`='CORE_ADDR';
 UPDATE `system_variables` SET `value`='{{WECUBE_HOME}}'
 WHERE `id`='system__global__BASE_MOUNT_PATH' AND `name`='BASE_MOUNT_PATH';
 
+UPDATE `system_variables` SET `value`='http://{{GATEWAY_HOST}}:19090'
+WHERE `id`='system__global__GATEWAY_URL' AND `name`='GATEWAY_URL';
+
+
 UPDATE `resource_server` SET `host`='{{WECUBE_PLUGIN_HOSTS}}', `port`='{{WECUBE_PLUGIN_HOST_PORT}}'
 WHERE `id`='10.128.202.3__docker__containerHost' AND `name`='containerHost';
 
@@ -17,6 +21,3 @@ WHERE `id`='10.128.202.3__mysql__mysqlHost' AND `name`='mysqlHost';
 
 UPDATE `resource_server` SET `host`='{{S3_HOST}}', `port`='{{S3_PORT}}'
 WHERE `id`='10.128.202.3__s3__s3Host' AND `name`='s3Host';
-
-UPDATE `system_variables` SET `value`='http://{{GATEWAY_HOST}}:19090'
-WHERE `id`='system__global__GATEWAY_URL' AND `name`='GATEWAY_URL';

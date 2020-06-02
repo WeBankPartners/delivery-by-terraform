@@ -1,17 +1,16 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]
-  then
-    echo "Usage: deploy_generate_compose.sh CONFIG VERSION "
-    exit 1
-fi
+set -e
 
-source $1
+CONFIG_FILE=$1
+WECUBE_IMAGE_VERSION=$2
 
-wecube_image_version=$2
-portal_image_version=$2
-gateway_image_version=$2
-auth_server_image_version=$2
+[ ! -f $CONFIG_FILE ] && echo "Invalid configuration file: $CONFIG_FILE" && exit 1
+source $CONFIG_FILE
+
+portal_image_version="$WECUBE_IMAGE_VERSION"
+gateway_image_version="$WECUBE_IMAGE_VERSION"
+auth_server_image_version="$WECUBE_IMAGE_VERSION"
 
 build_path=$(dirname $0)
 cp ${build_path}/docker-compose.tpl docker-compose.yml
@@ -29,7 +28,7 @@ sed -i "s~{{WECUBE_PLUGIN_HOST_PWD}}~$wecube_plugin_host_pwd~g" docker-compose.y
 sed -i "s~{{S3_URL}}~$s3_url~g" docker-compose.yml
 sed -i "s~{{S3_ACCESS_KEY}}~$s3_access_key~g" docker-compose.yml
 sed -i "s~{{S3_SECRET_KEY}}~$s3_secret_key~g" docker-compose.yml
-sed -i "s~{{WECUBE_IMAGE_VERSION}}~$wecube_image_version~g" docker-compose.yml
+sed -i "s~{{WECUBE_IMAGE_VERSION}}~$WECUBE_IMAGE_VERSION~g" docker-compose.yml
 sed -i "s~{{MYSQL_SERVER_ADDR}}~$mysql_server_addr~g" docker-compose.yml
 sed -i "s~{{MYSQL_SERVER_PORT}}~$mysql_server_port~g" docker-compose.yml
 sed -i "s~{{MYSQL_SERVER_DATABASE_NAME}}~$mysql_server_database_name~g" docker-compose.yml
