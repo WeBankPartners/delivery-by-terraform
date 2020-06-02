@@ -10,9 +10,6 @@ source $CONFIG_FILE
 
 echo -e "\nNow starting to configure plugins...\n"
 
-WECUBE_HOST="$install_target_host"
-PLUGIN_HOST="$install_target_host"
-
 PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
 PLUGINS_BUCKET_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com"
 PLUGIN_INSTALLER_PKG="$installer_dir/wecube-plugin-installer.zip"
@@ -20,7 +17,7 @@ PLUGIN_INSTALLER_DIR="$installer_dir/wecube-plugin-installer"
 COLLECTION_DIR="$PLUGIN_INSTALLER_DIR/wecube-auto-master"
 mkdir -p "$PLUGIN_INSTALLER_DIR"
 echo "Fetching wecube-plugin-installer from $PLUGIN_INSTALLER_URL"
-curl -#L $PLUGIN_INSTALLER_URL -o $PLUGIN_INSTALLER_PKG
+curl -L $PLUGIN_INSTALLER_URL -o $PLUGIN_INSTALLER_PKG
 unzip -o -q $PLUGIN_INSTALLER_PKG -d $PLUGIN_INSTALLER_DIR
 
 echo -e "\nFetching plugin packages...."
@@ -46,8 +43,8 @@ docker run --rm -t \
     --env-var "domain=$public_domain" \
     --env-var "username=$default_admin_username" \
     --env-var "password=$default_admin_password" \
-    --env-var "wecube_host=$WECUBE_HOST" \
-    --env-var "plugin_host=$PLUGIN_HOST" \
+    --env-var "wecube_host=$wecube_core_host" \
+    --env-var "plugin_host=$wecube_plugin_hosts" \
     --delay-request 2000 --disable-unicode \
     --reporters cli \
     --reporter-cli-no-banner --reporter-cli-no-console
@@ -67,8 +64,8 @@ docker run --rm -t \
     --env-var "domain=$public_domain" \
     --env-var "username=$default_admin_username" \
     --env-var "password=$default_admin_password" \
-    --env-var "wecube_host=$WECUBE_HOST" \
-    --env-var "plugin_host=$PLUGIN_HOST" \
+    --env-var "wecube_host=$wecube_core_host" \
+    --env-var "plugin_host=$wecube_plugin_hosts" \
     --delay-request 2000 --disable-unicode \
     --reporters cli \
     --reporter-cli-no-banner --reporter-cli-no-console
@@ -86,13 +83,13 @@ echo "Fetching monitor agent package..."
 MONITOR_AGENT_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/monitor_agent/node_exporter_v2.1.tar.gz"
 MONITOR_AGENT_PKG_FILE="$PLUGIN_PKG_DIR/node_exporter_v2.1.tar.gz"
 MONITOR_AGENT_PORT=9100
-curl -#L $MONITOR_AGENT_URL -o $MONITOR_AGENT_PKG_FILE
+curl -L $MONITOR_AGENT_URL -o $MONITOR_AGENT_PKG_FILE
 tar xzf $MONITOR_AGENT_PKG_FILE -C $PLUGIN_PKG_DIR
 pushd "$PLUGIN_PKG_DIR/node_exporter_v2.1" >/dev/null
 echo "Installing monitor agent..."
 sh ./start.sh
 popd >/dev/null
-./wait-for-it.sh -t 60 $WECUBE_HOST:$MONITOR_AGENT_PORT
+./wait-for-it.sh -t 60 $wecube_core_host:$MONITOR_AGENT_PORT
 
 echo "Registering monitoring objects..."
 docker run --rm -t \
@@ -103,8 +100,8 @@ docker run --rm -t \
     --env-var "domain=$public_domain" \
     --env-var "username=$default_admin_username" \
     --env-var "password=$default_admin_password" \
-    --env-var "wecube_host=$WECUBE_HOST" \
-    --env-var "plugin_host=$PLUGIN_HOST" \
+    --env-var "wecube_host=$wecube_core_host" \
+    --env-var "plugin_host=$wecube_plugin_hosts" \
     --env-var "node_exporter_port=$MONITOR_AGENT_PORT" \
     --env-var "plugin_mysql_port=$mysql_server_port" \
     --env-var "plugin_mysql_user=$mysql_user_name" \
