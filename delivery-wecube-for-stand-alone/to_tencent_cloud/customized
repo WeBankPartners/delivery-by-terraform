@@ -1,8 +1,8 @@
 # Version of WeCube platform docker image
-wecube_image_version=""
+wecube_image_version="v2.3.1"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
-#  "*package download link*"
-#  "*another package download link*"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.3.1/wecube-plugins-wecmdb-v1.4.4.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.3.1/wecube-plugins-monitor-v1.3.5.zip"
 )

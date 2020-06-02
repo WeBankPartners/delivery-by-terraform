@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 mysql_host=$1
 mysql_port=$2
