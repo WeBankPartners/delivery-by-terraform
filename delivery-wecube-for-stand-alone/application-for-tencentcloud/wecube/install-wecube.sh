@@ -6,12 +6,7 @@ wecube_version=$3
 wecube_home=${4:-/data/wecube}
 should_install_plugins=${5:-Y}
 
-echo -e "Checking Docker...\n"
-docker version || (echo 'Docker Engine is not installed!' && exit 1)
-docker-compose version || (echo 'Docker Compose is not installed!' && exit 1)
-curl -sSLf http://127.0.0.1:2375/version || (echo 'Docker Engine is not listening on TCP port 2375!' && exit 1)
-echo -e "\nCongratulations, Docker is properly installed.\n"
-
+./install-prerequisites.sh
 
 echo -e "\nDetermine component versions to be installed...\n"
 if [ -f "$wecube_version" ]; then

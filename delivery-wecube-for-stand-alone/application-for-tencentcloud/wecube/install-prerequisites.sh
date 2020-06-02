@@ -2,6 +2,29 @@
 
 set -e
 
+echo -e "\nChecking prerequisites...\n"
+PREREQUISITES_SATISFIED=''
+if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(docker version >/dev/null 2>&1); then
+  echo 'Docker Engine is not properly installed!'
+  PREREQUISITES_SATISFIED='false'
+fi
+if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(docker-compose version >/dev/null 2>&1); then
+  echo 'Docker Compose is not properly installed!'
+  PREREQUISITES_SATISFIED='false'
+fi
+if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(curl -sSLf http://127.0.0.1:2375/version >/dev/null 2>&1); then
+  echo 'Docker Engine is not listening on port 2375!'
+  PREREQUISITES_SATISFIED='false'
+fi
+
+if [ "$PREREQUISITES_SATISFIED" != 'false' ]; then
+  echo "Congratulations, all prerequisites are satisfied."
+  exit 0
+fi
+
+
+echo -e "\nInstalling prerequisites...\n"
+
 # 移除已安装的旧版本Docker
 yum remove docker \
            docker-client \
@@ -44,3 +67,10 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl -p /etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf
+
+echo -e "\nVerifying prerequisites installation...\n"
+docker version || (echo 'Docker Engine is not properly installed!' && exit 1)
+docker-compose version || (echo 'Docker Compose is not properly installed!' && exit 1)
+curl -sSLf http://127.0.0.1:2375/version || (echo 'Docker Engine is not listening on TCP port 2375!' && exit 1)
+
+echo "Prerequisites installation completed."
