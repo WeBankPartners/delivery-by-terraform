@@ -17,7 +17,7 @@ mkdir -p wecube-platform/database/platform-core
 
 curl -#L https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/wecube-sql/01.wecube.schema.sql -o wecube-platform/database/platform-core/01.wecube.schema.sql
 curl -#L https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/wecube-sql/03.wecube.flow_engine.schema.sql -o wecube-platform/database/platform-core/03.wecube.flow_engine.schema.sql
-curl -#L https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/wecube-sql/01.auth.schema.sql -o wecube-platform/database/auth-server/01.auth_init.sql
+curl -#L https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/wecube-sql/01.auth.schema.sql -o wecube-platform/database/auth-server/01.auth.schema.sql
 
 sshpass -p ${password} ssh -o "StrictHostKeyChecking no" root@${remoteHost}  > /dev/null 2>&1 << remoteCmd
 
