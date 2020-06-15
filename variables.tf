@@ -2,13 +2,9 @@ variable "cloud_provider" {
   default = "TencentCloud"
 }
 
-variable "secret_id" {
-  default = ""
-}
+variable "secret_id" {}
 
-variable "secret_key" {
-  default = ""
-}
+variable "secret_key" {}
 
 variable "region" {
   default = "ap-guangzhou"
