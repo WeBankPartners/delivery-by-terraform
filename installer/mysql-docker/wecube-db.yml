@@ -1,0 +1,20 @@
+version: "2"
+services:
+  mysql-wecube:
+    image: ccr.ccs.tencentyun.com/webankpartners/mysql:5.6
+    restart: always
+    command:
+      [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--default-time-zone=+8:00",
+        "--max_allowed_packet=4M",
+        "--lower_case_table_names=1",
+      ]
+    volumes:
+      - ${WECUBE_HOME}/mysql-wecube/data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:3306
