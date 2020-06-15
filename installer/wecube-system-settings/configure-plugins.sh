@@ -14,7 +14,7 @@ source $SYS_SETTINGS_ENV_FILE
 
 echo -e "\nNow starting to configure plugins..."
 
-PLUGIN_INSTALLER_URL="https://github.com/kanetz/wecube-auto/archive/master.zip"
+PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
 PLUGINS_BUCKET_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com"
 PLUGIN_INSTALLER_PKG="$INSTALLER_DIR/wecube-plugin-installer.zip"
 PLUGIN_INSTALLER_DIR="$INSTALLER_DIR/wecube-plugins"

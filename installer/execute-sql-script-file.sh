@@ -2,16 +2,16 @@
 
 set -e
 
-mysql_host=$1
-mysql_port=$2
-mysql_database=$3
-mysql_user=$4
-mysql_password=$5
-sql_script_file=$(realpath "$6")
+MYSQL_HOST=$1
+MYSQL_PORT=$2
+MYSQL_DATABASE=$3
+MYSQL_USER=$4
+MYSQL_PASSWORD=$5
+SQL_SCRIPT_FILE=$(realpath "$6")
 
-docker run --rm -t -v "$sql_script_file:$sql_script_file" \
+docker run --rm -t -v "$SQL_SCRIPT_FILE:$SQL_SCRIPT_FILE" \
 	ccr.ccs.tencentyun.com/webankpartners/mysql:5.6 \
 	mysql \
-	-h"$mysql_host" -P"$mysql_port" -D"$mysql_database" \
-	-u"$mysql_user" -p"$mysql_password" \
+	-h"$MYSQL_HOST" -P"$MYSQL_PORT" -D"$MYSQL_DATABASE" \
+	-u"$MYSQL_USER" -p"$MYSQL_PASSWORD" \
 	-e"source $sql_script_file"
