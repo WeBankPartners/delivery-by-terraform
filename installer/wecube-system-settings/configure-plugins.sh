@@ -10,6 +10,8 @@ source $ENV_FILE
 SYS_SETTINGS_ENV_TEMPLATE_FILE="./wecube-system-settings.env.tpl"
 SYS_SETTINGS_ENV_FILE="./wecube-system-settings.env"
 ../substitute-in-file.sh $ENV_FILE $SYS_SETTINGS_ENV_TEMPLATE_FILE $SYS_SETTINGS_ENV_FILE
+echo "" >>$SYS_SETTINGS_ENV_FILE
+cat $ENV_FILE >>$SYS_SETTINGS_ENV_FILE
 source $SYS_SETTINGS_ENV_FILE
 
 echo -e "\nNow starting to configure plugins..."

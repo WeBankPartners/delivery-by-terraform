@@ -10,7 +10,7 @@ locals {
   my_public_ip = chomp(data.http.my_public_ip.body)
 
   vpc_cluster = {
-    name       = "${var.idc_prefix}_MGMT"
+    name       = "TX_GZ_PRD_MGMT"
     cidr_block = "10.40.192.0/19"
   }
 
@@ -22,27 +22,27 @@ locals {
     local.subnet_db_cluster
   ]
   subnet_vdi_cluster = {
-    name              = "${var.idc_prefix}_MGMT_VDI"
+    name              = "TX_GZ_PRD_MGMT_VDI"
     cidr_block        = "10.40.196.0/24"
     availability_zone = local.primary_availability_zone
   }
   subnet_proxy_cluster = {
-    name              = "${var.idc_prefix}_MGMT_PROXY"
+    name              = "TX_GZ_PRD_MGMT_PROXY"
     cidr_block        = "10.40.220.0/24"
     availability_zone = local.primary_availability_zone
   }
   subnet_app_1_cluster = {
-    name              = "${var.idc_prefix}1_MGMT_APP"
+    name              = "TX_GZ_PRD1_MGMT_APP"
     cidr_block        = "10.40.200.0/24"
     availability_zone = local.primary_availability_zone
   }
   subnet_app_2_cluster = {
-    name              = "${var.idc_prefix}2_MGMT_APP"
+    name              = "TX_GZ_PRD2_MGMT_APP"
     cidr_block        = "10.40.201.0/24"
     availability_zone = local.secondary_availability_zone
   }
   subnet_db_cluster = {
-    name              = "${var.idc_prefix}1_MGMT_DB"
+    name              = "TX_GZ_PRD1_MGMT_DB"
     cidr_block        = "10.40.212.0/24"
     availability_zone = local.primary_availability_zone
   }
@@ -120,7 +120,7 @@ locals {
 
 
   bastion_host_cluster = {
-    name                       = "${var.idc_prefix}_MGMT_1M1_VDI1__mgmtbastion01"
+    name                       = "TX_GZ_PRD_MGMT_1M1_VDI1__mgmtbastion01"
     availability_zone          = local.primary_availability_zone
     subnet_name                = local.subnet_vdi_cluster.name
     instance_type              = "S2.SMALL1"
@@ -132,7 +132,7 @@ locals {
     internet_max_bandwidth_out = 10
   }
   vdi_host_cluster = {
-    name                       = "${var.idc_prefix}_MGMT_1M1_VDI1__mgmtvdi01"
+    name                       = "TX_GZ_PRD_MGMT_1M1_VDI1__mgmtvdi01"
     availability_zone          = local.primary_availability_zone
     subnet_name                = local.subnet_vdi_cluster.name
     instance_type              = "S2.MEDIUM4"
@@ -145,7 +145,7 @@ locals {
   }
 
   waf_host_cluster = {
-    name                       = "${var.idc_prefix}_MGMT_1M1_SQUID1__mgmtsquid01"
+    name                       = "TX_GZ_PRD_MGMT_1M1_SQUID1__mgmtsquid01"
     availability_zone          = local.primary_availability_zone
     subnet_name                = local.subnet_proxy_cluster.name
     instance_type              = "S2.SMALL1"
@@ -159,7 +159,7 @@ locals {
   }
 
   core_host_1_cluster = {
-    name                       = "${var.idc_prefix}_MGMT_1M1_DOCKER1__wecubecore01"
+    name                       = "TX_GZ_PRD_MGMT_1M1_DOCKER1__wecubecore01"
     availability_zone          = local.primary_availability_zone
     subnet_name                = local.subnet_app_1_cluster.name
     instance_type              = "S2.MEDIUM4"
@@ -172,7 +172,7 @@ locals {
     provisioned_with           = local.host_provisioners
   }
   core_host_2_cluster = {
-    name                       = "${var.idc_prefix}_MGMT_1M1_DOCKER1__wecubecore02"
+    name                       = "TX_GZ_PRD_MGMT_1M1_DOCKER1__wecubecore02"
     availability_zone          = local.secondary_availability_zone
     subnet_name                = local.subnet_app_2_cluster.name
     instance_type              = "S2.MEDIUM4"
@@ -185,7 +185,7 @@ locals {
     provisioned_with           = local.host_provisioners
   }
   plugin_host_1_cluster = {
-    name                       = "${var.idc_prefix}_MGMT_1M1_DOCKER1__wecubeplugin01"
+    name                       = "TX_GZ_PRD_MGMT_1M1_DOCKER1__wecubeplugin01"
     availability_zone          = local.primary_availability_zone
     subnet_name                = local.subnet_app_1_cluster.name
     instance_type              = "S2.LARGE8"
@@ -198,7 +198,7 @@ locals {
     provisioned_with           = local.host_provisioners
   }
   plugin_host_2_cluster = {
-    name                       = "${var.idc_prefix}_MGMT_1M1_DOCKER1__wecubeplugin02"
+    name                       = "TX_GZ_PRD_MGMT_1M1_DOCKER1__wecubeplugin02"
     availability_zone          = local.secondary_availability_zone
     subnet_name                = local.subnet_app_2_cluster.name
     instance_type              = "S2.LARGE8"
@@ -220,7 +220,7 @@ locals {
 
   # DB Instances
   core_db = {
-    name              = "${var.idc_prefix}_MGMT_1M1_MYSQL1__wecubecore"
+    name              = "TX_GZ_PRD_MGMT_1M1_MYSQL1__wecubecore"
     availability_zone = local.primary_availability_zone
     subnet_name       = local.subnet_db_cluster.name
     engine_version    = "5.6"
@@ -241,7 +241,7 @@ locals {
     }
   }
   plugin_db = {
-    name              = "${var.idc_prefix}_MGMT_1M1_MYSQL1__wecubeplugin"
+    name              = "TX_GZ_PRD_MGMT_1M1_MYSQL1__wecubeplugin"
     availability_zone = local.primary_availability_zone
     subnet_name       = local.subnet_db_cluster.name
     engine_version    = "5.6"
@@ -263,12 +263,12 @@ locals {
   }
 
   lb_internal_1_cluster = {
-    name         = "${var.idc_prefix}_MGMT_1M1_ILB1__wecubelb01"
+    name         = "TX_GZ_PRD_MGMT_1M1_ILB1__wecubelb01"
     subnet_name  = local.subnet_app_1_cluster.name
     network_type = "INTERNAL"
   }
   lb_internal_2_cluster = {
-    name         = "${var.idc_prefix}_MGMT_1M1_ILB1__wecubelb02"
+    name         = "TX_GZ_PRD_MGMT_1M1_ILB1__wecubelb02"
     subnet_name  = local.subnet_app_2_cluster.name
     network_type = "INTERNAL"
   }
@@ -443,11 +443,11 @@ locals {
         installer     = "wecube-system-settings"
         resource_name = local.core_host_1_cluster.name
         inject_asset_id = {
-          WECUBE_VPC_ASSET_ID            = local.vpc_cluster.name
-          WECUBE_SUBNET_ASSET_ID         = local.subnet_app_1_cluster.name
-          WECUBE_ROUTE_TABLE_ASSET_ID    = local.route_table_cluster.name
-          WECUBE_SECURITY_GROUP_ASSET_ID = local.security_group_cluster.name
-          WECUBE_HOST_ASSET_ID           = local.core_host_1_cluster.name
+          WECUBE_VPC            = local.vpc_cluster.name
+          WECUBE_SUBNET         = local.subnet_app_1_cluster.name
+          WECUBE_ROUTE_TABLE    = local.route_table_cluster.name
+          WECUBE_SECURITY_GROUP = local.security_group_cluster.name
+          WECUBE_HOST           = local.core_host_1_cluster.name
         }
         inject_private_ip = {
           CORE_HOST   = local.core_host_1_cluster.name

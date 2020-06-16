@@ -178,10 +178,11 @@ resource "null_resource" "post_deployment_steps" {
       INITIAL_PASSWORD=${var.initial_password}
       SHOULD_INSTALL_PLUGINS=${var.should_install_plugins}
 
-      # ASSET ID
+      # ASSETS
       %{ for var_name, resource_name in var.deployment_plan.post_deploy[count.index].inject_asset_id }
       # ${var_name}
-      ${var_name}=${var.resource_map.asset_id_by_name[resource_name]}
+      ${var_name}_ASSET_NAME=${resource_name}
+      ${var_name}_ASSET_ID=${var.resource_map.asset_id_by_name[resource_name]}
       %{ endfor }
 
       # PRIVATE IP

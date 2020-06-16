@@ -14,12 +14,8 @@ variable "availability_zones" {
   type    = list(string)
   default = [
     "ap-guangzhou-4",
-    "ap-guangzhou-3",
+#    "ap-guangzhou-3",
   ]
-}
-
-variable "idc_prefix" {
-  default = "TC_GZ_PRD"
 }
 
 variable "wecube_release_version" {

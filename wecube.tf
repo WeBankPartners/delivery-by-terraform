@@ -22,7 +22,6 @@ module "planning" {
   source = "./module/planning"
 
   availability_zones     = var.availability_zones
-  idc_prefix             = var.idc_prefix
   wecube_release_version = var.wecube_release_version
   initial_password       = var.initial_password
   default_mysql_port     = var.default_mysql_port

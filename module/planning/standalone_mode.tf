@@ -4,13 +4,13 @@
 locals {
   # VPC
   vpc_standalone = {
-    name       = "${var.idc_prefix}_MGMT"
+    name       = "TX_BJ_PRD_MGMT"
     cidr_block = "10.128.200.0/22"
   }
 
   # Subnets
   subnet_standalone = {
-    name       = "${local.vpc_standalone.name}_APP"
+    name       = "TX_BJ_PRD1_MGMT_APP"
     cidr_block = "10.128.202.0/24"
     availability_zone = local.primary_availability_zone
   }
@@ -145,11 +145,11 @@ locals {
         installer     = "wecube-system-settings"
         resource_name = local.host_standalone.name
         inject_asset_id = {
-          WECUBE_VPC_ASSET_ID            = local.vpc_standalone.name
-          WECUBE_SUBNET_ASSET_ID         = local.subnet_standalone.name
-          WECUBE_ROUTE_TABLE_ASSET_ID    = local.route_table_standalone.name
-          WECUBE_SECURITY_GROUP_ASSET_ID = local.security_group_standalone.name
-          WECUBE_HOST_ASSET_ID           = local.host_standalone.name
+          WECUBE_VPC            = local.vpc_standalone.name
+          WECUBE_SUBNET         = local.subnet_standalone.name
+          WECUBE_ROUTE_TABLE    = local.route_table_standalone.name
+          WECUBE_SECURITY_GROUP = local.security_group_standalone.name
+          WECUBE_HOST           = local.host_standalone.name
         }
         inject_private_ip = {
           CORE_HOST   = local.host_standalone.name
