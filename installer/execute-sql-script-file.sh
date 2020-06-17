@@ -14,4 +14,4 @@ docker run --rm -t -v "$SQL_SCRIPT_FILE:$SQL_SCRIPT_FILE" \
 	mysql \
 	-h"$MYSQL_HOST" -P"$MYSQL_PORT" -D"$MYSQL_DATABASE" \
 	-u"$MYSQL_USER" -p"$MYSQL_PASSWORD" \
-	-e"source $sql_script_file"
+	-e"source $SQL_SCRIPT_FILE"
