@@ -55,7 +55,7 @@ locals {
 #######################
 locals {
   host_standalone = {
-    name                       = "instance_wecube_platform"
+    name                       = "txbjwecubehost"
     availability_zone          = local.primary_availability_zone
     subnet_name                = local.subnet_standalone.name
     instance_type              = "S4.LARGE16"
