@@ -1,19 +1,28 @@
-# Retrieve Public IP
+#######################################
+# 集群模式下的资源规划及WeCube部署计划定义 #
+######################################
+
+# 获取当前主机的公共网络IP地址，以供安全策略定义使用
 data "http" "my_public_ip" {
   url = "http://ipv4.icanhazip.com"
 }
 
-#####################
-# Network Resources #
-#####################
+###########
+# 网络资源 #
+###########
 locals {
+  # 当前主机的公共网络IP地址
   my_public_ip = chomp(data.http.my_public_ip.body)
 
+  # 私有网络
   vpc_cluster = {
+    # 私有网络名称
     name       = "TX_GZ_PRD_MGMT"
+    # 私有网络CIDR IP地址空间块
     cidr_block = "10.40.192.0/19"
   }
 
+  # 子网
   subnets_cluster = [
     local.subnet_vdi_cluster,
     local.subnet_proxy_cluster,
@@ -22,45 +31,60 @@ locals {
     local.subnet_db_cluster
   ]
   subnet_vdi_cluster = {
-    name              = "TX_GZ_PRD_MGMT_VDI"
+    # 子网名称
+    name              = "TX_GZ_PRD1_MGMT_VDI01"
+    # 子网的CIDR IP地址空间块
     cidr_block        = "10.40.196.0/24"
+    # 子网所在的可用区
     availability_zone = local.primary_availability_zone
   }
   subnet_proxy_cluster = {
-    name              = "TX_GZ_PRD_MGMT_PROXY"
+    name              = "TX_GZ_PRD1_MGMT_PROXY01"
     cidr_block        = "10.40.220.0/24"
     availability_zone = local.primary_availability_zone
   }
   subnet_app_1_cluster = {
-    name              = "TX_GZ_PRD1_MGMT_APP"
+    name              = "TX_GZ_PRD1_MGMT_APP01"
     cidr_block        = "10.40.200.0/24"
     availability_zone = local.primary_availability_zone
   }
   subnet_app_2_cluster = {
-    name              = "TX_GZ_PRD2_MGMT_APP"
+    name              = "TX_GZ_PRD2_MGMT_APP01"
     cidr_block        = "10.40.201.0/24"
     availability_zone = local.secondary_availability_zone
   }
   subnet_db_cluster = {
-    name              = "TX_GZ_PRD1_MGMT_DB"
+    name              = "TX_GZ_PRD1_MGMT_DB01"
     cidr_block        = "10.40.212.0/24"
     availability_zone = local.primary_availability_zone
   }
 
+  # 私有网络默认路由表
   route_table_cluster = {
+    # 路由表名称
     name = "vpc_default_route_table"
   }
 
+  # 安全组
   security_group_cluster = {
+    # 安全组名称
     name        = local.vpc_cluster.name
+    # 安全组描述
     description = "Security Group for WeCube VPC"
   }
+
+  # 安全规则
   security_group_rules_cluster = [
     {
+      # 规则类型：入向 - ingress, 出向 - egress
       type              = "ingress"
+      # 规则匹配的CIDR IP地址
       cidr_ip           = local.vpc_cluster.cidr_block
+      # 规则应用的网络协议
       ip_protocol       = "tcp"
+      # 规则匹配的端口范围
       port_range        = "1-65535"
+      # 规则匹配后的动作策略
       policy            = "accept"
     },
     {
@@ -88,19 +112,22 @@ locals {
   ]
 }
 
-#######################
-# Computing Resources #
-#######################
+###########
+# 计算资源 #
+###########
 locals {
+  # 跳板机
   bastion_hosts_cluster = [
     local.bastion_host_cluster,
     local.vdi_host_cluster,
   ]
 
+  # 应用防火墙
   waf_hosts_cluster = [
     local.waf_host_cluster,
   ]
 
+  # 主机
   hosts_cluster = [
     local.core_host_1_cluster,
     local.core_host_2_cluster,
@@ -108,27 +135,40 @@ locals {
     local.plugin_host_2_cluster,
   ]
 
+  # 数据库
   db_instances_cluster = [
     local.core_db,
     local.plugin_db,
   ]
 
+  # 负载均衡器
   lb_instances_cluster = [
     local.lb_internal_1_cluster,
     local.lb_internal_2_cluster,
   ]
 
 
+  # 跳板机
   bastion_host_cluster = {
+    # 主机实例名称
     name                       = "TX_GZ_PRD_MGMT_1M1_VDI1__mgmtbastion01"
+    # 主机所在的可用区名称
     availability_zone          = local.primary_availability_zone
+    # 主机所在的私有网络中的子网名称
     subnet_name                = local.subnet_vdi_cluster.name
+    # 主机规格类型
     instance_type              = "S2.SMALL1"
+    # 主机初始化使用的虚拟机镜像名称
     image_id                   = "img-oikl1tzv"
+    # 主机存储系统使用的磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机root用户的初始密码
     password                   = var.initial_password
+    # 主机使用的私有网络IP
     private_ip                 = "10.40.196.4"
+    # 是否为主机分配公共网络IP
     allocate_public_ip         = true
+    # 主机公共网络出向流量带宽
     internet_max_bandwidth_out = 10
   }
   vdi_host_cluster = {
@@ -144,31 +184,55 @@ locals {
     internet_max_bandwidth_out = 10
   }
 
+  # 应用防火墙
   waf_host_cluster = {
+    # 主机实例名称
     name                       = "TX_GZ_PRD_MGMT_1M1_SQUID1__mgmtsquid01"
+    # 主机所在的可用区名称
     availability_zone          = local.primary_availability_zone
+    # 主机所在的私有网络中的子网名称
     subnet_name                = local.subnet_proxy_cluster.name
+    # 主机规格类型
     instance_type              = "S2.SMALL1"
+    # 主机初始化使用的虚拟机镜像名称
     image_id                   = "img-oikl1tzv"
+    # 主机存储系统使用的磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机root用户的初始密码
     password                   = var.initial_password
+    # 主机使用的私有网络IP
     private_ip                 = "10.40.220.3"
+    # 是否为主机分配公共网络IP
     allocate_public_ip         = true
+    # 主机公共网络出向流量带宽
     internet_max_bandwidth_out = 10
+    # 主机初始化时需要额外执行的安装程序名称（位于目录installer下）
     provisioned_with           = ["squid", "open-monitor-agent"]
   }
 
+  # 主机
   core_host_1_cluster = {
+    # 主机实例名称
     name                       = "TX_GZ_PRD_MGMT_1M1_DOCKER1__wecubecore01"
+    # 主机所在的可用区名称
     availability_zone          = local.primary_availability_zone
+    # 主机所在的私有网络中的子网名称
     subnet_name                = local.subnet_app_1_cluster.name
+    # 主机规格类型
     instance_type              = "S2.MEDIUM4"
+    # 主机初始化使用的虚拟机镜像名称
     image_id                   = "img-oikl1tzv"
+    # 主机存储系统使用的磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机root用户的初始密码
     password                   = var.initial_password
+    # 主机使用的私有网络IP
     private_ip                 = "10.40.200.2"
+    # 是否为主机分配公共网络IP
     allocate_public_ip         = false
+    # 主机公共网络出向流量带宽
     internet_max_bandwidth_out = 10
+    # 主机初始化时需要额外执行的安装程序名称（位于目录installer下）
     provisioned_with           = local.host_provisioners
   }
   core_host_2_cluster = {
@@ -218,19 +282,31 @@ locals {
     "open-monitor-agent",
   ]
 
-  # DB Instances
+  # 数据库
   core_db = {
+    # 数据库实例名称
     name              = "TX_GZ_PRD_MGMT_1M1_MYSQL1__wecubecore"
+    # 数据库实例所在的可用区
     availability_zone = local.primary_availability_zone
+    # 数据库实例所在的子网名称
     subnet_name       = local.subnet_db_cluster.name
+    # 数据库实例的MySQL版本
     engine_version    = "5.6"
+    # 数据库实例使用的内存大小（MB）
     mem_size          = 2000
+    # 数据库实例使用的存储磁盘大小（GB）
     volume_size       = 40
+    # 数据库实例root用户的初始密码
     root_password     = var.initial_password
+    # 数据库实例的内网监听端口
     intranet_port     = 3306
-    internet_service  = 1
+    # 数据库实例是否允许通过公共网络访问
+    internet_service  = 0
+    # ？？？
     slave_deploy_mode = 0
+    # 数据复制模式：0 - 异步复制，1 - 半同步复制，2 - 强同步复制
     slave_sync_mode   = 1
+
     first_slave_zone  = local.primary_availability_zone
     second_slave_zone = local.secondary_availability_zone
     parameters = {
@@ -276,17 +352,24 @@ locals {
 
 
 
-###################
-# Deployment Plan #
-###################
+###########
+# 部署计划 #
+###########
 locals {
+  # 集群模式下的WeCube部署计划
   deployment_plan_cluster = {
+    # 数据库组件部署计划
     db = [
       {
+        # 数据库组件部署计划名称
         name                 = "core-db-cluster"
+        # 部署数据库组件时需要执行的安装程序名称（位于目录installer下）
         installer            = "core-db"
+        # 部署数据库组件时需要作为客户端使用的主机资源名称
         client_resource_name = local.core_host_1_cluster.name
+        # 部署数据库组件的目标数据库资源名称
         db_resource_name     = local.core_db.name
+        # 目标数据库实例的数据库名称
         db_name              = "wecube"
       },
       {
@@ -305,11 +388,33 @@ locals {
       },
     ]
 
+    # 应用组件部署计划
     app = [
       {
-        name          = "wecube-platform-1-cluster"
-        installer     = "wecube-platform"
-        resource_name = local.core_host_1_cluster.name
+        # 应用组件部署计划名称
+        name            = "wecube-platform-1-cluster"
+        # 部署应用组件时需要执行的安装程序名称（位于installer目录下）
+        installer       = "wecube-platform"
+        # 应用组件部署的目标主机资源名称
+        resource_name   = local.core_host_1_cluster.name
+        # 在应用组件部署使用的环境变量配置文件中注入以下资源的私有网络IP地址
+        inject_private_ip = {
+          # 定义格式：变量名称 = 资源名称[,资源名称...]
+          STATIC_RESOURCE_HOSTS = "${local.core_host_1_cluster.name},${local.core_host_2_cluster.name}"
+          S3_HOST               = local.core_host_1_cluster.name
+        }
+        # 在应用组件部署使用的环境变量配置文件中注入以下已完成部署的数据库组件环境参数（数据库实例所在主机、端口、数据库名称、用户名、密码）
+        inject_db_plan_env = {
+          # 定义格式：变量名称前缀 = 数据库组件部署计划名称
+          CORE_DB        = "core-db-cluster"
+          AUTH_SERVER_DB = "auth-server-db-cluster"
+          PLUGIN_DB      = "plugin-db-cluster"
+        }
+      },
+      {
+        name            = "wecube-platform-2-cluster"
+        installer       = "wecube-platform"
+        resource_name   = local.core_host_2_cluster.name
         inject_private_ip = {
           STATIC_RESOURCE_HOSTS = "${local.core_host_1_cluster.name},${local.core_host_2_cluster.name}"
           S3_HOST               = local.core_host_1_cluster.name
@@ -321,32 +426,18 @@ locals {
         }
       },
       {
-        name          = "wecube-platform-2-cluster"
-        installer     = "wecube-platform"
-        resource_name = local.core_host_2_cluster.name
-        inject_private_ip = {
-          STATIC_RESOURCE_HOSTS = "${local.core_host_1_cluster.name},${local.core_host_2_cluster.name}"
-          S3_HOST               = local.core_host_1_cluster.name
-        }
-        inject_db_plan_env = {
-          CORE_DB        = "core-db-cluster"
-          AUTH_SERVER_DB = "auth-server-db-cluster"
-          PLUGIN_DB      = "plugin-db-cluster"
-        }
-      },
-      {
-        name          = "wecube-plugin-hosting-1-cluster"
-        installer     = "wecube-plugin-hosting"
-        resource_name = local.plugin_host_1_cluster.name
+        name            = "wecube-plugin-hosting-1-cluster"
+        installer       = "wecube-plugin-hosting"
+        resource_name   = local.plugin_host_1_cluster.name
         inject_private_ip = {}
         inject_db_plan_env = {
           CORE_DB = "core-db-cluster"
         }
       },
       {
-        name          = "wecube-plugin-hosting-2-cluster"
-        installer     = "wecube-plugin-hosting"
-        resource_name = local.plugin_host_2_cluster.name
+        name            = "wecube-plugin-hosting-2-cluster"
+        installer       = "wecube-plugin-hosting"
+        resource_name   = local.plugin_host_2_cluster.name
         inject_private_ip = {}
         inject_db_plan_env = {
           CORE_DB = "core-db-cluster"
@@ -354,18 +445,29 @@ locals {
       },
     ]
 
+    # 负载均衡组件部署计划
     lb = [
       {
+        # 负载均衡组件部署计划名称
         name              = "http-19090-wecube-portal-1-cluster"
+        # 负载均衡器资源名称
         resource_name     = local.lb_internal_1_cluster.name
+        # 负载均衡时使用的协议类型
         protocol          = "HTTP"
+        # 负载均衡对外服务监听的端口
         port              = 19090
+        # 负载均衡对外服务的访问路径
         path              = "/"
+        # 健康检查的访问路径
         health_check_path = "/platform/v1/health-check"
+        # 后端服务器实例定义
         back_ends         = [
           {
+            # 后端服务器所在的主机资源名称
             resource_name = local.core_host_1_cluster.name
+            # 后端服务器监听的端口
             port          = 19090
+            # 加权轮训时后端服务器所占权重
             weight        = 90
           },
           {
@@ -437,25 +539,51 @@ locals {
       },
     ]
 
+    # 部署后需要执行的步骤：WeCube系统参数配置
     post_deploy = [
       {
-        name          = "wecube-system-settings-cluster"
-        installer     = "wecube-system-settings"
-        resource_name = local.core_host_1_cluster.name
-        inject_asset_id = {
+        # 部署后执行步骤的名称
+        name            = "wecube-system-settings-cluster"
+        # 部署后执行步骤中需要执行的安装程序名称（位于目录installer下）
+        installer       = "wecube-system-settings"
+        # 执行部署后步骤时使用的主机资源名称
+        resource_name   = local.core_host_1_cluster.name
+        # 在部署后执行步骤使用的环境变量配置文件中注入以下变量和值
+        inject_env = {
+          REGION_ASSET_NAME = "TX_GZ_PRD"
+          REGION            = var.region
+          AZ_ASSET_NAME     = "TX_GZ_PRD1,TX_GZ_PRD2"
+          AZ                = "${local.primary_availability_zone},${local.secondary_availability_zone}"
+        }
+        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源资产id
+        inject_asset_data = {
+          # 定义格式：变量名称前缀 = 资源名称[,资源名称]...
           WECUBE_VPC            = local.vpc_cluster.name
-          WECUBE_SUBNET         = local.subnet_app_1_cluster.name
           WECUBE_ROUTE_TABLE    = local.route_table_cluster.name
           WECUBE_SECURITY_GROUP = local.security_group_cluster.name
-          WECUBE_HOST           = local.core_host_1_cluster.name
+          WECUBE_SUBNET         = join(",", [for sn in local.subnets_cluster : sn.name])
+          WECUBE_HOST           = join(",", concat([
+                                      for h in local.bastion_hosts_cluster : h.name
+                                    ], [
+                                      for h in local.waf_hosts_cluster     : h.name
+                                    ], [
+                                      for h in local.hosts_cluster         : h.name
+                                    ]
+                                  ))
+          WECUBE_DB             = join(",", [for db in local.db_instances_cluster : db.name])
+          WECUBE_LB             = join(",", [for lb in local.lb_instances_cluster : lb.name])
         }
+        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的私有网络IP地址
         inject_private_ip = {
+          # 定义格式：变量名称 = 资源名称[,资源名称]...
           CORE_HOST   = local.core_host_1_cluster.name
           S3_HOST     = local.core_host_1_cluster.name
           PLUGIN_HOST = local.plugin_host_1_cluster.name
           PORTAL_HOST = local.core_host_1_cluster.name
         }
+        # 在部署后执行步骤使用的环境变量配置文件中注入以下已完成部署的数据库组件环境参数（数据库实例所在主机、端口、数据库名称、用户名、密码）
         inject_db_plan_env = {
+          # 定义格式：变量名称前缀 = 数据库组件部署计划名称
           CORE_DB        = "core-db-cluster"
           AUTH_SERVER_DB = "auth-server-db-cluster"
           PLUGIN_DB      = "plugin-db-cluster"

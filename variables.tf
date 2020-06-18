@@ -14,7 +14,7 @@ variable "availability_zones" {
   type    = list(string)
   default = [
     "ap-guangzhou-4",
-#    "ap-guangzhou-3",
+    "ap-guangzhou-3",
   ]
 }
 

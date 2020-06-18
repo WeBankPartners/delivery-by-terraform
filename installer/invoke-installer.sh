@@ -17,7 +17,7 @@ for INSTALLER in "$@"; do
     find . -name '*.sh' -exec chmod +x \{\} +
     source ~/.bashrc
     sh "$INSTALLER_DIR/install-$INSTALLER.sh" "$ENV_FILE"
-    echo -e "\n\e[0;32mInstallaion of $INSTALLER on host $HOST_PRIVATE_IP completed successfully.\e[0m\n"
+    echo -e "\n\e[0;32mInstallation of $INSTALLER on host $HOST_PRIVATE_IP completed successfully.\e[0m\n"
 
     popd >/dev/null 2>&1
 done
