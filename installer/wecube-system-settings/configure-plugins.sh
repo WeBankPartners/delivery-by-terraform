@@ -61,61 +61,7 @@ echo -e "\nEnabling service configurations for all registered plugins..."
 
 
 echo -e "\nConfiguring plugin WeCMDB...\n"
-docker run --rm -t \
-    -v "$COLLECTION_DIR:$COLLECTION_DIR" \
-    -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
-    postman/newman \
-    run "$COLLECTION_DIR/022_wecube_sync_model.postman_collection.json" \
-    --env-var "domain=$PUBLIC_DOMAIN" \
-    --env-var "username=$DEFAULT_ADMIN_USERNAME" \
-    --env-var "password=$DEFAULT_ADMIN_PASSWORD" \
-    --env-var "wecube_host=$CORE_HOST" \
-    --env-var "plugin_host=$PLUGIN_HOST" \
-    --delay-request 2000 --disable-unicode \
-    --reporters cli \
-    --reporter-cli-no-banner --reporter-cli-no-console
-
-echo "Updating asset data in CMDB..."
-TEMPLATE_FILE_FOR_UPDATE_ASSET_IDS="./register-cmdb-asset-ids.sql.tpl"
-SQL_FILE_FOR_UPDATE_ASSET_IDS="./register-cmdb-asset-ids.sql"
-../substitute-in-file.sh $SYS_SETTINGS_ENV_FILE $TEMPLATE_FILE_FOR_UPDATE_ASSET_IDS $SQL_FILE_FOR_UPDATE_ASSET_IDS
-../execute-sql-script-file.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
-    $PLUGIN_CMDB_DB_NAME $PLUGIN_DB_USERNAME $PLUGIN_DB_PASSWORD \
-    $SQL_FILE_FOR_UPDATE_ASSET_IDS
-
+./configure-wecmdb.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR
 
 echo -e "\nConfigure plugin Open-Monitor...\n"
-docker run --rm -t \
-    -v "$COLLECTION_DIR:$COLLECTION_DIR" \
-    -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
-    postman/newman \
-    run "$COLLECTION_DIR/021_wecube_init_plugin.postman_collection.json" \
-    --env-var "domain=$PUBLIC_DOMAIN" \
-    --env-var "username=$DEFAULT_ADMIN_USERNAME" \
-    --env-var "password=$DEFAULT_ADMIN_PASSWORD" \
-    --env-var "wecube_host=$CORE_HOST" \
-    --env-var "plugin_host=$PLUGIN_HOST" \
-    --env-var "node_exporter_port=$MONITOR_AGENT_PORT" \
-    --env-var "plugin_mysql_host=$PLUGIN_DB_HOST" \
-    --env-var "plugin_mysql_port=$PLUGIN_DB_PORT" \
-    --env-var "plugin_mysql_user=$PLUGIN_DB_USERNAME" \
-    --env-var "plugin_mysql_password=$PLUGIN_DB_PASSWORD" \
-    --env-var "core_host=$CORE_HOST" \
-    --env-var "core_jmx_port=$WECUBE_SERVER_JMX_PORT" \
-    --delay-request 2000 --disable-unicode \
-    --reporters cli \
-    --reporter-cli-no-banner --reporter-cli-no-console
-
-echo "Uploading monitor agent package for future use..."
-AGENT_PKG_FILENAME="node_exporter_v2.1.tar.gz"
-AGENT_PKG_PATH="$PLUGIN_PKG_DIR/$AGENT_PKG_FILENAME"
-AGENT_PKG_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/monitor_agent/$AGENT_PKG_FILENAME"
-echo "Fetching agent package from $AGENT_PKG_URL ..."
-../curl-with-retry.sh -fL $AGENT_PKG_URL -o $AGENT_PKG_PATH
-docker run --rm -t \
-    -v "$AGENT_PKG_PATH:/$AGENT_PKG_FILENAME" \
-    --entrypoint=/bin/sh \
-    minio/mc -c """
-        mc config host add wecubeS3 $S3_URL $S3_ACCESS_KEY $S3_SECRET_KEY && \
-        mc cp /$AGENT_PKG_FILENAME wecubeS3/wecube-agent
-    """
+./configure-open-monitor.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR $PLUGIN_PKG_DIR

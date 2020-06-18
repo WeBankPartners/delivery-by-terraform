@@ -17,6 +17,6 @@ locals {
   proxy_host_ip = length(var.resource_plan.waf_hosts) > 0 ? var.resource_plan.waf_hosts[0].private_ip : ""
 
   combined_vm_instances = concat(tencentcloud_instance.bastion_hosts,
-                          concat(tencentcloud_instance.waf_hosts,
-                                 tencentcloud_instance.vm_instances))
+                                 tencentcloud_instance.waf_hosts,
+                                 tencentcloud_instance.vm_instances)
 }

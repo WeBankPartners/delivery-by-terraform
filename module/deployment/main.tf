@@ -39,6 +39,7 @@ resource "null_resource" "db_deployments" {
   provisioner "file" {
     content = <<-EOT
       DATE_TIME=${timestamp()}
+      HOST_RESOURCE_NAME=${var.deployment_plan.db[count.index].client_resource_name}
       HOST_PRIVATE_IP=${var.resource_map.vm_by_name[var.deployment_plan.db[count.index].client_resource_name].private_ip}
 
       DB_HOST=${local.db_plan_env_by_name[var.deployment_plan.db[count.index].name].db_host}
@@ -74,6 +75,7 @@ resource "null_resource" "app_deployments" {
   provisioner "file" {
     content = <<-EOT
       DATE_TIME=${timestamp()}
+      HOST_RESOURCE_NAME=${var.deployment_plan.app[count.index].resource_name}
       HOST_PRIVATE_IP=${var.resource_map.vm_by_name[var.deployment_plan.app[count.index].resource_name].private_ip}
       WECUBE_HOME=${var.wecube_home}
       WECUBE_RELEASE_VERSION=${var.wecube_release_version}
@@ -83,7 +85,7 @@ resource "null_resource" "app_deployments" {
       # PRIVATE IP
       %{ for var_name, host_names in var.deployment_plan.app[count.index].inject_private_ip }
       # ${var_name}
-      ${var_name}=${join(",", [for host_name in split(",", host_names) : var.resource_map.vm_by_name[host_name].private_ip])}
+      ${var_name}=${join(",", [for host_name in split(",", host_names) : lookup(var.resource_map.private_ip_by_name, host_name, "")])}
       %{ endfor }
 
       # DB ENV
@@ -171,6 +173,7 @@ resource "null_resource" "post_deployment_steps" {
   provisioner "file" {
     content = <<-EOT
       DATE_TIME=${timestamp()}
+      HOST_RESOURCE_NAME=${var.deployment_plan.post_deploy[count.index].resource_name}
       HOST_PRIVATE_IP=${var.resource_map.vm_by_name[var.deployment_plan.post_deploy[count.index].resource_name].private_ip}
       WECUBE_HOME=${var.wecube_home}
       WECUBE_RELEASE_VERSION=${var.wecube_release_version}
@@ -178,17 +181,22 @@ resource "null_resource" "post_deployment_steps" {
       INITIAL_PASSWORD=${var.initial_password}
       SHOULD_INSTALL_PLUGINS=${var.should_install_plugins}
 
+      %{ for var_name, var_value in var.deployment_plan.post_deploy[count.index].inject_env }
+      ${var_name}=${var_value}
+      %{ endfor }
+
       # ASSETS
-      %{ for var_name, resource_name in var.deployment_plan.post_deploy[count.index].inject_asset_id }
+      %{ for var_name, resource_names in var.deployment_plan.post_deploy[count.index].inject_asset_data }
       # ${var_name}
-      ${var_name}_ASSET_NAME=${resource_name}
-      ${var_name}_ASSET_ID=${var.resource_map.asset_id_by_name[resource_name]}
+      ${var_name}_ASSET_NAME=${resource_names}
+      ${var_name}_ASSET_ID=${join(",", [for resource_name in split(",", resource_names) : var.resource_map.asset_id_by_name[resource_name]])}
+      ${var_name}_PRIVATE_IP=${join(",", [for resource_name in split(",", resource_names) : lookup(var.resource_map.private_ip_by_name, resource_name, "")])}
       %{ endfor }
 
       # PRIVATE IP
       %{ for var_name, host_names in var.deployment_plan.post_deploy[count.index].inject_private_ip }
       # ${var_name}
-      ${var_name}=${join(",", [for host_name in split(",", host_names) : var.resource_map.vm_by_name[host_name].private_ip])}
+      ${var_name}=${join(",", [for host_name in split(",", host_names) : lookup(var.resource_map.private_ip_by_name, host_name, "")])}
       %{ endfor }
 
       # DB ENV

@@ -21,6 +21,7 @@ provider "tencentcloud" {
 module "planning" {
   source = "./module/planning"
 
+  region                 = var.region
   availability_zones     = var.availability_zones
   wecube_release_version = var.wecube_release_version
   initial_password       = var.initial_password
