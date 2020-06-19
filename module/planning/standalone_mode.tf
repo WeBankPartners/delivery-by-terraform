@@ -190,8 +190,9 @@ locals {
     # 负载均衡组件部署计划（单机模式下并不需要）
     lb = []
 
-    # 部署后需要执行的步骤：WeCube系统参数配置
+    # 部署后需要执行的步骤
     post_deploy = [
+      # 部署后执行步骤：WeCube系统参数配置
       {
         # 部署后执行步骤的名称
         name            = "wecube-system-settings-standalone"
@@ -205,8 +206,16 @@ locals {
           REGION            = var.region
           AZ_ASSET_NAME     = "TX_BJ_PRD1"
           AZ                = local.primary_availability_zone
+
+          COS_SECRETID      = var.secret_id
+          COS_SECRETKEY     = var.secret_key
+          COS_REGION        = "ap-guangzhou"
+          COS_BUCKET        = "wecube-artifacts-1259008868"
+          S3_ACCESS_KEY     = "access_key"
+          S3_SECRET_KEY     = "secret_key"
+          S3_BUCKET_NAME    = "wecube-artifacts"
         }
-        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源资产id
+        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的资产名称、资产ID和私有网络IP地址（如有）
         inject_asset_data = {
           # 定义格式：变量名称前缀 = 资源名称[,资源名称]...
           WECUBE_VPC            = local.vpc_standalone.name
@@ -230,7 +239,7 @@ locals {
           AUTH_SERVER_DB = "auth-server-db-standalone"
           PLUGIN_DB      = "plugin-db-standalone"
         }
-      },
+      }
     ]
   }
 }

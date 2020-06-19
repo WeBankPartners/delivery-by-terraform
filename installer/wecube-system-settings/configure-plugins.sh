@@ -65,3 +65,6 @@ echo -e "\nConfiguring plugin WeCMDB...\n"
 
 echo -e "\nConfigure plugin Open-Monitor...\n"
 ./configure-open-monitor.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR $PLUGIN_PKG_DIR
+
+echo -e "\nConfigure plugin Artifacts...\n"
+./configure-artifacts.sh $SYS_SETTINGS_ENV_FILE

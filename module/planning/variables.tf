@@ -1,3 +1,5 @@
+variable "secret_id" {}
+variable "secret_key" {}
 variable "region" {}
 variable "availability_zones" {}
 variable "wecube_release_version" {}

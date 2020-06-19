@@ -555,7 +555,7 @@ locals {
           AZ_ASSET_NAME     = "TX_GZ_PRD1,TX_GZ_PRD2"
           AZ                = "${local.primary_availability_zone},${local.secondary_availability_zone}"
         }
-        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源资产id
+        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的资产名称、资产ID和私有网络IP地址（如有）
         inject_asset_data = {
           # 定义格式：变量名称前缀 = 资源名称[,资源名称]...
           WECUBE_VPC            = local.vpc_cluster.name
