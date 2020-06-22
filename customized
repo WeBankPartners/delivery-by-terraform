@@ -1,12 +1,6 @@
-# Version of WeCube platform docker image
-#WECUBE_IMAGE_VERSION="v2.4.0"
-
-# Versions of WeCube plugin packages
-#PLUGIN_PKGS=(
-#  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-wecmdb-v1.4.5.zip"
-#  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-monitor-v1.5.0.zip"
-#)
-
+##################################################
+# Configurations for General WeCube Installation #
+##################################################
 
 # Version of WeCube platform docker image
 WECUBE_IMAGE_VERSION="20200618173105-5f8335e"
@@ -20,4 +14,17 @@ PLUGIN_PKGS=(
   "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-notifications-v0.1.1.zip"
   "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-artifacts-v0.3.0.zip"
   "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-service-mgmt-v0.5.0.zip"
+)
+
+
+################################################
+# Configurations for Specific Project Delivery #
+################################################
+
+# TencentCloud COS parameters for application artifact packages
+ARTIFACTS_COS_REGION="ap-guangzhou"
+ARTIFACTS_COS_BUCKET="wecube-artifacts-1259008868"
+ARTIFACTS_COS_OBJECTS=(
+	"register.xml"
+	"权限.xlsx"
 )

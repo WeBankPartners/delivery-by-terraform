@@ -41,12 +41,12 @@ docker run --rm -t \
     --entrypoint=/bin/sh \
     minio/mc -c """
     mc config host add wecubeS3 $S3_URL $S3_ACCESS_KEY $S3_SECRET_KEY && \
-    mc cp /$AGENT_PKG_FILENAME wecubeS3/$AGENT_BUCKET_NAME
+    mc cp /$AGENT_PKG_FILENAME wecubeS3/$AGENT_S3_BUCKET_NAME
     """
 ../execute-sql-expression.sh $CORE_DB_HOST $CORE_DB_PORT \
     $CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
     """
     UPDATE ``wecube``.``system_variables`` 
-       SET value = '$S3_URL/$AGENT_BUCKET_NAME/$AGENT_PKG_FILENAME'
+       SET value = '$S3_URL/$AGENT_S3_BUCKET_NAME/$AGENT_PKG_FILENAME'
      WHERE name ='HOST_EXPORTER_S3_PATH';
     """

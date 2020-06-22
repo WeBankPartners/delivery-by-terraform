@@ -14,8 +14,10 @@ echo "Updating WeCube system settings..."
 echo "Determine plugin versions to be installed..."
 
 if [ -f "$WECUBE_RELEASE_VERSION" ]; then
-    echo "Reading customized WeCube version specs from $WECUBE_RELEASE_VERSION..."
-    PATH="$PATH:." source "$WECUBE_RELEASE_VERSION"
+    VERSION_SPEC_FILE="$WECUBE_RELEASE_VERSION"
+    echo "Reading customized WeCube version specs from $VERSION_SPEC_FILE..."
+    PATH="$PATH:." source "$VERSION_SPEC_FILE"
+    PATH="$PATH:." cat "$VERSION_SPEC_FILE" >>"$ENV_FILE"
 else
   GITHUB_RELEASE_URL="https://api.github.com/repos/WeBankPartners/wecube-platform/releases/$WECUBE_RELEASE_VERSION"
   GITHUB_RELEASE_INFO_FILE="$WECUBE_HOME/installer/release-info"
