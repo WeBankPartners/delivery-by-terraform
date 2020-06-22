@@ -550,10 +550,19 @@ locals {
         resource_name   = local.core_host_1_cluster.name
         # 在部署后执行步骤使用的环境变量配置文件中注入以下变量和值
         inject_env = {
-          REGION_ASSET_NAME = "TX_GZ_PRD"
-          REGION            = var.region
-          AZ_ASSET_NAME     = "TX_GZ_PRD1,TX_GZ_PRD2"
-          AZ                = "${local.primary_availability_zone},${local.secondary_availability_zone}"
+          REGION_ASSET_NAME     = "TX_GZ_PRD"
+          REGION                = var.region
+          AZ_ASSET_NAME         = "TX_GZ_PRD1,TX_GZ_PRD2"
+          AZ                    = "${local.primary_availability_zone},${local.secondary_availability_zone}"
+
+          COS_SECRETID          = var.secret_id
+          COS_SECRETKEY         = var.secret_key
+          COS_REGION            = "ap-guangzhou"
+          COS_BUCKET            = "wecube-artifacts-1259008868"
+          S3_ACCESS_KEY         = "access_key"
+          S3_SECRET_KEY         = "secret_key"
+          AGENT_BUCKET_NAME     = "wecube-agent"
+          ARTIFACTS_BUCKET_NAME = "wecube-artifacts"
         }
         # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的资产名称、资产ID和私有网络IP地址（如有）
         inject_asset_data = {

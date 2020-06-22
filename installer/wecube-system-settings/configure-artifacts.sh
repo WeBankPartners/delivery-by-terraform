@@ -2,18 +2,18 @@
 
 set -e
 
-ENV_FILE=$1
+SYS_SETTINGS_ENV_FILE=$1
 
-source $ENV_FILE
+source $SYS_SETTINGS_ENV_FILE
 
 DOWNLOAD_DIR=$(realpath "./download")
 mkdir -p "$DOWNLOAD_DIR"
-echo "DOWNLOAD_DIR=$DOWNLOAD_DIR" >>$ENV_FILE
+echo "DOWNLOAD_DIR=$DOWNLOAD_DIR" >>$SYS_SETTINGS_ENV_FILE
 
 echo "Downloading artifacts from TencentCloud COS..."
 PYTHON_TEMPLATE_FILE="./download-all-objects-in-bucket.py.tpl"
 PYTHON_SCRIPT_FILE=$(realpath "./download-all-objects-in-bucket.py")
-../substitute-in-file.sh $ENV_FILE "$PYTHON_TEMPLATE_FILE" "$PYTHON_SCRIPT_FILE"
+../substitute-in-file.sh $SYS_SETTINGS_ENV_FILE "$PYTHON_TEMPLATE_FILE" "$PYTHON_SCRIPT_FILE"
 docker run --rm -t \
   -v "$DOWNLOAD_DIR:$DOWNLOAD_DIR" \
   -v "$PYTHON_SCRIPT_FILE:$PYTHON_SCRIPT_FILE" \
@@ -31,10 +31,10 @@ done
 
 echo "Uploading artifacts..."
 SHELL_SCRIPT_FILE=$(realpath "./upload-all-files-in-dir-to-minio.sh")
-ENV_FILE_PATH=$(realpath "$ENV_FILE")
+SYS_SETTINGS_ENV_FILE_PATH=$(realpath "$SYS_SETTINGS_ENV_FILE")
 docker run --rm -t \
   -v "$DOWNLOAD_DIR:$DOWNLOAD_DIR" \
-  -v "$ENV_FILE_PATH:$ENV_FILE_PATH" \
+  -v "$SYS_SETTINGS_ENV_FILE_PATH:$SYS_SETTINGS_ENV_FILE_PATH" \
   -v "$SHELL_SCRIPT_FILE:$SHELL_SCRIPT_FILE" \
   --entrypoint=/bin/sh \
-  minio/mc "$SHELL_SCRIPT_FILE" "$ENV_FILE_PATH"
+  minio/mc "$SHELL_SCRIPT_FILE" "$SYS_SETTINGS_ENV_FILE_PATH"
