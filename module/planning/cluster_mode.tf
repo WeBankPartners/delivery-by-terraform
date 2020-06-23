@@ -566,20 +566,20 @@ locals {
         # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的资产名称、资产ID和私有网络IP地址（如有）
         inject_asset_data = {
           # 定义格式：变量名称前缀 = 资源名称[,资源名称]...
-          WECUBE_VPC            = local.vpc_cluster.name
-          WECUBE_ROUTE_TABLE    = local.route_table_cluster.name
-          WECUBE_SECURITY_GROUP = local.security_group_cluster.name
-          WECUBE_SUBNET         = join(",", [for sn in local.subnets_cluster : sn.name])
+          WECUBE_VPC            = "vpc/${local.vpc_cluster.name}"
+          WECUBE_ROUTE_TABLE    = "rt/${local.route_table_cluster.name}"
+          WECUBE_SECURITY_GROUP = "sg/${local.security_group_cluster.name}"
+          WECUBE_SUBNET         = join(",", [for sn in local.subnets_cluster : "sn/${sn.name}"])
           WECUBE_HOST           = join(",", concat([
-                                      for h in local.bastion_hosts_cluster : h.name
+                                      for h in local.bastion_hosts_cluster : "vm/${h.name}"
                                     ], [
-                                      for h in local.waf_hosts_cluster     : h.name
+                                      for h in local.waf_hosts_cluster     : "vm/${h.name}"
                                     ], [
-                                      for h in local.hosts_cluster         : h.name
+                                      for h in local.hosts_cluster         : "vm/${h.name}"
                                     ]
                                   ))
-          WECUBE_DB             = join(",", [for db in local.db_instances_cluster : db.name])
-          WECUBE_LB             = join(",", [for lb in local.lb_instances_cluster : lb.name])
+          WECUBE_DB             = join(",", [for db in local.db_instances_cluster : "db/${db.name}"])
+          WECUBE_LB             = join(",", [for lb in local.lb_instances_cluster : "lb/${lb.name}"])
         }
         # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的私有网络IP地址
         inject_private_ip = {

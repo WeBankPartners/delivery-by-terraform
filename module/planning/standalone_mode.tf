@@ -218,11 +218,11 @@ locals {
         # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的资产名称、资产ID和私有网络IP地址（如有）
         inject_asset_data = {
           # 定义格式：变量名称前缀 = 资源名称[,资源名称]...
-          WECUBE_VPC            = local.vpc_standalone.name
-          WECUBE_SUBNET         = local.subnet_standalone.name
-          WECUBE_ROUTE_TABLE    = local.route_table_standalone.name
-          WECUBE_SECURITY_GROUP = local.security_group_standalone.name
-          WECUBE_HOST           = local.host_standalone.name
+          WECUBE_VPC            = "vpc/${local.vpc_standalone.name}"
+          WECUBE_SUBNET         = "sn/${local.subnet_standalone.name}"
+          WECUBE_ROUTE_TABLE    = "rt/${local.route_table_standalone.name}"
+          WECUBE_SECURITY_GROUP = "sg/${local.security_group_standalone.name}"
+          WECUBE_HOST           = "vm/${local.host_standalone.name}"
         }
         # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的私有网络IP地址
         inject_private_ip = {
