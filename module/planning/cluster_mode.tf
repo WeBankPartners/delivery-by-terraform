@@ -364,7 +364,7 @@ locals {
         # 数据库组件部署计划名称
         name                 = "core-db-cluster"
         # 部署数据库组件时需要执行的安装程序名称（位于目录installer下）
-        installer            = "core-db"
+        installer            = "db-connectivity"
         # 部署数据库组件时需要作为客户端使用的主机资源名称
         client_resource_name = local.core_host_1_cluster.name
         # 部署数据库组件的目标数据库资源名称
@@ -374,14 +374,14 @@ locals {
       },
       {
         name                 = "auth-server-db-cluster"
-        installer            = "auth-server-db"
+        installer            = "db-connectivity"
         client_resource_name = local.core_host_1_cluster.name
         db_resource_name     = local.core_db.name
         db_name              = "auth_server"
       },
       {
         name                 = "plugin-db-cluster"
-        installer            = "plugin-db"
+        installer            = "db-connectivity"
         client_resource_name = local.plugin_host_1_cluster.name
         db_resource_name     = local.plugin_db.name
         db_name              = "mysql"

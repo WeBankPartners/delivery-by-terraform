@@ -113,7 +113,7 @@ locals {
         # 数据库组件部署计划名称
         name                 = "core-db-standalone"
         # 部署数据库组件时需要执行的安装程序名称（位于目录installer下）
-        installer            = "core-db"
+        installer            = "db-connectivity"
         # 部署数据库组件时需要作为客户端使用的主机资源名称
         client_resource_name = local.host_standalone.name
         # 部署数据库组件的目标数据库资源名称（单机模式下没有单独创建的数据库资源，但需要指定后续的部署目标数据库的5项参数）
@@ -131,7 +131,7 @@ locals {
       },
       {
         name                 = "auth-server-db-standalone"
-        installer            = "auth-server-db"
+        installer            = "db-connectivity"
         client_resource_name = local.host_standalone.name
         db_resource_name     = null
         db_host              = local.host_standalone.private_ip
@@ -142,7 +142,7 @@ locals {
       },
       {
         name                 = "plugin-db-standalone"
-        installer            = "plugin-db"
+        installer            = "db-connectivity"
         client_resource_name = local.host_standalone.name
         db_resource_name     = null
         db_host              = local.host_standalone.private_ip
