@@ -180,7 +180,9 @@ locals {
         name            = "wecube-plugin-hosting-standalone"
         installer       = "wecube-plugin-hosting"
         resource_name   = local.host_standalone.name
-        inject_private_ip = {}
+        inject_private_ip = {
+          CORE_HOST = local.host_standalone.name
+        }
         inject_db_plan_env = {
           CORE_DB  = "core-db-standalone"
         }

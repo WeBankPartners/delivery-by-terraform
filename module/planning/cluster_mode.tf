@@ -429,7 +429,9 @@ locals {
         name            = "wecube-plugin-hosting-1-cluster"
         installer       = "wecube-plugin-hosting"
         resource_name   = local.plugin_host_1_cluster.name
-        inject_private_ip = {}
+        inject_private_ip = {
+          CORE_HOST = local.core_host_1_cluster.name
+        }
         inject_db_plan_env = {
           CORE_DB = "core-db-cluster"
         }
@@ -438,7 +440,9 @@ locals {
         name            = "wecube-plugin-hosting-2-cluster"
         installer       = "wecube-plugin-hosting"
         resource_name   = local.plugin_host_2_cluster.name
-        inject_private_ip = {}
+        inject_private_ip = {
+          CORE_HOST = local.core_host_1_cluster.name
+        }
         inject_db_plan_env = {
           CORE_DB = "core-db-cluster"
         }
