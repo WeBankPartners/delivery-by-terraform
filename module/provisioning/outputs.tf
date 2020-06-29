@@ -5,19 +5,19 @@ output "resource_map" {
     lb_by_name = {for lb in tencentcloud_clb_instance.lb_instances   : lb.clb_name      => lb}
 
     asset_id_by_name = merge({
-        for vpc in tencentcloud_vpc.vpcs : vpc.name => vpc.id
+        for vpc in tencentcloud_vpc.vpcs : "vpc/${vpc.name}" => vpc.id
       }, {
-        for sn in tencentcloud_subnet.subnets : sn.name => sn.id
+        for sn in tencentcloud_subnet.subnets : "sn/${sn.name}" => sn.id
       }, {
-        for rt in tencentcloud_route_table.route_tables : rt.name => rt.id
+        for rt in tencentcloud_route_table.route_tables : "rt/${rt.name}" => rt.id
       }, {
-        for sg in tencentcloud_security_group.security_groups : sg.name => sg.id
+        for sg in tencentcloud_security_group.security_groups : "sg/${sg.name}" => sg.id
       }, {
-        for vm in local.combined_vm_instances : vm.instance_name => vm.id
+        for vm in local.combined_vm_instances : "vm/${vm.instance_name}" => vm.id
       }, {
-        for db in tencentcloud_mysql_instance.db_instances : db.instance_name => db.id
+        for db in tencentcloud_mysql_instance.db_instances : "db/${db.instance_name}" => db.id
       }, {
-        for lb in tencentcloud_clb_instance.lb_instances : lb.clb_name => lb.id
+        for lb in tencentcloud_clb_instance.lb_instances : "lb/${lb.clb_name}" => lb.id
       }
     )
 

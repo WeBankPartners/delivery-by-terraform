@@ -1,5 +1,6 @@
 SET NAMES utf8 ;
 
+
 UPDATE `system_variables`
    SET `value`='${WECUBE_HOME}'
  WHERE `id`='system__global__BASE_MOUNT_PATH'
@@ -21,12 +22,70 @@ UPDATE `system_variables`
    AND `name`='GATEWAY_URL';
 
 
-UPDATE `resource_server`
-   SET `host`='${PLUGIN_DB_HOST}',
-       `port`='${PLUGIN_DB_PORT}'
- WHERE `name`='mysqlHost';
+INSERT INTO `resource_server`
+            (
+              `id`,
+              `created_by`,
+              `created_date`,
+              `host`,
+              `is_allocated`,
+              `login_password`,
+              `login_username`,
+              `name`,
+              `port`,
+              `purpose`,
+              `status`,
+              `type`,
+              `updated_by`,
+              `updated_date`
+            )
+     VALUES (
+              '${PLUGIN_DB_HOST}__mysql__mysqlHost',
+              'umadmin',
+              '${DATE_TIME}',
+              '${PLUGIN_DB_HOST}',
+              1,
+              'eNgy+i8zfJOUHeCS3te+UA==',
+              'root',
+              'mysqlHost',
+              '${PLUGIN_DB_PORT}',
+              'ss',
+              'active',
+              'mysql',
+              'umadmin',
+              '${DATE_TIME}'
+            );
 
-UPDATE `resource_server`
-   SET `host`='${S3_HOST}',
-       `port`='9000'
- WHERE `name`='s3Host';
+INSERT INTO `resource_server`
+            (
+              `id`,
+              `created_by`,
+              `created_date`,
+              `host`,
+              `is_allocated`,
+              `login_password`,
+              `login_username`,
+              `name`,
+              `port`,
+              `purpose`,
+              `status`,
+              `type`,
+              `updated_by`,
+              `updated_date`
+            )
+     VALUES (
+              '${S3_HOST}__s3__s3Host',
+              'umadmin',
+              '${DATE_TIME}',
+              '${S3_HOST}',
+              1,
+              'CqXwzhKmoPOTssB6JUrEOw==',
+              'access_key',
+              's3Host',
+              '9000',
+              'ss',
+              'active',
+              's3',
+              'umadmin',
+              '${DATE_TIME}'
+            );

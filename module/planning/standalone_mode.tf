@@ -85,8 +85,10 @@ locals {
     instance_type              = "S4.LARGE16"
     # 主机初始化使用的虚拟机镜像名称
     image_id                   = "img-oikl1tzv"
-    # 主机存储系统使用的磁盘类型
+    # 主机存储系统磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机存储系统磁盘大小
+    system_disk_size           = 100
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP
@@ -113,7 +115,7 @@ locals {
         # 数据库组件部署计划名称
         name                 = "core-db-standalone"
         # 部署数据库组件时需要执行的安装程序名称（位于目录installer下）
-        installer            = "core-db"
+        installer            = "db-connectivity"
         # 部署数据库组件时需要作为客户端使用的主机资源名称
         client_resource_name = local.host_standalone.name
         # 部署数据库组件的目标数据库资源名称（单机模式下没有单独创建的数据库资源，但需要指定后续的部署目标数据库的5项参数）
@@ -131,7 +133,7 @@ locals {
       },
       {
         name                 = "auth-server-db-standalone"
-        installer            = "auth-server-db"
+        installer            = "db-connectivity"
         client_resource_name = local.host_standalone.name
         db_resource_name     = null
         db_host              = local.host_standalone.private_ip
@@ -142,7 +144,7 @@ locals {
       },
       {
         name                 = "plugin-db-standalone"
-        installer            = "plugin-db"
+        installer            = "db-connectivity"
         client_resource_name = local.host_standalone.name
         db_resource_name     = null
         db_host              = local.host_standalone.private_ip
@@ -180,7 +182,9 @@ locals {
         name            = "wecube-plugin-hosting-standalone"
         installer       = "wecube-plugin-hosting"
         resource_name   = local.host_standalone.name
-        inject_private_ip = {}
+        inject_private_ip = {
+          CORE_HOST = local.host_standalone.name
+        }
         inject_db_plan_env = {
           CORE_DB  = "core-db-standalone"
         }
@@ -190,8 +194,9 @@ locals {
     # 负载均衡组件部署计划（单机模式下并不需要）
     lb = []
 
-    # 部署后需要执行的步骤：WeCube系统参数配置
+    # 部署后需要执行的步骤
     post_deploy = [
+      # 部署后执行步骤：WeCube系统参数配置
       {
         # 部署后执行步骤的名称
         name            = "wecube-system-settings-standalone"
@@ -201,19 +206,27 @@ locals {
         resource_name   = local.host_standalone.name
         # 在部署后执行步骤使用的环境变量配置文件中注入以下变量和值
         inject_env = {
-          REGION_ASSET_NAME = "TX_BJ_PRD"
-          REGION            = var.region
-          AZ_ASSET_NAME     = "TX_BJ_PRD1"
-          AZ                = local.primary_availability_zone
+          REGION_ASSET_NAME        = "TX_BJ_PRD"
+          REGION                   = var.region
+          AZ_ASSET_NAME            = "TX_BJ_PRD1"
+          AZ                       = local.primary_availability_zone
+
+          ARTIFACTS_COS_SECRETID   = var.artifact_repo_secret_id
+          ARTIFACTS_COS_SECRETKEY  = var.artifact_repo_secret_key
+
+          S3_ACCESS_KEY            = "access_key"
+          S3_SECRET_KEY            = "secret_key"
+          AGENT_S3_BUCKET_NAME     = "wecube-agent"
+          ARTIFACTS_S3_BUCKET_NAME = "wecube-artifacts"
         }
-        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源资产id
+        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的资产名称、资产ID和私有网络IP地址（如有）
         inject_asset_data = {
           # 定义格式：变量名称前缀 = 资源名称[,资源名称]...
-          WECUBE_VPC            = local.vpc_standalone.name
-          WECUBE_SUBNET         = local.subnet_standalone.name
-          WECUBE_ROUTE_TABLE    = local.route_table_standalone.name
-          WECUBE_SECURITY_GROUP = local.security_group_standalone.name
-          WECUBE_HOST           = local.host_standalone.name
+          WECUBE_VPC            = "vpc/${local.vpc_standalone.name}"
+          WECUBE_SUBNET         = "sn/${local.subnet_standalone.name}"
+          WECUBE_ROUTE_TABLE    = "rt/${local.route_table_standalone.name}"
+          WECUBE_SECURITY_GROUP = "sg/${local.security_group_standalone.name}"
+          WECUBE_HOST           = "vm/${local.host_standalone.name}"
         }
         # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的私有网络IP地址
         inject_private_ip = {
@@ -230,7 +243,7 @@ locals {
           AUTH_SERVER_DB = "auth-server-db-standalone"
           PLUGIN_DB      = "plugin-db-standalone"
         }
-      },
+      }
     ]
   }
 }

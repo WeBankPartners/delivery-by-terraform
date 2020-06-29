@@ -10,7 +10,6 @@ source $ENV_FILE
 SYS_SETTINGS_ENV_TEMPLATE_FILE="./wecube-system-settings.env.tpl"
 SYS_SETTINGS_ENV_FILE="./wecube-system-settings.env"
 ../substitute-in-file.sh $ENV_FILE $SYS_SETTINGS_ENV_TEMPLATE_FILE $SYS_SETTINGS_ENV_FILE
-echo "" >>$SYS_SETTINGS_ENV_FILE
 cat $ENV_FILE >>$SYS_SETTINGS_ENV_FILE
 source $SYS_SETTINGS_ENV_FILE
 
@@ -40,24 +39,24 @@ done
 
 echo -e "\nRegistering plugins, this may take a few minutes...\n"
 docker run --rm -t \
-    -v "$COLLECTION_DIR:$COLLECTION_DIR" \
-    -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
-    postman/newman \
-    run "$COLLECTION_DIR/020_wecube_plugin_register.postman_collection.json" \
-    -d "$PLUGIN_PKG_DIR/plugin-list.csv" \
-    --env-var "domain=$PUBLIC_DOMAIN" \
-    --env-var "username=$DEFAULT_ADMIN_USERNAME" \
-    --env-var "password=$DEFAULT_ADMIN_PASSWORD" \
-    --env-var "wecube_host=$CORE_HOST" \
-    --env-var "plugin_host=$PLUGIN_HOST" \
-    --delay-request 2000 --disable-unicode \
-    --reporters cli \
-    --reporter-cli-no-banner --reporter-cli-no-console
+  -v "$COLLECTION_DIR:$COLLECTION_DIR" \
+  -v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
+  postman/newman \
+  run "$COLLECTION_DIR/020_wecube_plugin_register.postman_collection.json" \
+  -d "$PLUGIN_PKG_DIR/plugin-list.csv" \
+  --env-var "domain=$PUBLIC_DOMAIN" \
+  --env-var "username=$DEFAULT_ADMIN_USERNAME" \
+  --env-var "password=$DEFAULT_ADMIN_PASSWORD" \
+  --env-var "wecube_host=$CORE_HOST" \
+  --env-var "plugin_host=$PLUGIN_HOST" \
+  --delay-request 2000 --disable-unicode \
+  --reporters cli \
+  --reporter-cli-no-banner --reporter-cli-no-console
 
 echo -e "\nEnabling service configurations for all registered plugins..."
 ../execute-sql-script-file.sh $CORE_DB_HOST $CORE_DB_PORT \
-    $CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
-    "./register-all-plugin-services.sql"
+  $CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
+  "./register-all-plugin-services.sql"
 
 
 echo -e "\nConfiguring plugin WeCMDB...\n"
@@ -65,3 +64,6 @@ echo -e "\nConfiguring plugin WeCMDB...\n"
 
 echo -e "\nConfigure plugin Open-Monitor...\n"
 ./configure-open-monitor.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR $PLUGIN_PKG_DIR
+
+echo -e "\nConfigure plugin Artifacts...\n"
+./configure-artifacts.sh $SYS_SETTINGS_ENV_FILE

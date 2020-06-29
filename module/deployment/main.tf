@@ -188,9 +188,9 @@ resource "null_resource" "post_deployment_steps" {
       # ASSETS
       %{ for var_name, resource_names in var.deployment_plan.post_deploy[count.index].inject_asset_data }
       # ${var_name}
-      ${var_name}_ASSET_NAME=${resource_names}
+      ${var_name}_ASSET_NAME=${join(",", [for resource_name in split(",", resource_names) : split("/", resource_name)[1]])}
       ${var_name}_ASSET_ID=${join(",", [for resource_name in split(",", resource_names) : var.resource_map.asset_id_by_name[resource_name]])}
-      ${var_name}_PRIVATE_IP=${join(",", [for resource_name in split(",", resource_names) : lookup(var.resource_map.private_ip_by_name, resource_name, "")])}
+      ${var_name}_PRIVATE_IP=${join(",", [for resource_name in split(",", resource_names) : lookup(var.resource_map.private_ip_by_name, split("/", resource_name)[1], "")])}
       %{ endfor }
 
       # PRIVATE IP

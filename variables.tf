@@ -1,40 +1,67 @@
 variable "cloud_provider" {
-  default = "TencentCloud"
+  description = "Specify the public cloud provider used to create resources"
+  default     = "TencentCloud"
 }
 
-variable "secret_id" {}
+variable "secret_id" {
+  description = "Secret id used when connecting to the public cloud provider"
+}
 
-variable "secret_key" {}
+variable "secret_key" {
+  description = "Secret key used when connecting to the public cloud provider"
+}
 
 variable "region" {
-  default = "ap-guangzhou"
+  description = "The region of the public cloud where resources are to be created"
+  default     = "ap-beijing"
 }
 
 variable "availability_zones" {
-  type    = list(string)
-  default = [
-    "ap-guangzhou-4",
-    "ap-guangzhou-3",
+  description = "The availability zones in the region where resources are to be created (STANDALONE mode will be used if SINGLE AZ is specified and CLUSTER mode will be used for 2 AZs)"
+  type        = list(string)
+  default     = [
+    "ap-beijing-4"
   ]
 }
 
 variable "wecube_release_version" {
-  default = "customized"
+  description = "The WeCube release version on GitHub that we use to determine target versions of specific components to be installed"
+  default     = "customized"
 }
 
 variable "wecube_home" {
-  default = "/data/wecube"
+  description = "The installation root directory of WeCube on the host"
+  default     = "/data/wecube"
 }
 
 variable "initial_password" {
-  default = "Wecube@123456"
+  description = "The initial password of root user on hosts and MySQL instances"
+  default     = "Wecube@123456"
 }
 
 variable "default_mysql_port" {
-  default = "3307"
+  description = "The listening port of MySQL instances"
+  default     = "3307"
 }
 
 variable "should_install_plugins" {
-  type    = bool
-  default = true
+  description = "Whether we should install and configure WeCube plugins after WeCube platform is set up"
+  type        = bool
+  default     = true
+}
+
+
+variable "artifact_repo_secret_id"  {
+  description = "Secret id used when connecting to artifacts repository"
+}
+variable "artifact_repo_secret_key" {
+  description = "Secret key used when connecting to artifacts repository"
+}
+variable "artifact_repo_region" {
+  description = "The region of Tencent Cloud COS service where the artifact repository is located"
+  default     = "ap-guangzhou"
+}
+variable "artifact_repo_bucket" {
+  description = "The bucket of Tencent Cloud COS service where the artifact repository is located"
+  default     = "wecube-artifacts-1259008868"
 }

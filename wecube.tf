@@ -21,11 +21,18 @@ provider "tencentcloud" {
 module "planning" {
   source = "./module/planning"
 
-  region                 = var.region
-  availability_zones     = var.availability_zones
-  wecube_release_version = var.wecube_release_version
-  initial_password       = var.initial_password
-  default_mysql_port     = var.default_mysql_port
+  secret_id                = var.secret_id
+  secret_key               = var.secret_key
+  region                   = var.region
+  availability_zones       = var.availability_zones
+  wecube_release_version   = var.wecube_release_version
+  initial_password         = var.initial_password
+  default_mysql_port       = var.default_mysql_port
+
+  artifact_repo_secret_id  = var.artifact_repo_secret_id
+  artifact_repo_secret_key = var.artifact_repo_secret_key
+  artifact_repo_region     = var.artifact_repo_region
+  artifact_repo_bucket     = var.artifact_repo_bucket
 }
 
 module "provisioning" {

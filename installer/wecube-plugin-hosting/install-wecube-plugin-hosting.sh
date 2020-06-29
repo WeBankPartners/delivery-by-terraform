@@ -9,6 +9,9 @@ PLUGIN_DEPLOY_DIR="${WECUBE_HOME}/plugin"
 echo "Creating plugin deployment directory $PLUGIN_DEPLOY_DIR ..."
 mkdir -p "$PLUGIN_DEPLOY_DIR"
 
+echo "Waiting for WeCube platform initialization..."
+../wait-for-it.sh -t 300 "$CORE_HOST:19100" -- echo "WeCube platform core is ready."
+
 echo "Creating resource server record..."
 SQL_FILE_TEMPLATE="./register-wecube-plugin-container-host.sql.tpl"
 SQL_FILE="./register-wecube-plugin-container-host.sql"

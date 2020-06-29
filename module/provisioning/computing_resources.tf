@@ -131,6 +131,7 @@ resource "tencentcloud_instance" "vm_instances" {
   instance_type              = var.resource_plan.vm_instances[count.index].instance_type
   image_id                   = var.resource_plan.vm_instances[count.index].image_id
   system_disk_type           = var.resource_plan.vm_instances[count.index].system_disk_type
+  system_disk_size           = var.resource_plan.vm_instances[count.index].system_disk_size
   password                   = var.resource_plan.vm_instances[count.index].password
   private_ip                 = var.resource_plan.vm_instances[count.index].private_ip
   allocate_public_ip         = var.resource_plan.vm_instances[count.index].allocate_public_ip

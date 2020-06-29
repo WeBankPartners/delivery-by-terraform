@@ -162,6 +162,8 @@ locals {
     image_id                   = "img-oikl1tzv"
     # 主机存储系统使用的磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机存储系统磁盘大小
+    system_disk_size           = 50
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP
@@ -178,6 +180,7 @@ locals {
     instance_type              = "S2.MEDIUM4"
     image_id                   = "img-9id7emv7"
     system_disk_type           = "CLOUD_PREMIUM"
+    system_disk_size           = 50
     password                   = var.initial_password
     private_ip                 = "10.40.196.3"
     allocate_public_ip         = true
@@ -198,6 +201,8 @@ locals {
     image_id                   = "img-oikl1tzv"
     # 主机存储系统使用的磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机存储系统磁盘大小
+    system_disk_size           = 50
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP
@@ -224,6 +229,8 @@ locals {
     image_id                   = "img-oikl1tzv"
     # 主机存储系统使用的磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机存储系统磁盘大小
+    system_disk_size           = 50
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP
@@ -242,6 +249,7 @@ locals {
     instance_type              = "S2.MEDIUM4"
     image_id                   = "img-oikl1tzv"
     system_disk_type           = "CLOUD_PREMIUM"
+    system_disk_size           = 50
     password                   = var.initial_password
     private_ip                 = "10.40.201.2"
     allocate_public_ip         = false
@@ -255,6 +263,7 @@ locals {
     instance_type              = "S2.LARGE8"
     image_id                   = "img-oikl1tzv"
     system_disk_type           = "CLOUD_PREMIUM"
+    system_disk_size           = 50
     password                   = var.initial_password
     private_ip                 = "10.40.200.3"
     allocate_public_ip         = false
@@ -268,6 +277,7 @@ locals {
     instance_type              = "S2.LARGE8"
     image_id                   = "img-oikl1tzv"
     system_disk_type           = "CLOUD_PREMIUM"
+    system_disk_size           = 50
     password                   = var.initial_password
     private_ip                 = "10.40.201.3"
     allocate_public_ip         = false
@@ -299,14 +309,14 @@ locals {
     # 数据库实例root用户的初始密码
     root_password     = var.initial_password
     # 数据库实例的内网监听端口
-    intranet_port     = 3306
+    intranet_port     = var.default_mysql_port
     # 数据库实例是否允许通过公共网络访问
     internet_service  = 0
-    # ？？？
-    slave_deploy_mode = 0
     # 数据复制模式：0 - 异步复制，1 - 半同步复制，2 - 强同步复制
     slave_sync_mode   = 1
-
+    # 数据库从节点部署模式：0 - 单可用区，1 - 多可用区
+    slave_deploy_mode = 0
+    # 
     first_slave_zone  = local.primary_availability_zone
     second_slave_zone = local.secondary_availability_zone
     parameters = {
@@ -324,7 +334,7 @@ locals {
     mem_size          = 4000
     volume_size       = 50
     root_password     = var.initial_password
-    intranet_port     = 3306
+    intranet_port     = var.default_mysql_port
     internet_service  = 1
     slave_deploy_mode = 0
     slave_sync_mode   = 1
@@ -364,7 +374,7 @@ locals {
         # 数据库组件部署计划名称
         name                 = "core-db-cluster"
         # 部署数据库组件时需要执行的安装程序名称（位于目录installer下）
-        installer            = "core-db"
+        installer            = "db-connectivity"
         # 部署数据库组件时需要作为客户端使用的主机资源名称
         client_resource_name = local.core_host_1_cluster.name
         # 部署数据库组件的目标数据库资源名称
@@ -374,14 +384,14 @@ locals {
       },
       {
         name                 = "auth-server-db-cluster"
-        installer            = "auth-server-db"
+        installer            = "db-connectivity"
         client_resource_name = local.core_host_1_cluster.name
         db_resource_name     = local.core_db.name
         db_name              = "auth_server"
       },
       {
         name                 = "plugin-db-cluster"
-        installer            = "plugin-db"
+        installer            = "db-connectivity"
         client_resource_name = local.plugin_host_1_cluster.name
         db_resource_name     = local.plugin_db.name
         db_name              = "mysql"
@@ -429,7 +439,9 @@ locals {
         name            = "wecube-plugin-hosting-1-cluster"
         installer       = "wecube-plugin-hosting"
         resource_name   = local.plugin_host_1_cluster.name
-        inject_private_ip = {}
+        inject_private_ip = {
+          CORE_HOST = local.core_host_1_cluster.name
+        }
         inject_db_plan_env = {
           CORE_DB = "core-db-cluster"
         }
@@ -438,7 +450,9 @@ locals {
         name            = "wecube-plugin-hosting-2-cluster"
         installer       = "wecube-plugin-hosting"
         resource_name   = local.plugin_host_2_cluster.name
-        inject_private_ip = {}
+        inject_private_ip = {
+          CORE_HOST = local.core_host_1_cluster.name
+        }
         inject_db_plan_env = {
           CORE_DB = "core-db-cluster"
         }
@@ -550,28 +564,36 @@ locals {
         resource_name   = local.core_host_1_cluster.name
         # 在部署后执行步骤使用的环境变量配置文件中注入以下变量和值
         inject_env = {
-          REGION_ASSET_NAME = "TX_GZ_PRD"
-          REGION            = var.region
-          AZ_ASSET_NAME     = "TX_GZ_PRD1,TX_GZ_PRD2"
-          AZ                = "${local.primary_availability_zone},${local.secondary_availability_zone}"
+          REGION_ASSET_NAME        = "TX_GZ_PRD"
+          REGION                   = var.region
+          AZ_ASSET_NAME            = "TX_GZ_PRD1,TX_GZ_PRD2"
+          AZ                       = "${local.primary_availability_zone},${local.secondary_availability_zone}"
+
+          ARTIFACTS_COS_SECRETID   = var.secret_id
+          ARTIFACTS_COS_SECRETKEY  = var.secret_key
+
+          S3_ACCESS_KEY            = "access_key"
+          S3_SECRET_KEY            = "secret_key"
+          AGENT_S3_BUCKET_NAME     = "wecube-agent"
+          ARTIFACTS_S3_BUCKET_NAME = "wecube-artifacts"
         }
-        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源资产id
+        # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的资产名称、资产ID和私有网络IP地址（如有）
         inject_asset_data = {
           # 定义格式：变量名称前缀 = 资源名称[,资源名称]...
-          WECUBE_VPC            = local.vpc_cluster.name
-          WECUBE_ROUTE_TABLE    = local.route_table_cluster.name
-          WECUBE_SECURITY_GROUP = local.security_group_cluster.name
-          WECUBE_SUBNET         = join(",", [for sn in local.subnets_cluster : sn.name])
+          WECUBE_VPC            = "vpc/${local.vpc_cluster.name}"
+          WECUBE_ROUTE_TABLE    = "rt/${local.route_table_cluster.name}"
+          WECUBE_SECURITY_GROUP = "sg/${local.security_group_cluster.name}"
+          WECUBE_SUBNET         = join(",", [for sn in local.subnets_cluster : "sn/${sn.name}"])
           WECUBE_HOST           = join(",", concat([
-                                      for h in local.bastion_hosts_cluster : h.name
+                                      for h in local.bastion_hosts_cluster : "vm/${h.name}"
                                     ], [
-                                      for h in local.waf_hosts_cluster     : h.name
+                                      for h in local.waf_hosts_cluster     : "vm/${h.name}"
                                     ], [
-                                      for h in local.hosts_cluster         : h.name
+                                      for h in local.hosts_cluster         : "vm/${h.name}"
                                     ]
                                   ))
-          WECUBE_DB             = join(",", [for db in local.db_instances_cluster : db.name])
-          WECUBE_LB             = join(",", [for lb in local.lb_instances_cluster : lb.name])
+          WECUBE_DB             = join(",", [for db in local.db_instances_cluster : "db/${db.name}"])
+          WECUBE_LB             = join(",", [for lb in local.lb_instances_cluster : "lb/${lb.name}"])
         }
         # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的私有网络IP地址
         inject_private_ip = {
