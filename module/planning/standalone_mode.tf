@@ -85,8 +85,10 @@ locals {
     instance_type              = "S4.LARGE16"
     # 主机初始化使用的虚拟机镜像名称
     image_id                   = "img-oikl1tzv"
-    # 主机存储系统使用的磁盘类型
+    # 主机存储系统磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机存储系统磁盘大小
+    system_disk_size           = 100
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP

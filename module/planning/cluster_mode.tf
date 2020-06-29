@@ -162,6 +162,8 @@ locals {
     image_id                   = "img-oikl1tzv"
     # 主机存储系统使用的磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机存储系统磁盘大小
+    system_disk_size           = 50
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP
@@ -178,6 +180,7 @@ locals {
     instance_type              = "S2.MEDIUM4"
     image_id                   = "img-9id7emv7"
     system_disk_type           = "CLOUD_PREMIUM"
+    system_disk_size           = 50
     password                   = var.initial_password
     private_ip                 = "10.40.196.3"
     allocate_public_ip         = true
@@ -198,6 +201,8 @@ locals {
     image_id                   = "img-oikl1tzv"
     # 主机存储系统使用的磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机存储系统磁盘大小
+    system_disk_size           = 50
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP
@@ -224,6 +229,8 @@ locals {
     image_id                   = "img-oikl1tzv"
     # 主机存储系统使用的磁盘类型
     system_disk_type           = "CLOUD_PREMIUM"
+    # 主机存储系统磁盘大小
+    system_disk_size           = 50
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP
@@ -242,6 +249,7 @@ locals {
     instance_type              = "S2.MEDIUM4"
     image_id                   = "img-oikl1tzv"
     system_disk_type           = "CLOUD_PREMIUM"
+    system_disk_size           = 50
     password                   = var.initial_password
     private_ip                 = "10.40.201.2"
     allocate_public_ip         = false
@@ -255,6 +263,7 @@ locals {
     instance_type              = "S2.LARGE8"
     image_id                   = "img-oikl1tzv"
     system_disk_type           = "CLOUD_PREMIUM"
+    system_disk_size           = 50
     password                   = var.initial_password
     private_ip                 = "10.40.200.3"
     allocate_public_ip         = false
@@ -268,6 +277,7 @@ locals {
     instance_type              = "S2.LARGE8"
     image_id                   = "img-oikl1tzv"
     system_disk_type           = "CLOUD_PREMIUM"
+    system_disk_size           = 50
     password                   = var.initial_password
     private_ip                 = "10.40.201.3"
     allocate_public_ip         = false
@@ -302,11 +312,11 @@ locals {
     intranet_port     = var.default_mysql_port
     # 数据库实例是否允许通过公共网络访问
     internet_service  = 0
-    # ？？？
-    slave_deploy_mode = 0
     # 数据复制模式：0 - 异步复制，1 - 半同步复制，2 - 强同步复制
     slave_sync_mode   = 1
-
+    # 数据库从节点部署模式：0 - 单可用区，1 - 多可用区
+    slave_deploy_mode = 0
+    # 
     first_slave_zone  = local.primary_availability_zone
     second_slave_zone = local.secondary_availability_zone
     parameters = {
