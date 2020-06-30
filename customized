@@ -3,11 +3,11 @@
 ##################################################
 
 # Version of WeCube platform docker image
-WECUBE_IMAGE_VERSION="20200624162827-1598557"
+WECUBE_IMAGE_VERSION="20200628200010-f013770"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
-  "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-wecmdb-v1.4.5.16.zip"
+  "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-wecmdb-v1.4.5.21.zip"
   "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-qcloud-v1.8.6.4.zip"
   "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-saltstack-v1.8.6.5.zip"
   "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-monitor-v1.5.0.6.zip"
@@ -26,6 +26,6 @@ PLUGIN_PKGS=(
 ARTIFACTS_COS_REGION="ap-beijing"
 ARTIFACTS_COS_BUCKET="ekyc-1258470876"
 ARTIFACTS_COS_OBJECTS=(
-	"demo-app-spring-boot-db_1.0.1.tar.gz"
+	"d502c4127f7c3cc6fb7a060eab1e31bb_demo-app-spring-boot-db_1.0.1.tar.gz"
 	"demo-app-spring-boot_1.5.3.tar.gz"
 )

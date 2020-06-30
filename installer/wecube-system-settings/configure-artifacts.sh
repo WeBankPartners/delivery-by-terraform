@@ -28,9 +28,13 @@ echo "Generating MD5 checksums..."
 for FILE in "$DOWNLOAD_DIR"/*; do
   BASE_FILE_NAME=$(basename $FILE)
   MD5_CHECKSUM=$(md5sum "$FILE" | awk '{ print $1 }')
-  FILE_NAME_WITH_MD5_CHECKSUM="${DOWNLOAD_DIR}/${MD5_CHECKSUM}_${BASE_FILE_NAME}"
-  echo "Processed file $FILE_NAME_WITH_MD5_CHECKSUM"
-  mv "$FILE" "$FILE_NAME_WITH_MD5_CHECKSUM"
+  if [ "${BASE_FILE_NAME:0:33}" == "${MD5_CHECKSUM}_" ]; then
+    echo "Skipped file $BASE_FILE_NAME"
+  else
+    FILE_NAME_WITH_MD5_CHECKSUM="${DOWNLOAD_DIR}/${MD5_CHECKSUM}_${BASE_FILE_NAME}"
+    echo "Processed file $FILE_NAME_WITH_MD5_CHECKSUM"
+    mv "$FILE" "$FILE_NAME_WITH_MD5_CHECKSUM"
+  fi
 done
 
 echo "Uploading artifacts..."
