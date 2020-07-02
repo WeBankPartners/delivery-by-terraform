@@ -78,6 +78,7 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl -p /etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf
+sysctl net.ipv4.ip_forward
 
 echo -e "\nVerifying Docker installation...\n"
 docker version || (echo 'Docker Engine is not properly installed!' && exit 1)
