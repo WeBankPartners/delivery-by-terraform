@@ -2,6 +2,7 @@ from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 import sys
 import logging
+import pathlib
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
@@ -21,4 +22,5 @@ for object_key in object_keys.split():
 
 	local_file = '%s/%s'%(download_dir, object_key)
 	logging.info('Saving file %s ...'%(local_file))
+	pathlib.Path(local_file).parent.mkdir(parents=True, exist_ok=True)
 	object_response['Body'].get_stream_to_file(local_file)
