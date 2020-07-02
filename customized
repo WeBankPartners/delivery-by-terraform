@@ -23,9 +23,10 @@ PLUGIN_PKGS=(
 ################################################
 
 # TencentCloud COS parameters for application artifact packages
-ARTIFACTS_COS_REGION="ap-beijing"
-ARTIFACTS_COS_BUCKET="ekyc-1258470876"
+ARTIFACTS_COS_REGION="ap-guangzhou"
+ARTIFACTS_COS_BUCKET="wecube-plugins-1258470876"
 ARTIFACTS_COS_OBJECTS=(
-	"d502c4127f7c3cc6fb7a060eab1e31bb_demo-app-spring-boot-db_1.0.1.tar.gz"
-	"demo-app-spring-boot_1.5.3.tar.gz"
+  "/v2.5.0/demo_system/4523d14ea55a20293f6fa2e1da524618_demo-app-spring-boot_1.5.3.tar.gz"
+  "/v2.5.0/demo_system/d87dd39bfb554f6b40286c5965925179_demo-app-nginx_0.1.1.tar.gz"
+  "/v2.5.0/demo_system/d502c4127f7c3cc6fb7a060eab1e31bb_demo-app-spring-boot-db_1.0.1.tar.gz"
 )
