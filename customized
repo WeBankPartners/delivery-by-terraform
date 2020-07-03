@@ -3,17 +3,17 @@
 ##################################################
 
 # Version of WeCube platform docker image
-WECUBE_IMAGE_VERSION="20200628200010-f013770"
+WECUBE_IMAGE_VERSION="v2.5.0"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
-  "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-wecmdb-v1.4.5.21.zip"
-  "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-qcloud-v1.8.6.4.zip"
-  "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-saltstack-v1.8.6.5.zip"
-  "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-monitor-v1.5.0.6.zip"
-  "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-notifications-v0.1.1.zip"
-  "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-artifacts-v0.3.0.1.zip"
-  "https://wecube-plugins-1258470876.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-service-mgmt-v0.5.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-wecmdb-v1.5.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-qcloud-v1.8.7.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-saltstack-v1.9.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-monitor-v1.6.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-notifications-v0.1.1.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-artifacts-v0.3.1.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-service-mgmt-v0.5.1.zip"
 )
 
 
@@ -24,7 +24,7 @@ PLUGIN_PKGS=(
 
 # TencentCloud COS parameters for application artifact packages
 ARTIFACTS_COS_REGION="ap-guangzhou"
-ARTIFACTS_COS_BUCKET="wecube-plugins-1258470876"
+ARTIFACTS_COS_BUCKET="wecube-1259801214"
 ARTIFACTS_COS_OBJECTS=(
   "/v2.5.0/demo_system/4523d14ea55a20293f6fa2e1da524618_demo-app-spring-boot_1.5.3.tar.gz"
   "/v2.5.0/demo_system/d87dd39bfb554f6b40286c5965925179_demo-app-nginx_0.1.1.tar.gz"
