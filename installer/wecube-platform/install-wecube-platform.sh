@@ -34,8 +34,8 @@ else
     COMPONENT_LINK=${COMPONENT%%"|"*}
 
     if [ "$COMPONENT_NAME" == 'wecube image' ]; then
-        WECUBE_IMAGE_VERSION="$COMPONENT_VERSION"
-        break;
+      WECUBE_IMAGE_VERSION="$COMPONENT_VERSION"
+      break;
     fi
   done
 fi
