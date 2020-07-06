@@ -50,18 +50,10 @@ variable "should_install_plugins" {
   default     = true
 }
 
-
 variable "artifact_repo_secret_id"  {
   description = "Secret id used when connecting to artifacts repository"
 }
+
 variable "artifact_repo_secret_key" {
   description = "Secret key used when connecting to artifacts repository"
-}
-variable "artifact_repo_region" {
-  description = "The region of Tencent Cloud COS service where the artifact repository is located"
-  default     = "ap-guangzhou"
-}
-variable "artifact_repo_bucket" {
-  description = "The bucket of Tencent Cloud COS service where the artifact repository is located"
-  default     = "wecube-artifacts-1259008868"
 }
