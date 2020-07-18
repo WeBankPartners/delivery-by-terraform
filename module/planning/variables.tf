@@ -8,9 +8,6 @@ variable "default_mysql_port" {}
 
 variable "artifact_repo_secret_id" {}
 variable "artifact_repo_secret_key" {}
-variable "artifact_repo_region" {}
-variable "artifact_repo_bucket" {}
-
 
 locals {
   cluster_mode                = length(var.availability_zones) > 1

@@ -21,6 +21,8 @@ docker run --rm -t \
     --reporters cli \
     --reporter-cli-no-banner --reporter-cli-no-console
 
+[ -z "$REGION" ] && echo "Skipped updating asset data." && exit 0
+
 echo "Updating region data in CMDB..."
 ../execute-sql-expression.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
     $PLUGIN_CMDB_DB_NAME $PLUGIN_DB_USERNAME $PLUGIN_DB_PASSWORD \
