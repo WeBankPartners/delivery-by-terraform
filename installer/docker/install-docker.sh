@@ -42,7 +42,7 @@ yum remove docker \
            docker-engine
 
 # 安装工具组件
-yum install -y yum-utils device-mapper-persistent-data lvm2 unzip
+yum install -y yum-utils device-mapper-persistent-data lvm2 unzip httpie
 
 # 安装Docker Engine
 #yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo

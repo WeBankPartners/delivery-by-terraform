@@ -13,11 +13,22 @@ echo "Waiting for WeCube platform initialization..."
 ../wait-for-it.sh -t 300 "$CORE_HOST:19100" -- echo "WeCube platform core is ready."
 
 echo "Creating resource server record..."
-SQL_FILE_TEMPLATE="./register-wecube-plugin-container-host.sql.tpl"
-SQL_FILE="./register-wecube-plugin-container-host.sql"
-../substitute-in-file.sh $ENV_FILE $SQL_FILE_TEMPLATE $SQL_FILE
-../execute-sql-script-file.sh $CORE_DB_HOST $CORE_DB_PORT \
-  $CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
-  $SQL_FILE
 
+ACCESS_TOKEN=$(http -h POST "http://${CORE_HOST}:19090/auth/v1/api/login" username=umadmin password=umadmin | awk '/Authorization:/{ print $3 }' | sed 's/\r$//')
+[ -z "$ACCESS_TOKEN" ] && echo "Failed to get access token from WeCube platform! Installation aborted." && exit 1
+http POST "http://${CORE_HOST}:19090/platform/resource/servers/create" "Authorization:Bearer $ACCESS_TOKEN" <<EOF
+[
+  {
+    "name": "containerHost",
+    "type": "docker",
+    "status": "active",
+    "isAllocated": true,
+    "host": "${HOST_PRIVATE_IP}",
+    "port": "22",
+    "loginUsername": "root",
+    "loginPassword": "${INITIAL_PASSWORD}",
+    "purpose": "Plugin container hosting"
+  }
+]
+EOF
 echo "Resource server record created."
