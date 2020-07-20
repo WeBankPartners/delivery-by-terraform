@@ -40,7 +40,7 @@ else
   done
 fi
 
-[ -z "$WECUBE_IMAGE_VERSION" ] && echo -e "\nFailed to determine WeCube image version! Installation aborted." && exit 1
+[ -z "$WECUBE_IMAGE_VERSION" ] && echo -e "\n\e[0;31mFailed to determine WeCube image version! Installation aborted.\e[0m\n" && exit 1
 
 echo -e "\nInstalling WeCube platform with image version $WECUBE_IMAGE_VERSION"
 ./setup-wecube-containers.sh $ENV_FILE $WECUBE_IMAGE_VERSION

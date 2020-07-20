@@ -11,7 +11,7 @@ for INSTALLER in "$@"; do
     INSTALLER_DIR="$SCRIPT_DIR/$INSTALLER"
     pushd $INSTALLER_DIR >/dev/null 2>&1
 
-    [ ! -d $INSTALLER_DIR ] && echo -e "\nInvalid installer name $INSTALLER_DIR" && exit 1
+    [ ! -d $INSTALLER_DIR ] && echo -e "\n\e[0;31mInvalid installer name $INSTALLER_DIR\e[0m\n" && exit 1
 
     echo -e "\n\e[0;36mInstalling $INSTALLER on host $HOST_PRIVATE_IP with env file $ENV_FILE ...\e[0m\n"
     find . -name '*.sh' -exec chmod +x \{\} +

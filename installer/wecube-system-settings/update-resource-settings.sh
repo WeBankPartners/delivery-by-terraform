@@ -8,7 +8,7 @@ source $ENV_FILE
 echo "Creating resource server records..."
 
 ACCESS_TOKEN=$(http -h POST "http://${CORE_HOST}:19090/auth/v1/api/login" username=umadmin password=umadmin | awk '/Authorization:/{ print $3 }' | sed 's/\r$//')
-[ -z "$ACCESS_TOKEN" ] && echo "Failed to get access token from WeCube platform! Installation aborted." && exit 1
+[ -z "$ACCESS_TOKEN" ] && echo -e "\n\e[0;31mFailed to get access token from WeCube platform! Installation aborted.\e[0m\n" && exit 1
 http POST "http://${CORE_HOST}:19090/platform/resource/servers/create" "Authorization:Bearer $ACCESS_TOKEN" <<EOF
 [
   {

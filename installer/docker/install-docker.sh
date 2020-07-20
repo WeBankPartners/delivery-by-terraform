@@ -81,8 +81,8 @@ sysctl -p /etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf
 sysctl net.ipv4.ip_forward
 
 echo -e "\nVerifying Docker installation...\n"
-docker version || (echo 'Docker Engine is not properly installed!' && exit 1)
-docker-compose version || (echo 'Docker Compose is not properly installed!' && exit 1)
-curl -sSLf "http://$HOST_PRIVATE_IP:$DOCKER_PORT/version" || (echo 'Docker Engine is not listening on TCP port $DOCKER_PORT!' && exit 1)
+docker version || (echo -e '\n\e[0;31mDocker Engine is not properly installed!\e[0m\n' && exit 1)
+docker-compose version || (echo -e '\n\e[0;31mDocker Compose is not properly installed!\e[0m\n' && exit 1)
+curl -sSLf "http://$HOST_PRIVATE_IP:$DOCKER_PORT/version" || (echo -e '\n\e[0;31mDocker Engine is not listening on TCP port $DOCKER_PORT!\e[0m\n' && exit 1)
 
 echo "Docker installation completed."

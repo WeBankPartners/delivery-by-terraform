@@ -49,7 +49,7 @@ else
   done
 fi
 
-[ ${#PLUGIN_PKGS[@]} == 0 ] && echo -e "\nFailed to fetch component versions! Installation aborted." && exit 1
+[ ${#PLUGIN_PKGS[@]} == 0 ] && echo -e "\n\e[0;31mFailed to fetch component versions! Installation aborted.\e[0m\n" && exit 1
 
 echo -e "\nInstalling the following WeCube plugin...\n"
 printf '  %s\n' "${PLUGIN_PKGS[@]}"
