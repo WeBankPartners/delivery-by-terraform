@@ -5,6 +5,38 @@ set -e
 ENV_FILE=$1
 source $ENV_FILE
 
+echo "Creating resource server records..."
+
+ACCESS_TOKEN=$(http -h POST "http://${WECUBE_HOST_PRIVATE_IP}:19090/auth/v1/api/login" username=umadmin password=umadmin | awk '/Authorization:/{ print $3 }' | sed 's/\r$//')
+[ -z "$ACCESS_TOKEN" ] && echo "Failed to get access token from WeCube platform! Installation aborted." && exit 1
+http POST "http://${WECUBE_HOST_PRIVATE_IP}:19090/platform/resource/servers/create" "Authorization:Bearer $ACCESS_TOKEN" <<EOF
+[
+  {
+    "name": "mysqlHost",
+    "type": "mysql",
+    "status": "active",
+    "isAllocated": true,
+    "host": "${PLUGIN_DB_HOST}",
+    "port": "${PLUGIN_DB_PORT}",
+    "loginUsername": "${PLUGIN_DB_USERNAME}",
+    "loginPassword": "${PLUGIN_DB_PASSWORD}",
+    "purpose": "Plugin db hosting"
+  },
+  {
+    "name": "s3Host",
+    "type": "s3",
+    "status": "active",
+    "isAllocated": true,
+    "host": "${S3_HOST}",
+    "port": "9000",
+    "loginUsername": "${S3_ACCESS_KEY}",
+    "loginPassword": "${S3_SECRET_KEY}",
+    "purpose": "Plugin object storage hosting"
+  }
+]
+EOF
+
+echo "Updating system variables..."
 SQL_FILE_TEMPLATE="./update-resource-settings.sql.tpl"
 SQL_FILE="./update-resource-settings.sql"
 ../substitute-in-file.sh $ENV_FILE $SQL_FILE_TEMPLATE $SQL_FILE
