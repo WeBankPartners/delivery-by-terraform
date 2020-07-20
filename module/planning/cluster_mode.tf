@@ -212,7 +212,7 @@ locals {
     # 主机公共网络出向流量带宽
     internet_max_bandwidth_out = 10
     # 主机初始化时需要额外执行的安装程序名称（位于目录installer下）
-    provisioned_with           = ["squid", "open-monitor-agent"]
+    provisioned_with           = ["yum-packages", "squid", "open-monitor-agent"]
   }
 
   # 主机
@@ -286,6 +286,7 @@ locals {
   }
   host_provisioners = [
     "proxy-settings",
+    "yum-packages",
     "docker",
     "proxy-settings-for-docker",
     "minio-docker",
