@@ -45,8 +45,12 @@ yum remove docker \
 yum install -y yum-utils device-mapper-persistent-data lvm2
 
 # 安装Docker Engine
-#yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
+  echo 'Using mirror for docker yum repository in Mainland China.'
+  sed -i 's+download.docker.com+mirrors.cloud.tencent.com/docker-ce+' /etc/yum.repos.d/docker-ce.repo
+fi
+yum makecache fast
 yum install -y docker-ce docker-ce-cli containerd.io
 
 # 安装Docker Compose
@@ -57,12 +61,16 @@ DOCKER_COMPOSE_BIN="/usr/local/bin/docker-compose"
 chmod +x "$DOCKER_COMPOSE_BIN"
 
 # 配置Docker Engine以监听远程API请求
-# 我们在这里启用了腾讯云的Docker Hub镜像为中国大陆境内的访问进行加速，请根据您自己的实际情况进行调整
 mkdir -p /etc/systemd/system/docker.service.d
+DOCKER_START_CMD="/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:$DOCKER_PORT"
+if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
+  echo 'Using mirror for docker image registry in Mainland China.'
+  DOCKER_START_CMD="$DOCKER_START_CMD --registry-mirror=https://mirror.ccs.tencentyun.com"
+fi
 cat >/etc/systemd/system/docker.service.d/docker-wecube-override-01-port.conf <<EOF
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:$DOCKER_PORT --registry-mirror=https://mirror.ccs.tencentyun.com
+ExecStart=$DOCKER_START_CMD
 EOF
 
 # 启动Docker服务

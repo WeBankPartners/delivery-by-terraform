@@ -81,6 +81,7 @@ resource "null_resource" "app_deployments" {
       WECUBE_RELEASE_VERSION=${var.wecube_release_version}
       SHOULD_INSTALL_PLUGINS=${var.should_install_plugins}
       INITIAL_PASSWORD=${var.initial_password}
+      USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
 
       # PRIVATE IP
       %{ for var_name, host_names in var.deployment_plan.app[count.index].inject_private_ip }
@@ -180,6 +181,7 @@ resource "null_resource" "post_deployment_steps" {
       SHOULD_INSTALL_PLUGINS=${var.should_install_plugins}
       INITIAL_PASSWORD=${var.initial_password}
       SHOULD_INSTALL_PLUGINS=${var.should_install_plugins}
+      USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
 
       %{ for var_name, var_value in var.deployment_plan.post_deploy[count.index].inject_env }
       ${var_name}=${var_value}

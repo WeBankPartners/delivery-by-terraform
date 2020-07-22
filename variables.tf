@@ -50,6 +50,12 @@ variable "should_install_plugins" {
   default     = true
 }
 
+variable "use_mirror_in_mainland_china" {
+  description = "Whether we should mirror sites in Mainland China during WeCube installation"
+  type        = bool
+  default     = true
+}
+
 variable "artifact_repo_secret_id"  {
   description = "Secret id used when connecting to artifacts repository"
 }

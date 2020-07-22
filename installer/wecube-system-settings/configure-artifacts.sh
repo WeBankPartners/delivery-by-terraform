@@ -13,11 +13,17 @@ echo "Downloading artifact packages from TencentCloud COS..."
 PYTHON_SCRIPT_FILE=$(realpath "./download-objects-in-bucket.py")
 DOWNLOAD_DIR=$(realpath "./download")
 mkdir -p "$DOWNLOAD_DIR"
+
+PIP_INSTALL_CMD="pip install -U cos-python-sdk-v5"
+if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
+  echo 'Using mirror for pip index in Mainland China.'
+  PIP_INSTALL_CMD="pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -U cos-python-sdk-v5"
+fi
 docker run --rm -t \
   -v "$PYTHON_SCRIPT_FILE:$PYTHON_SCRIPT_FILE" \
   -v "$DOWNLOAD_DIR:$DOWNLOAD_DIR" \
   python:3 /bin/sh -c """
-  pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -U cos-python-sdk-v5 && \
+  $PIP_INSTALL_CMD && \
   python $PYTHON_SCRIPT_FILE \
     $ARTIFACTS_COS_SECRETID $ARTIFACTS_COS_SECRETKEY \
     $ARTIFACTS_COS_REGION $ARTIFACTS_COS_BUCKET \"${ARTIFACTS_COS_OBJECTS[*]}\" \
