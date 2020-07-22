@@ -2,7 +2,7 @@
 
 set -e
 
-RETRIES=30
+RETRIES=50
 
 while [ $RETRIES -gt 0 ]; do
   if $(curl --connect-timeout 30 --speed-time 30 --speed-limit 1000 "$@"); then
