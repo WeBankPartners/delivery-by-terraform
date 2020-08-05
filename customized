@@ -3,19 +3,18 @@
 ##################################################
 
 # Version of WeCube platform docker image
-WECUBE_IMAGE_VERSION="v2.5.0"
+WECUBE_IMAGE_VERSION="v2.6.0"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-wecmdb-v1.5.0.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-qcloud-v1.8.7.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-saltstack-v1.9.0.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-monitor-v1.6.0.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-notifications-v0.1.1.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-artifacts-v0.3.1.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.5.0/wecube-plugins-service-mgmt-v0.5.1.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.0/wecube-plugins-wecmdb-v1.5.1.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.0/wecube-plugins-qcloud-v1.8.8.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.0/wecube-plugins-saltstack-v1.10.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.0/wecube-plugins-monitor-v1.7.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.0/wecube-plugins-notifications-v0.1.2.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.0/wecube-plugins-artifacts-v0.4.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.0/wecube-plugins-service-mgmt-v0.6.0.zip"
 )
-
 
 
 ################################################
