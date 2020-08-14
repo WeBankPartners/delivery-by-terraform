@@ -20,7 +20,7 @@ for object_key in object_keys.split():
 	    Key=object_key
 	)
 
-	local_file = '%s/%s'%(download_dir, object_key)
+	local_file = '%s/%s'%(download_dir, object_key.lstrip('/'))
 	logging.info('Saving file %s ...'%(local_file))
 	pathlib.Path(local_file).parent.mkdir(parents=True, exist_ok=True)
 	object_response['Body'].get_stream_to_file(local_file)
