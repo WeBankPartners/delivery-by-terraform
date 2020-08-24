@@ -13,7 +13,7 @@ SYS_SETTINGS_ENV_FILE="./wecube-system-settings.env"
 cat $ENV_FILE >>$SYS_SETTINGS_ENV_FILE
 source $SYS_SETTINGS_ENV_FILE
 
-echo -e "\nNow starting to configure plugins..."
+echo -e "\nNow configuring plugins..."
 
 PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
 PLUGINS_BUCKET_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com"
