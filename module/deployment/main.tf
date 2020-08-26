@@ -53,6 +53,7 @@ resource "null_resource" "db_deployments" {
 
   provisioner "remote-exec" {
     inline = [
+      "find ${var.wecube_home}/installer -name \"*.env\" -exec chmod 600 {} +",
       "${var.wecube_home}/installer/invoke-installer.sh ${var.wecube_home}/installer/db-deployment-${var.deployment_plan.db[count.index].name}.env ${var.deployment_plan.db[count.index].installer}"
     ]
   }
@@ -104,6 +105,7 @@ resource "null_resource" "app_deployments" {
 
   provisioner "remote-exec" {
     inline = [
+      "find ${var.wecube_home}/installer -name \"*.env\" -exec chmod 600 {} +",
       "${var.wecube_home}/installer/invoke-installer.sh ${var.wecube_home}/installer/app-deployment-${var.deployment_plan.app[count.index].name}.env ${var.deployment_plan.app[count.index].installer}"
     ]
   }
@@ -216,6 +218,7 @@ resource "null_resource" "post_deployment_steps" {
 
   provisioner "remote-exec" {
     inline = [
+      "find ${var.wecube_home}/installer -name \"*.env\" -exec chmod 600 {} +",
       "${var.wecube_home}/installer/invoke-installer.sh ${var.wecube_home}/installer/app-deployment-${var.deployment_plan.post_deploy[count.index].name}.env ${var.deployment_plan.post_deploy[count.index].installer}"
     ]
   }

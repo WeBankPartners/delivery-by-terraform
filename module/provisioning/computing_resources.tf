@@ -191,6 +191,7 @@ resource "tencentcloud_instance" "vm_instances" {
   provisioner "remote-exec" {
     inline = [
       "find ${var.wecube_home}/installer -name \"*.sh\" -exec chmod +x {} +",
+      "find ${var.wecube_home}/installer -name \"*.env\" -exec chmod 600 {} +",
       "${var.wecube_home}/installer/invoke-installer.sh ${var.wecube_home}/installer/provisioning.env ${join(" ", var.resource_plan.vm_instances[count.index].provisioned_with)}"
     ]
   }
