@@ -5,7 +5,7 @@ set -e
 RETRIES=50
 
 while [ $RETRIES -gt 0 ]; do
-  if $(curl --connect-timeout 30 --speed-time 30 --speed-limit 1000 "$@"); then
+  if $(curl --connect-timeout 30 --speed-time 60 --speed-limit 1000 "$@"); then
     exit 0
   else
     RETRIES=$((RETRIES - 1))

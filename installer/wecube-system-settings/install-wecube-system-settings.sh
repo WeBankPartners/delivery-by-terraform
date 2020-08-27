@@ -55,14 +55,15 @@ else
 	done
 
 	PLUGLIN_CONFIG_PKG=$(cat $GITHUB_RELEASE_INFO_FILE | grep -o '\[插件配置最佳实践\]([^()]*)' | cut -f 2 -d '(' | cut -f 1 -d ')')
+
+	cat <<-EOF >>"$SYS_SETTINGS_ENV_FILE"
+		PLUGIN_PKGS=(${PLUGIN_PKGS[@]})
+		PLUGLIN_CONFIG_PKG=${PLUGLIN_CONFIG_PKG}
+	EOF
 fi
 
 [ ${#PLUGIN_PKGS[@]} == 0 ] && echo -e "\n\e[0;31mFailed to fetch component versions! Installation aborted.\e[0m\n" && exit 1
 
 echo -e "\nInstalling the following WeCube plugin..."
 printf '  %s\n' "${PLUGIN_PKGS[@]}"
-./register-plugins.sh $SYS_SETTINGS_ENV_FILE "${PLUGIN_PKGS[@]}"
-
-[ -z "$PLUGLIN_CONFIG_PKG" ] && echo -e "\nNo plugin configuration package is specified and skipped importing.\n" && exit 0
-echo -e "\nConfiguring plugin services..."
-./configure-plugin-services.sh $SYS_SETTINGS_ENV_FILE $PLUGLIN_CONFIG_PKG
+./configure-plugins.sh $SYS_SETTINGS_ENV_FILE

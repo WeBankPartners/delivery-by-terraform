@@ -2,9 +2,7 @@
 
 set -e
 
-SYS_SETTINGS_ENV_FILE=$1; shift
-PLUGIN_PKGS=( "$@" )
-
+SYS_SETTINGS_ENV_FILE=$1
 source $SYS_SETTINGS_ENV_FILE
 
 PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
@@ -44,6 +42,50 @@ docker run --rm -t \
 	--reporters cli \
 	--reporter-cli-no-banner --reporter-cli-no-console
 
+if [ -z "$PLUGLIN_CONFIG_PKG" ]; then
+	echo -e "\nNo plugin configuration package is specified and skipped importing."
+else
+	echo -e "\nFetching plugin configurations from $PLUGLIN_CONFIG_PKG"
+	PLUGIN_CONFIG_PKG_FILE="$INSTALLER_DIR/plugin-configs.zip"
+	PLUGIN_CONFIG_DIR="$INSTALLER_DIR/plugin-configs"
+	../curl-with-retry.sh -fL $PLUGLIN_CONFIG_PKG -o $PLUGIN_CONFIG_PKG_FILE
+	unzip -o -q $PLUGIN_CONFIG_PKG_FILE -d $PLUGIN_CONFIG_DIR
+
+	find "$PLUGIN_CONFIG_DIR" -type f -name '*.sql' | while read SQL_SCRIPT_FILE; do
+		echo -e "\nImporting plugin SQL script file $SQL_SCRIPT_FILE"
+		PLUGIN_DB_NAME=$(basename $SQL_SCRIPT_FILE .sql)
+		../execute-sql-script-file.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
+			$PLUGIN_DB_NAME $PLUGIN_DB_USERNAME $PLUGIN_DB_PASSWORD \
+			$SQL_SCRIPT_FILE
+	done
+
+	find "$PLUGIN_CONFIG_DIR" -type f -name '*.xml' | while read PLUGIN_CONFIG_FILE; do
+		echo -e "\nImporting plugin configurations from $PLUGIN_CONFIG_FILE"
+		PLUGIN_PKG_COORDS=$(basename $PLUGIN_CONFIG_FILE .xml)
+		ACCESS_TOKEN=$(./api-utils/login.sh "$SYS_SETTINGS_ENV_FILE")
+		[ -z "$ACCESS_TOKEN" ] && echo -e "\n\e[0;31mFailed to get access token from WeCube platform! Installation aborted.\e[0m\n" && exit 1
+		http --ignore-stdin --check-status --follow \
+			--form POST "http://${CORE_HOST}:19090/platform/v1/plugins/packages/import/$PLUGIN_PKG_COORDS" \
+			"Authorization:Bearer $ACCESS_TOKEN" \
+			xml-file@"$PLUGIN_CONFIG_FILE"
+
+		if [ "${PLUGIN_PKG_COORDS:0:8}" == "wecmdb__" ]; then
+			echo "Restarting WeCMDB instance..."
+			./api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_COORDS
+		fi
+	done
+fi
+
+echo -e "\nEnabling all plugin configurations..."
+read -d '' SQL_STMT <<-EOF || true
+	UPDATE ``plugin_configs``
+	   SET ``status`` = 'ENABLED'
+	 WHERE ``register_name`` != '';
+EOF
+../execute-sql-statements.sh $CORE_DB_HOST $CORE_DB_PORT \
+	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
+	"$SQL_STMT"
+
 echo -e "\nConfiguring plugin WeCMDB..."
 ./configure-wecmdb.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR
 
@@ -52,4 +94,3 @@ echo -e "\nConfigure plugin Open-Monitor..."
 
 echo -e "\nConfigure plugin Artifacts..."
 ./configure-artifacts.sh $SYS_SETTINGS_ENV_FILE
-

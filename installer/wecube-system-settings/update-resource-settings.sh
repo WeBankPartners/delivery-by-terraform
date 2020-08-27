@@ -9,7 +9,8 @@ echo "Creating resource server records..."
 
 ACCESS_TOKEN=$(./api-utils/login.sh "$SYS_SETTINGS_ENV_FILE")
 [ -z "$ACCESS_TOKEN" ] && echo -e "\n\e[0;31mFailed to get access token from WeCube platform! Installation aborted.\e[0m\n" && exit 1
-http POST "http://${CORE_HOST}:19090/platform/resource/servers/create" "Authorization:Bearer $ACCESS_TOKEN" <<-EOF
+http --check-status --follow \
+	POST "http://${CORE_HOST}:19090/platform/resource/servers/create" "Authorization:Bearer $ACCESS_TOKEN" <<-EOF
 	[
 		{
 			"name": "mysqlHost",
