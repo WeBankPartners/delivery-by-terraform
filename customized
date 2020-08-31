@@ -3,7 +3,7 @@
 ##################################################
 
 # Version of WeCube platform docker image
-WECUBE_IMAGE_VERSION="v2.6.0"
+WECUBE_IMAGE_VERSION="v2.6.1"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
