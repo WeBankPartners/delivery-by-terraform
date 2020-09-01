@@ -3,11 +3,11 @@ locals {
 
   db_plan_env_by_name = {
     for db_plan in var.deployment_plan.db : db_plan.name => (db_plan.db_resource_name == null ? db_plan : {
-      db_host     = var.resource_map.db_by_name[db_plan.db_resource_name].intranet_ip
-      db_port     = var.resource_map.db_by_name[db_plan.db_resource_name].intranet_port
+      db_host     = lookup(var.resource_map.db_by_name, db_plan.db_resource_name, {intranet_ip=null}).intranet_ip
+      db_port     = lookup(var.resource_map.db_by_name, db_plan.db_resource_name, {intranet_port=null}).intranet_port
       db_name     = db_plan.db_name
       db_username = "root"
-      db_password = var.resource_map.db_by_name[db_plan.db_resource_name].root_password
+      db_password = lookup(var.resource_map.db_by_name, db_plan.db_resource_name, {root_password=null}).root_password
     })
   }
 
@@ -16,10 +16,10 @@ locals {
   lb_back_ends = flatten([
     for lb_plan in var.deployment_plan.lb : [
       for back_end in lb_plan.back_ends : merge(back_end, {
-        clb_id       = var.resource_map.lb_by_name[lb_plan.resource_name].id
-        listener_id = local.lb_listener_by_name[lb_plan.name].id
-        rule_id     = local.lb_listener_rule_by_lisener_id[local.lb_listener_by_name[lb_plan.name].id].id
-        instance_id = var.resource_map.vm_by_name[back_end.resource_name].id
+        clb_id      = lookup(var.resource_map.lb_by_name, lb_plan.resource_name, {id=null}).id
+        listener_id = lookup(local.lb_listener_by_name, lb_plan.name, {id=null}).id
+        rule_id     = lookup(local.lb_listener_rule_by_lisener_id, lookup(local.lb_listener_by_name, lb_plan.name, {id=null}).id, {id=null}).id
+        instance_id = lookup(var.resource_map.vm_by_name, back_end.resource_name, {id=null}).id
       })
     ]
   ])
