@@ -30,7 +30,7 @@ docker run --rm -t \
 	--reporter-cli-no-banner --reporter-cli-no-console
 
 echo -e "\nUploading monitor agent package for future use...\n"
-AGENT_PKG_FILENAME="node_exporter_v2.1.tar.gz"
+AGENT_PKG_FILENAME="node_exporter.tar.gz"
 AGENT_PKG_PATH="$PLUGIN_PKG_DIR/$AGENT_PKG_FILENAME"
 AGENT_PKG_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/monitor_agent/$AGENT_PKG_FILENAME"
 echo "Fetching agent package from $AGENT_PKG_URL ..."

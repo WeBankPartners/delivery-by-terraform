@@ -3,16 +3,16 @@
 ######################################
 
 # 获取当前主机的公共网络IP地址，以供安全策略定义使用
-data "http" "my_public_ip" {
-  url = "http://ipv4.icanhazip.com"
-}
+# data "http" "my_public_ip" {
+#   url = "http://ipv4.icanhazip.com"
+# }
 
 ###########
 # 网络资源 #
 ###########
 locals {
   # 当前主机的公共网络IP地址
-  my_public_ip = chomp(data.http.my_public_ip.body)
+  # my_public_ip = chomp(data.http.my_public_ip.body)
 
   # 私有网络
   vpc_cluster = {
