@@ -60,5 +60,5 @@ module "deployment" {
 }
 
 output "wecube_website_url" {
-  value="http://${module.provisioning.resource_map.entrypoint_ip_by_name[module.planning.entrypoint_host_name]}:19090"
+  value="http://${lookup(module.provisioning.resource_map.entrypoint_ip_by_name, module.planning.entrypoint_host_name, "")}:19090"
 }
