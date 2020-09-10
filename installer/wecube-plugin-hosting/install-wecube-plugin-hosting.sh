@@ -6,7 +6,7 @@ ENV_FILE=$1
 source $ENV_FILE
 
 PLUGIN_DEPLOY_DIR="${WECUBE_HOME}/plugin"
-echo "Creating plugin deployment directory $PLUGIN_DEPLOY_DIR ..."
+echo "Creating plugin deployment directory $PLUGIN_DEPLOY_DIR"
 mkdir -p "$PLUGIN_DEPLOY_DIR"
 
 echo "Waiting for WeCube platform initialization..."

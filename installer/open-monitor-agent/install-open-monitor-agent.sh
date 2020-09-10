@@ -5,7 +5,7 @@ set -e
 ENV_FILE=$1
 source $ENV_FILE
 
-echo "Installing open-monitor-agent on $HOST_PRIVATE_IP..."
+echo "Installing open-monitor-agent on $HOST_PRIVATE_IP"
 
 MONITOR_AGENT_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/monitor_agent/node_exporter_v2.1.tar.gz"
 MONITOR_AGENT_PKG_FILE="./node_exporter_v2.1.tar.gz"

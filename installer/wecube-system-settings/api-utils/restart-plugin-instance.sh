@@ -12,10 +12,10 @@ ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
 INSANCE_JSON=$(http --ignore-stdin --check-status --follow \
 	-b GET "http://${CORE_HOST}:19090/platform/v1/packages/${PLUGIN_PKG_COORDS}/instances" \
 	"Authorization:Bearer $ACCESS_TOKEN" \
-	| jq '.data[0]')
-INSTANCE_ID=$(jq '.id' <<<"$INSANCE_JSON" | cut -f 2 -d \")
-INSTANCE_HOST=$(jq '.host' <<<"$INSANCE_JSON" | cut -f 2 -d \")
-INSTANCE_PORT=$(jq '.port' <<<"$INSANCE_JSON")
+	| jq -e '.data[0]')
+INSTANCE_ID=$(jq -e '.id' <<<"$INSANCE_JSON" | cut -f 2 -d \")
+INSTANCE_HOST=$(jq -e '.host' <<<"$INSANCE_JSON" | cut -f 2 -d \")
+INSTANCE_PORT=$(jq -e '.port' <<<"$INSANCE_JSON")
 
 echo -e "\nRemoving instance $INSTANCE_ID"
 http --ignore-stdin --check-status --follow \

@@ -6,7 +6,7 @@ ENV_FILE=$1
 
 source $ENV_FILE
 
-echo "Installing minio docker container on $HOST_PRIVATE_IP..."
+echo "Installing minio docker container on $HOST_PRIVATE_IP"
 
 cp $ENV_FILE ./.env
 docker-compose -f "./wecube-s3.yml" up -d

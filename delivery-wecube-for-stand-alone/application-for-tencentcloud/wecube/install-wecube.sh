@@ -10,13 +10,13 @@ should_install_plugins=${5:-Y}
 
 echo -e "\nDetermine component versions to be installed...\n"
 if [ -f "$wecube_version" ]; then
-    echo "Reading customized WeCube version specs from $wecube_version..."
+    echo "Reading customized WeCube version specs from $wecube_version"
     PATH="$PATH:." source "$wecube_version"
 else
   GITHUB_RELEASE_URL="https://api.github.com/repos/WeBankPartners/wecube-platform/releases/$wecube_version"
   GITHUB_RELEASE_JSON=""
   RETRIES=30
-  echo "Fetching release info for $wecube_version from $GITHUB_RELEASE_URL..."
+  echo "Fetching release info for $wecube_version from $GITHUB_RELEASE_URL"
   while [ $RETRIES -gt 0 ] && [ -z "$GITHUB_RELEASE_JSON" ]; do
       RETRIES=$((RETRIES - 1))
       GITHUB_RELEASE_JSON=$(curl -sSfl "$GITHUB_RELEASE_URL")

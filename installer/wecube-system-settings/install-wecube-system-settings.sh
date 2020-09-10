@@ -21,13 +21,16 @@ echo -e "\nDetermine plugin versions to be installed..."
 
 if [ -f "$WECUBE_RELEASE_VERSION" ]; then
 	VERSION_SPEC_FILE="$WECUBE_RELEASE_VERSION"
-	echo "Reading customized WeCube version specs from $VERSION_SPEC_FILE..."
+	echo "Reading customized WeCube version specs from $VERSION_SPEC_FILE"
 	PATH="$PATH:." source "$VERSION_SPEC_FILE"
 	PATH="$PATH:." cat "$VERSION_SPEC_FILE" >>"$SYS_SETTINGS_ENV_FILE"
 else
+	if [ "$WECUBE_RELEASE_VERSION" != 'latest' ]; then
+		WECUBE_RELEASE_VERSION="tags/$WECUBE_RELEASE_VERSION"
+	fi
 	GITHUB_RELEASE_URL="https://api.github.com/repos/WeBankPartners/wecube-platform/releases/$WECUBE_RELEASE_VERSION"
 	GITHUB_RELEASE_INFO_FILE="$WECUBE_HOME/installer/release-info"
-	echo "Fetching release $WECUBE_RELEASE_VERSION from $GITHUB_RELEASE_URL..."
+	echo "Fetching release $WECUBE_RELEASE_VERSION from $GITHUB_RELEASE_URL"
 	../curl-with-retry.sh -fL $GITHUB_RELEASE_URL -o $GITHUB_RELEASE_INFO_FILE
 
 	WECUBE_IMAGE_VERSION=""

@@ -4,7 +4,7 @@ set -e
 
 ENV_FILE=$1
 
-echo "Installing proxy settings for docker on $HOST_PRIVATE_IP..."
+echo "Installing proxy settings for docker on $HOST_PRIVATE_IP"
 
 source $ENV_FILE
 

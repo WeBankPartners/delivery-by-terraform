@@ -6,7 +6,7 @@ ENV_FILE=$1
 
 source $ENV_FILE
 
-echo "Installing docker on $HOST_PRIVATE_IP..."
+echo "Installing docker on $HOST_PRIVATE_IP"
 
 echo -e "\nChecking Docker...\n"
 PREREQUISITES_SATISFIED=''
@@ -80,6 +80,8 @@ systemctl start docker.service
 docker run --rm -t hello-world
 
 # 启用IP转发并配置桥接来解决Docker容器对外部网络的通信问题
+modprobe overlay
+modprobe br_netfilter
 cat <<EOF >/etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf
 net.ipv4.ip_forward = 1
 net.bridge.bridge-nf-call-ip6tables = 1

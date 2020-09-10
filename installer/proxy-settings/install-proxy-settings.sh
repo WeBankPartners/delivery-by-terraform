@@ -6,7 +6,7 @@ ENV_FILE=$1
 
 source $ENV_FILE
 
-echo "Installing proxy settings on $HOST_PRIVATE_IP..."
+echo "Installing proxy settings on $HOST_PRIVATE_IP"
 
 PROFILE_FILE="/etc/profile.d/proxy_settings_for_wecube.sh"
 

@@ -6,7 +6,7 @@ ENV_FILE=$1
 
 source $ENV_FILE
 
-echo "Installing mysql docker container on $HOST_PRIVATE_IP..."
+echo "Installing mysql docker container on $HOST_PRIVATE_IP"
 
 cp $ENV_FILE ./.env
 docker-compose -f "./wecube-db.yml" up -d
