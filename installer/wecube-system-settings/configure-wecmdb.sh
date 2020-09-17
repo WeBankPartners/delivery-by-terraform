@@ -21,7 +21,10 @@ docker run --rm -t \
 	--reporters cli \
 	--reporter-cli-no-banner --reporter-cli-no-console
 
-[ -z "$REGION" ] && echo "Skipped updating asset data." && exit 0
+if [ "$PLUGLIN_CONFIG" != 'standard' ] || [ -z "$REGION" ]; then
+	echo "Skipped updating asset data."
+	exit 0
+fi
 
 echo "Updating region data in CMDB..."
 read -d '' SQL_STMT <<-EOF || true

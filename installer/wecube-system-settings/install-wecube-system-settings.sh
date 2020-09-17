@@ -22,18 +22,28 @@ echo -e "\nDetermine plugin versions to be installed..."
 if [ -f "$WECUBE_RELEASE_VERSION" ]; then
 	VERSION_SPEC_FILE="$WECUBE_RELEASE_VERSION"
 	echo "Reading customized WeCube version specs from $VERSION_SPEC_FILE"
-	PATH="$PATH:." source "$VERSION_SPEC_FILE"
-	PATH="$PATH:." cat "$VERSION_SPEC_FILE" >>"$SYS_SETTINGS_ENV_FILE"
+	PATH="$PATH:." source $VERSION_SPEC_FILE
+	PATH="$PATH:." cat $VERSION_SPEC_FILE | tee -a $SYS_SETTINGS_ENV_FILE
 else
 	if [ "$WECUBE_RELEASE_VERSION" != 'latest' ]; then
 		WECUBE_RELEASE_VERSION="tags/$WECUBE_RELEASE_VERSION"
 	fi
 	GITHUB_RELEASE_URL="https://api.github.com/repos/WeBankPartners/wecube-platform/releases/$WECUBE_RELEASE_VERSION"
 	GITHUB_RELEASE_INFO_FILE="$WECUBE_HOME/installer/release-info"
-	echo "Fetching release $WECUBE_RELEASE_VERSION from $GITHUB_RELEASE_URL"
+	echo "Fetching release \"$WECUBE_RELEASE_VERSION\" from $GITHUB_RELEASE_URL"
 	../curl-with-retry.sh -fL $GITHUB_RELEASE_URL -o $GITHUB_RELEASE_INFO_FILE
 
-	WECUBE_IMAGE_VERSION=""
+	if [ "$WECUBE_FEATURE_SET" == '*' ]; then
+		echo "Will install all plugins and best practices as requested."
+	else
+		FEATURE_SET_URL="https://raw.githubusercontent.com/WeBankPartners/wecube-best-practice/master/feature-sets/$WECUBE_FEATURE_SET"
+		FEATURE_SET_FILE="$WECUBE_HOME/installer/feature-set"
+		echo "Using feature set \"$WECUBE_FEATURE_SET\" from $FEATURE_SET_URL"
+		../curl-with-retry.sh -fL $FEATURE_SET_URL -o $FEATURE_SET_FILE
+		source $FEATURE_SET_FILE
+		cat $FEATURE_SET_FILE | tee -a $SYS_SETTINGS_ENV_FILE
+	fi
+
 	PLUGIN_PKGS=()
 	COMPONENT_TABLE_MD=$(cat $GITHUB_RELEASE_INFO_FILE | grep -o '|[ ]*wecube image[ ]*|.*|\\r\\n' | sed -e 's/[ ]*|[ ]*/|/g')
 	while [ -n "$COMPONENT_TABLE_MD" ]; do
@@ -52,16 +62,29 @@ else
 
 		if [ "$COMPONENT_NAME" == 'wecube image' ]; then
 			continue
-		elif [ -n "$COMPONENT_NAME" ]; then
+		elif [ -n "$COMPONENT_NAME" ] && ( \
+			[ "$WECUBE_FEATURE_SET" == '*' ] || [ "$PLUGINS" != "${PLUGINS/$COMPONENT_NAME/}" ] \
+			); then
 			PLUGIN_PKGS+=("$COMPONENT_LINK")
 		fi
 	done
 
-	PLUGLIN_CONFIG_PKG=$(cat $GITHUB_RELEASE_INFO_FILE | grep -o '\[插件配置最佳实践\]([^()]*)' | cut -f 2 -d '(' | cut -f 1 -d ')')
+	PLUGLIN_CONFIG_PKG=""
+	[ "$WECUBE_FEATURE_SET" == '*' ] && PLUGINS='*' && PLUGIN_CONFIG='standard'
+	if [ -n "$PLUGIN_CONFIG" ]; then
+		PLUGIN_CONFIG_SET_URL="https://raw.githubusercontent.com/WeBankPartners/wecube-best-practice/master/plugin-configs/plugin-config-set.md"
+		PLUGIN_CONFIG_SET_FILE="$WECUBE_HOME/installer/plugin-config-set.md"
+		echo "Fetching plugin config set from $PLUGIN_CONFIG_SET_URL"
+		../curl-with-retry.sh -fL $PLUGIN_CONFIG_SET_URL -o $PLUGIN_CONFIG_SET_FILE
+		PLUGLIN_CONFIG_PKG=$(cat $PLUGIN_CONFIG_SET_FILE | grep -o "\\[$PLUGIN_CONFIG\\]([^()]*)" | cut -f 2 -d '(' | cut -f 1 -d ')')
+		echo "Using plugin config \"$PLUGIN_CONFIG\" from $PLUGLIN_CONFIG_PKG"
+	fi
 
 	cat <<-EOF >>"$SYS_SETTINGS_ENV_FILE"
+		PLUGINS="${PLUGINS}"
 		PLUGIN_PKGS=(${PLUGIN_PKGS[@]})
-		PLUGLIN_CONFIG_PKG=${PLUGLIN_CONFIG_PKG}
+		PLUGIN_CONFIG="${PLUGIN_CONFIG}"
+		PLUGLIN_CONFIG_PKG="${PLUGLIN_CONFIG_PKG}"
 	EOF
 fi
 

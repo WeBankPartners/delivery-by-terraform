@@ -60,8 +60,11 @@ else
 	done
 
 	find "$PLUGIN_CONFIG_DIR" -type f -name '*.xml' | while read PLUGIN_CONFIG_FILE; do
-		echo -e "\nImporting plugin configurations from $PLUGIN_CONFIG_FILE"
 		PLUGIN_PKG_COORDS=$(basename $PLUGIN_CONFIG_FILE .xml)
+		PLUGIN_PKG_NAME="${PLUGIN_PKG_COORDS%%__*}"
+		[ "$PLUGINS" != "*" ] && [ "$PLUGINS" == "${PLUGINS/$PLUGIN_PKG_NAME/}" ] && continue
+
+		echo -e "\nImporting plugin configurations for \"$PLUGIN_PKG_NAME\" from $PLUGIN_CONFIG_FILE"
 		ACCESS_TOKEN=$(./api-utils/login.sh "$SYS_SETTINGS_ENV_FILE")
 		[ -z "$ACCESS_TOKEN" ] && echo -e "\n\e[0;31mFailed to get access token from WeCube platform! Installation aborted.\e[0m\n" && exit 1
 		http --ignore-stdin --check-status --follow \
@@ -69,7 +72,7 @@ else
 			"Authorization:Bearer $ACCESS_TOKEN" \
 			xml-file@"$PLUGIN_CONFIG_FILE"
 
-		if [ "${PLUGIN_PKG_COORDS:0:8}" == "wecmdb__" ]; then
+		if [ "$PLUGIN_PKG_NAME" == "wecmdb" ]; then
 			echo "Restarting WeCMDB instance..."
 			./api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_COORDS
 		fi

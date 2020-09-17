@@ -25,7 +25,6 @@ module "planning" {
   secret_key             = var.secret_key
   region                 = var.region
   availability_zones     = var.availability_zones
-  wecube_release_version = var.wecube_release_version
   initial_password       = var.initial_password
   default_mysql_port     = var.default_mysql_port
 
@@ -50,6 +49,7 @@ module "deployment" {
 
   wecube_home                  = var.wecube_home
   wecube_release_version       = var.wecube_release_version
+  wecube_feature_set           = var.wecube_feature_set
   should_install_plugins       = var.should_install_plugins
   initial_password             = var.initial_password
   use_mirror_in_mainland_china = var.use_mirror_in_mainland_china

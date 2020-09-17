@@ -1,5 +1,6 @@
 variable "wecube_home" {}
 variable "wecube_release_version" {}
+variable "wecube_feature_set" {}
 variable "should_install_plugins" {}
 variable "initial_password" {}
 variable "use_mirror_in_mainland_china" {}

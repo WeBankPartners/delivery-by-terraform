@@ -26,7 +26,12 @@ variable "availability_zones" {
 
 variable "wecube_release_version" {
   description = "The WeCube release version on GitHub that we use to determine target versions of specific components to be installed"
-  default     = "customized"
+  default     = "latest"
+}
+
+variable "wecube_feature_set" {
+  description = "Set of features provided by plugins and best practices desired during installation"
+  default     = "*"
 }
 
 variable "wecube_home" {
