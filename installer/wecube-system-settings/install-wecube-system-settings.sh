@@ -70,7 +70,7 @@ else
 	done
 
 	PLUGLIN_CONFIG_PKG=""
-	[ "$WECUBE_FEATURE_SET" == '*' ] && PLUGINS='*' && PLUGIN_CONFIG='standard'
+	[ "$WECUBE_FEATURE_SET" == '*' ] && PLUGIN_CONFIG='standard'
 	if [ -n "$PLUGIN_CONFIG" ]; then
 		PLUGIN_CONFIG_SET_URL="https://raw.githubusercontent.com/WeBankPartners/wecube-best-practice/master/plugin-configs/plugin-config-set.md"
 		PLUGIN_CONFIG_SET_FILE="$WECUBE_HOME/installer/plugin-config-set.md"
