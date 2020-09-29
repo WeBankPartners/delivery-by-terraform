@@ -17,6 +17,6 @@ UPDATE `system_variables`
    AND `name`='CORE_ADDR';
 
 UPDATE `system_variables`
-   SET `value`='http://${PORTAL_HOST}:19090'
+   SET `value`='http://${PORTAL_HOST}:19110'
  WHERE `id`='system__global__GATEWAY_URL'
    AND `name`='GATEWAY_URL';
