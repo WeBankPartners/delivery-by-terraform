@@ -11,11 +11,14 @@ WECUBE_ENV_TEMPLATE_FILE="./wecube-platform.env.tpl"
 WECUBE_ENV_FILE="./wecube-platform.env"
 echo "Building WeCube env file $WECUBE_ENV_FILE"
 WECUBE_IMAGE_VERSION=$WECUBE_IMAGE_VERSION \
-  ../substitute-in-file.sh $ENV_FILE $WECUBE_ENV_TEMPLATE_FILE $WECUBE_ENV_FILE
+../substitute-in-file.sh $ENV_FILE $WECUBE_ENV_TEMPLATE_FILE $WECUBE_ENV_FILE
 source $WECUBE_ENV_FILE
 
 echo "Starting WeCube containers..."
-docker-compose -f docker-compose.yml --env-file=$WECUBE_ENV_FILE up -d
+DOCKER_COMPOSE_ENV_TEMPLATE_FILE="./wecube-platform.docker-compose.env.template"
+DOCKER_COMPOSE_ENV_FILE="./wecube-platform.docker-compose.env"
+../substitute-in-file.sh $ENV_FILE $DOCKER_COMPOSE_ENV_TEMPLATE_FILE $DOCKER_COMPOSE_ENV_FILE
+docker-compose -f docker-compose.yml --env-file=$DOCKER_COMPOSE_ENV_FILE up -d
 PORTS_TO_CHECK=(
   "$AUTH_SERVER_PORT"
   "$WECUBE_SERVER_PORT"
