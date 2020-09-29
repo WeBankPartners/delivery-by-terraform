@@ -15,7 +15,7 @@ WECUBE_IMAGE_VERSION=$WECUBE_IMAGE_VERSION \
 source $WECUBE_ENV_FILE
 
 echo "Starting WeCube containers..."
-DOCKER_COMPOSE_ENV_TEMPLATE_FILE="./wecube-platform.docker-compose.env.template"
+DOCKER_COMPOSE_ENV_TEMPLATE_FILE="./wecube-platform.docker-compose.env.tpl"
 DOCKER_COMPOSE_ENV_FILE="./wecube-platform.docker-compose.env"
 ../substitute-in-file.sh $ENV_FILE $DOCKER_COMPOSE_ENV_TEMPLATE_FILE $DOCKER_COMPOSE_ENV_FILE
 docker-compose -f docker-compose.yml --env-file=$DOCKER_COMPOSE_ENV_FILE up -d
