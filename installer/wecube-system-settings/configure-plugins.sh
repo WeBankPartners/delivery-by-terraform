@@ -42,13 +42,13 @@ docker run --rm -t \
 	--reporters cli \
 	--reporter-cli-no-banner --reporter-cli-no-console
 
-if [ -z "$PLUGLIN_CONFIG_PKG" ]; then
+if [ -z "$PLUGIN_CONFIG_PKG" ]; then
 	echo -e "\nNo plugin configuration package is specified and skipped importing."
 else
-	echo -e "\nFetching plugin configurations from $PLUGLIN_CONFIG_PKG"
+	echo -e "\nFetching plugin configurations from $PLUGIN_CONFIG_PKG"
 	PLUGIN_CONFIG_PKG_FILE="$INSTALLER_DIR/plugin-configs.zip"
 	PLUGIN_CONFIG_DIR="$INSTALLER_DIR/plugin-configs"
-	../curl-with-retry.sh -fL $PLUGLIN_CONFIG_PKG -o $PLUGIN_CONFIG_PKG_FILE
+	../curl-with-retry.sh -fL $PLUGIN_CONFIG_PKG -o $PLUGIN_CONFIG_PKG_FILE
 	unzip -o -q $PLUGIN_CONFIG_PKG_FILE -d $PLUGIN_CONFIG_DIR
 
 	find "$PLUGIN_CONFIG_DIR" -type f -name '*.sql' | while read SQL_SCRIPT_FILE; do

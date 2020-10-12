@@ -21,7 +21,7 @@ docker run --rm -t \
 	--reporters cli \
 	--reporter-cli-no-banner --reporter-cli-no-console
 
-if [ "$PLUGIN_CONFIG" != 'standard' ] || [ -z "$REGION" ]; then
+if [ "$PLUGIN_CONFIG" != '标准安装配置' ] || [ -z "$REGION" ]; then
 	echo "Skipped updating asset data."
 	exit 0
 fi

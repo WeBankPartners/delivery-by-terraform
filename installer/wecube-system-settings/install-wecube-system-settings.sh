@@ -69,22 +69,18 @@ else
 		fi
 	done
 
-	PLUGLIN_CONFIG_PKG=""
-	[ "$WECUBE_FEATURE_SET" == '*' ] && PLUGIN_CONFIG='standard'
+	PLUGIN_CONFIG_PKG=""
+	[ "$WECUBE_FEATURE_SET" == '*' ] && PLUGIN_CONFIG='标准安装配置'
 	if [ -n "$PLUGIN_CONFIG" ]; then
-		PLUGIN_CONFIG_SET_URL="https://raw.githubusercontent.com/WeBankPartners/wecube-best-practice/master/plugin-configs/plugin-config-set.md"
-		PLUGIN_CONFIG_SET_FILE="$WECUBE_HOME/installer/plugin-config-set.md"
-		echo "Fetching plugin config set from $PLUGIN_CONFIG_SET_URL"
-		../curl-with-retry.sh -fL $PLUGIN_CONFIG_SET_URL -o $PLUGIN_CONFIG_SET_FILE
-		PLUGLIN_CONFIG_PKG=$(cat $PLUGIN_CONFIG_SET_FILE | grep -o "\\[$PLUGIN_CONFIG\\]([^()]*)" | cut -f 2 -d '(' | cut -f 1 -d ')')
-		echo "Using plugin config \"$PLUGIN_CONFIG\" from $PLUGLIN_CONFIG_PKG"
+		PLUGIN_CONFIG_PKG=$(cat $GITHUB_RELEASE_INFO_FILE | grep -o "\\[${PLUGIN_CONFIG}\\]([^()]*)" | cut -f 2 -d '(' | cut -f 1 -d ')')
+		echo "Using plugin config \"$PLUGIN_CONFIG\" at $PLUGIN_CONFIG_PKG"
 	fi
 
 	cat <<-EOF >>"$SYS_SETTINGS_ENV_FILE"
 		PLUGINS="${PLUGINS}"
 		PLUGIN_PKGS=(${PLUGIN_PKGS[@]})
 		PLUGIN_CONFIG="${PLUGIN_CONFIG}"
-		PLUGLIN_CONFIG_PKG="${PLUGLIN_CONFIG_PKG}"
+		PLUGIN_CONFIG_PKG="${PLUGIN_CONFIG_PKG}"
 	EOF
 fi
 
