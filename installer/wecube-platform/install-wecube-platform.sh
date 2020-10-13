@@ -8,7 +8,7 @@ source $ENV_FILE
 echo "Deploying wecube-platform on $HOST_PRIVATE_IP"
 
 if [ -f "$WECUBE_RELEASE_VERSION" ]; then
-	echo "Reading customized WeCube version specs from $WECUBE_RELEASE_VERSION"
+	echo "Reading customized WeCube version specs from file $WECUBE_RELEASE_VERSION"
 	PATH="$PATH:." source "$WECUBE_RELEASE_VERSION"
 else
 	if [ "$WECUBE_RELEASE_VERSION" != 'latest' ]; then

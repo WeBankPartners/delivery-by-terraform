@@ -3,31 +3,40 @@
 ##################################################
 
 # Version of WeCube platform docker image
-WECUBE_IMAGE_VERSION="v2.6.1"
+WECUBE_IMAGE_VERSION="v2.7.0"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.1/wecube-plugins-wecmdb-v1.5.2.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.1/wecube-plugins-qcloud-v1.8.9.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.1/wecube-plugins-saltstack-v1.10.1.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.1/wecube-plugins-monitor-v1.7.1.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.1/wecube-plugins-notifications-v0.1.3.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.1/wecube-plugins-artifacts-v0.4.2.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.1/wecube-plugins-service-mgmt-v0.6.1.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-wecmdb-v1.5.3.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-saltstack-v1.10.2.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-monitor-v1.8.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-qcloud-v1.8.9.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-artifacts-v0.5.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-service-mgmt-v0.6.2.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-notifications-v0.1.3.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-alicloud-v1.0.2.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-capacity-v1.0.0.zip"
 )
 
-PLUGLIN_CONFIG_PKG="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.6.1/plugin_best_practice.zip"
+PLUGIN_CONFIG_PKG="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.7.0/plugin_best_practice.zip"
 
 
 ################################################
 # Configurations for Specific Project Delivery #
 ################################################
 
-# TencentCloud COS parameters for application artifact packages
-ARTIFACTS_COS_REGION="ap-guangzhou"
-ARTIFACTS_COS_BUCKET="wecube-1259801214"
-ARTIFACTS_COS_OBJECTS=(
-  "/v2.5.0/demo_system/4523d14ea55a20293f6fa2e1da524618_demo-app-spring-boot_1.5.3.tar.gz"
-  "/v2.5.0/demo_system/d87dd39bfb554f6b40286c5965925179_demo-app-nginx_0.1.1.tar.gz"
-  "/v2.5.0/demo_system/d502c4127f7c3cc6fb7a060eab1e31bb_demo-app-spring-boot-db_1.0.1.tar.gz"
+# Artifacts packages
+ARTIFACTS_PKGS=(
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/4523d14ea55a20293f6fa2e1da524618_demo-app-spring-boot_1.5.3.tar.gz"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/d502c4127f7c3cc6fb7a060eab1e31bb_demo-app-spring-boot-db_1.0.1.tar.gz"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/d87dd39bfb554f6b40286c5965925179_demo-app-nginx_0.1.1.tar.gz"
 )
+
+# TencentCloud COS parameters for application artifact packages
+#ARTIFACTS_COS_REGION="ap-guangzhou"
+#ARTIFACTS_COS_BUCKET="wecube-1259801214"
+#ARTIFACTS_COS_OBJECTS=(
+#  "/v2.5.0/demo_system/4523d14ea55a20293f6fa2e1da524618_demo-app-spring-boot_1.5.3.tar.gz"
+#  "/v2.5.0/demo_system/d87dd39bfb554f6b40286c5965925179_demo-app-nginx_0.1.1.tar.gz"
+#  "/v2.5.0/demo_system/d502c4127f7c3cc6fb7a060eab1e31bb_demo-app-spring-boot-db_1.0.1.tar.gz"
+#)

@@ -21,7 +21,7 @@ echo -e "\nDetermine plugin versions to be installed..."
 
 if [ -f "$WECUBE_RELEASE_VERSION" ]; then
 	VERSION_SPEC_FILE="$WECUBE_RELEASE_VERSION"
-	echo "Reading customized WeCube version specs from $VERSION_SPEC_FILE"
+	echo "Reading customized WeCube version specs from file $VERSION_SPEC_FILE"
 	PATH="$PATH:." source $VERSION_SPEC_FILE
 	PATH="$PATH:." cat $VERSION_SPEC_FILE | tee -a $SYS_SETTINGS_ENV_FILE
 else
