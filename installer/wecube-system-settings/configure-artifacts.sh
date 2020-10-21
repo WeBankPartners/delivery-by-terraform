@@ -3,8 +3,11 @@
 set -e
 
 SYS_SETTINGS_ENV_FILE=$1
+SHOULD_CREATE_BUCKET=$2
 
 source $SYS_SETTINGS_ENV_FILE
+
+echo -e "\nConfiguring artifacts..."
 
 DOWNLOAD_DIR=$(realpath "./download")
 mkdir -p "$DOWNLOAD_DIR"
@@ -46,8 +49,8 @@ find "$DOWNLOAD_DIR" -type f | while read FILE; do
 		echo "Skipped file $BASE_NAME"
 	else
 		FILE_WITH_MD5_CHECKSUM="${DIR_NAME}/${MD5_CHECKSUM}_${BASE_NAME}"
-		echo "Processed file $FILE_WITH_MD5_CHECKSUM"
 		mv "$FILE" "$FILE_WITH_MD5_CHECKSUM"
+		echo "Processed file $FILE_WITH_MD5_CHECKSUM"
 	fi
 done
 
@@ -58,5 +61,6 @@ docker run --rm -t \
 	-v "$SHELL_SCRIPT_FILE:$SHELL_SCRIPT_FILE" \
 	--env "S3_URL=$S3_URL" --env "S3_ACCESS_KEY=$S3_ACCESS_KEY"  --env "S3_SECRET_KEY=$S3_SECRET_KEY" \
 	--env "DOWNLOAD_DIR=$DOWNLOAD_DIR" --env "ARTIFACTS_S3_BUCKET_NAME=$ARTIFACTS_S3_BUCKET_NAME" \
+	--env "SHOULD_CREATE_BUCKET=$SHOULD_CREATE_BUCKET" \
 	--entrypoint=/bin/sh \
 	minio/mc "$SHELL_SCRIPT_FILE"

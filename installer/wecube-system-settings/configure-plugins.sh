@@ -18,13 +18,16 @@ echo -e "\nFetching plugin packages..."
 PLUGIN_PKG_DIR="$PLUGIN_INSTALLER_DIR/plugin-packages"
 mkdir -p "$PLUGIN_PKG_DIR"
 PLUGIN_LIST_CSV="$PLUGIN_PKG_DIR/plugin-list.csv"
+PLUGIN_PKG_FILES=()
 echo "plugin_package_path" > $PLUGIN_LIST_CSV
 for PLUGIN_URL in "${PLUGIN_PKGS[@]}"; do
 	PLUGIN_PKG_FILE="$PLUGIN_PKG_DIR/${PLUGIN_URL##*'/'}"
+	PLUGIN_PKG_FILES+=("$PLUGIN_PKG_FILE")
 	echo -e "\nFetching from $PLUGIN_URL"
 	../curl-with-retry.sh -fL $PLUGIN_URL -o $PLUGIN_PKG_FILE
 	echo $PLUGIN_PKG_FILE >> $PLUGIN_LIST_CSV
 done
+PLUGIN_PKGS_STR="${PLUGIN_PKG_FILES[*]}"
 
 echo -e "\nRegistering plugins, this may take a few minutes...\n"
 docker run --rm -t \
@@ -32,7 +35,7 @@ docker run --rm -t \
 	-v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
 	postman/newman \
 	run "$COLLECTION_DIR/020_wecube_plugin_register.postman_collection.json" \
-	-d "$PLUGIN_PKG_DIR/plugin-list.csv" \
+	-d "$PLUGIN_LIST_CSV" \
 	--env-var "domain=$PUBLIC_DOMAIN" \
 	--env-var "username=$DEFAULT_ADMIN_USERNAME" \
 	--env-var "password=$DEFAULT_ADMIN_PASSWORD" \
@@ -61,8 +64,13 @@ else
 
 	find "$PLUGIN_CONFIG_DIR" -type f -name '*.xml' | while read PLUGIN_CONFIG_FILE; do
 		PLUGIN_PKG_COORDS=$(basename $PLUGIN_CONFIG_FILE .xml)
-		PLUGIN_PKG_NAME="${PLUGIN_PKG_COORDS%%__*}"
-		[ -n "$PLUGINS" ] && [ "$PLUGINS" == "${PLUGINS/$PLUGIN_PKG_NAME/}" ] && continue
+		PLUGIN_PKG_NAME="${PLUGIN_PKG_COORDS%__*}"
+		PLUGIN_PKG_VERSION="${PLUGIN_PKG_COORDS##*__}"
+		PLUGIN_PKG_FILE_PATTERN="${PLUGIN_PKG_NAME}-${PLUGIN_PKG_VERSION}"
+		if [ "${PLUGIN_PKGS_STR/$PLUGIN_PKG_FILE_PATTERN/}" == "$PLUGIN_PKGS_STR" ]; then
+			echo -e "\nSkipped importing plugin configuration for \"$PLUGIN_PKG_NAME\" from $PLUGIN_CONFIG_FILE"
+			continue
+		fi
 
 		echo -e "\nImporting plugin configurations for \"$PLUGIN_PKG_NAME\" from $PLUGIN_CONFIG_FILE"
 		ACCESS_TOKEN=$(./api-utils/login.sh "$SYS_SETTINGS_ENV_FILE")
@@ -89,11 +97,13 @@ EOF
 	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
 	"$SQL_STMT"
 
-echo -e "\nConfiguring plugin WeCMDB..."
-./configure-wecmdb.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR
+if [ "${PLUGIN_PKGS_STR/wecube-plugins-wecmdb/}" != "$PLUGIN_PKGS_STR" ]; then
+	./configure-wecmdb.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR
+fi
 
-echo -e "\nConfigure plugin Open-Monitor..."
-./configure-open-monitor.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR $PLUGIN_PKG_DIR
+if [ "${PLUGIN_PKGS_STR/wecube-plugins-monitor/}" != "$PLUGIN_PKGS_STR" ]; then
+	./configure-open-monitor.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR $PLUGIN_PKG_DIR
+fi
 
-echo -e "\nConfigure plugin Artifacts..."
-./configure-artifacts.sh $SYS_SETTINGS_ENV_FILE
+[ "${PLUGIN_PKGS_STR/wecube-plugins-artifacts/}" == "$PLUGIN_PKGS_STR" ] && SHOULD_CREATE_BUCKET='true'
+./configure-artifacts.sh $SYS_SETTINGS_ENV_FILE $SHOULD_CREATE_BUCKET

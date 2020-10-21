@@ -8,6 +8,8 @@ PLUGIN_PKG_DIR=$3
 
 source $SYS_SETTINGS_ENV_FILE
 
+echo -e "\nConfiguring plugin Open-Monitor..."
+
 echo -e "\nRegistering monitoring target objects...\n"
 docker run --rm -t \
 	-v "$COLLECTION_DIR:$COLLECTION_DIR" \
