@@ -9,6 +9,13 @@ PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/mast
 PLUGIN_INSTALLER_PKG="$INSTALLER_DIR/wecube-plugin-installer.zip"
 PLUGIN_INSTALLER_DIR="$INSTALLER_DIR/wecube-plugins"
 COLLECTION_DIR="$PLUGIN_INSTALLER_DIR/wecube-auto-master"
+
+if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
+	echo 'Using Gitee as mirror for WeCube code repository in Mainland China.'
+	PLUGIN_INSTALLER_URL="https://gitee.com/WeBankPartners/wecube-auto/repository/archive/master.zip"
+	COLLECTION_DIR="$PLUGIN_INSTALLER_DIR/wecube-auto"
+fi
+
 mkdir -p "$PLUGIN_INSTALLER_DIR"
 echo "Fetching wecube-plugin-installer from $PLUGIN_INSTALLER_URL"
 ../curl-with-retry.sh -fL $PLUGIN_INSTALLER_URL -o $PLUGIN_INSTALLER_PKG
@@ -27,7 +34,6 @@ for PLUGIN_URL in "${PLUGIN_PKGS[@]}"; do
 	../curl-with-retry.sh -fL $PLUGIN_URL -o $PLUGIN_PKG_FILE
 	echo $PLUGIN_PKG_FILE >> $PLUGIN_LIST_CSV
 done
-PLUGIN_PKGS_STR="${PLUGIN_PKG_FILES[*]}"
 
 echo -e "\nRegistering plugins, this may take a few minutes...\n"
 docker run --rm -t \
@@ -44,6 +50,9 @@ docker run --rm -t \
 	--delay-request 2000 --disable-unicode \
 	--reporters cli \
 	--reporter-cli-no-banner --reporter-cli-no-console
+
+INSTALLED_PLUGIN_PKGS=$(./api-utils/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
+echo -e "\nInstalled plugin packages: $INSTALLED_PLUGIN_PKGS"
 
 if [ -z "$PLUGIN_CONFIG_PKG" ]; then
 	echo -e "\nNo plugin configuration package is specified and skipped importing."
@@ -65,14 +74,13 @@ else
 	find "$PLUGIN_CONFIG_DIR" -type f -name '*.xml' | while read PLUGIN_CONFIG_FILE; do
 		PLUGIN_PKG_COORDS=$(basename $PLUGIN_CONFIG_FILE .xml)
 		PLUGIN_PKG_NAME="${PLUGIN_PKG_COORDS%__*}"
-		PLUGIN_PKG_VERSION="${PLUGIN_PKG_COORDS##*__}"
-		PLUGIN_PKG_FILE_PATTERN="${PLUGIN_PKG_NAME}-${PLUGIN_PKG_VERSION}"
-#		if [ "${PLUGIN_PKGS_STR/$PLUGIN_PKG_FILE_PATTERN/}" == "$PLUGIN_PKGS_STR" ]; then
-#			echo -e "\nSkipped importing plugin configuration for \"$PLUGIN_PKG_NAME\" from $PLUGIN_CONFIG_FILE"
-#			continue
-#		fi
 
-		echo -e "\nImporting plugin configurations for \"$PLUGIN_PKG_NAME\" from $PLUGIN_CONFIG_FILE"
+		if [ "${INSTALLED_PLUGIN_PKGS/$PLUGIN_PKG_COORDS/}" == "$INSTALLED_PLUGIN_PKGS" ]; then
+			echo -e "\nPlugin package \"$PLUGIN_PKG_COORDS\" is not installed, skipped importing plugin configuration from $PLUGIN_CONFIG_FILE"
+			continue
+		fi
+
+		echo -e "\nImporting plugin configurations for \"$PLUGIN_PKG_COORDS\" from $PLUGIN_CONFIG_FILE"
 		ACCESS_TOKEN=$(./api-utils/login.sh "$SYS_SETTINGS_ENV_FILE")
 		[ -z "$ACCESS_TOKEN" ] && echo -e "\n\e[0;31mFailed to get access token from WeCube platform! Installation aborted.\e[0m\n" && exit 1
 		http --ignore-stdin --check-status --follow \
@@ -97,13 +105,13 @@ EOF
 	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
 	"$SQL_STMT"
 
-if [ "${PLUGIN_PKGS_STR/wecube-plugins-wecmdb/}" != "$PLUGIN_PKGS_STR" ]; then
+if [ "${INSTALLED_PLUGIN_PKGS/wecmdb/}" != "$INSTALLED_PLUGIN_PKGS" ]; then
 	./configure-wecmdb.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR
 fi
 
-if [ "${PLUGIN_PKGS_STR/wecube-plugins-monitor/}" != "$PLUGIN_PKGS_STR" ]; then
+if [ "${INSTALLED_PLUGIN_PKGS/monitor/}" != "$INSTALLED_PLUGIN_PKGS" ]; then
 	./configure-open-monitor.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR $PLUGIN_PKG_DIR
 fi
 
-[ "${PLUGIN_PKGS_STR/wecube-plugins-artifacts/}" == "$PLUGIN_PKGS_STR" ] && SHOULD_CREATE_BUCKET='true'
+[ "${INSTALLED_PLUGIN_PKGS/artifacts/}" == "$INSTALLED_PLUGIN_PKGS" ] && SHOULD_CREATE_BUCKET='true'
 ./configure-artifacts.sh $SYS_SETTINGS_ENV_FILE $SHOULD_CREATE_BUCKET

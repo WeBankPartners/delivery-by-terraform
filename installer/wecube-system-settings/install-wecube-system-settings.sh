@@ -28,13 +28,19 @@ else
 	if [ "$WECUBE_RELEASE_VERSION" != 'latest' ]; then
 		WECUBE_RELEASE_VERSION="tags/$WECUBE_RELEASE_VERSION"
 	fi
-	GITHUB_RELEASE_URL="https://api.github.com/repos/WeBankPartners/wecube-platform/releases/$WECUBE_RELEASE_VERSION"
-	GITHUB_RELEASE_INFO_FILE="$WECUBE_HOME/installer/release-info"
-	echo "Fetching release \"$WECUBE_RELEASE_VERSION\" from $GITHUB_RELEASE_URL"
-	../curl-with-retry.sh -fL $GITHUB_RELEASE_URL -o $GITHUB_RELEASE_INFO_FILE
+
+	RELEASE_URL="https://api.github.com/repos/WeBankPartners/wecube-platform/releases/$WECUBE_RELEASE_VERSION"
+	if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
+		echo 'Using Gitee as mirror for WeCube release in Mainland China.'
+		RELEASE_URL="https://gitee.com/api/v5/repos/WeBankPartners/wecube-platform/releases/$WECUBE_RELEASE_VERSION"
+	fi
+
+	RELEASE_INFO_FILE="$WECUBE_HOME/installer/release-info"
+	echo "Fetching release \"$WECUBE_RELEASE_VERSION\" from $RELEASE_URL"
+	../curl-with-retry.sh -fL $RELEASE_URL -o $RELEASE_INFO_FILE
 
 	PLUGIN_PKGS=()
-	COMPONENT_TABLE_MD=$(cat $GITHUB_RELEASE_INFO_FILE | grep -o '|[ ]*wecube image[ ]*|.*|\\r\\n' | sed -e 's/[ ]*|[ ]*/|/g')
+	COMPONENT_TABLE_MD=$(cat $RELEASE_INFO_FILE | grep -o '|[ ]*wecube image[ ]*|.*|\\r\\n' | sed -e 's/[ ]*|[ ]*/|/g')
 	while [ -n "$COMPONENT_TABLE_MD" ]; do
 		# process row by row
 		COMPONENT=${COMPONENT_TABLE_MD%%"\r\n"*}
@@ -57,7 +63,7 @@ else
 	done
 
 	PLUGIN_CONFIG='标准安装配置'
-	PLUGIN_CONFIG_PKG=$(cat $GITHUB_RELEASE_INFO_FILE | grep -o "\\[${PLUGIN_CONFIG}\\]([^()]*)" | cut -f 2 -d '(' | cut -f 1 -d ')')
+	PLUGIN_CONFIG_PKG=$(cat $RELEASE_INFO_FILE | grep -o "\\[${PLUGIN_CONFIG}\\]([^()]*)" | cut -f 2 -d '(' | cut -f 1 -d ')')
 	echo "Using plugin config \"$PLUGIN_CONFIG\" at $PLUGIN_CONFIG_PKG"
 
 	cat <<-EOF >>"$SYS_SETTINGS_ENV_FILE"
