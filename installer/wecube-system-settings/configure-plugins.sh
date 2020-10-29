@@ -67,10 +67,10 @@ else
 		PLUGIN_PKG_NAME="${PLUGIN_PKG_COORDS%__*}"
 		PLUGIN_PKG_VERSION="${PLUGIN_PKG_COORDS##*__}"
 		PLUGIN_PKG_FILE_PATTERN="${PLUGIN_PKG_NAME}-${PLUGIN_PKG_VERSION}"
-		if [ "${PLUGIN_PKGS_STR/$PLUGIN_PKG_FILE_PATTERN/}" == "$PLUGIN_PKGS_STR" ]; then
-			echo -e "\nSkipped importing plugin configuration for \"$PLUGIN_PKG_NAME\" from $PLUGIN_CONFIG_FILE"
-			continue
-		fi
+#		if [ "${PLUGIN_PKGS_STR/$PLUGIN_PKG_FILE_PATTERN/}" == "$PLUGIN_PKGS_STR" ]; then
+#			echo -e "\nSkipped importing plugin configuration for \"$PLUGIN_PKG_NAME\" from $PLUGIN_CONFIG_FILE"
+#			continue
+#		fi
 
 		echo -e "\nImporting plugin configurations for \"$PLUGIN_PKG_NAME\" from $PLUGIN_CONFIG_FILE"
 		ACCESS_TOKEN=$(./api-utils/login.sh "$SYS_SETTINGS_ENV_FILE")
