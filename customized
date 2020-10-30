@@ -3,22 +3,22 @@
 ##################################################
 
 # Version of WeCube platform docker image
-WECUBE_IMAGE_VERSION="v2.7.0"
+WECUBE_IMAGE_VERSION="v2.7.1"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-wecmdb-v1.5.3.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-saltstack-v1.10.2.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-monitor-v1.8.0.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-qcloud-v1.8.9.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-artifacts-v0.5.0.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-service-mgmt-v0.6.2.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-notifications-v0.1.3.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-wecmdb-v1.5.4.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-saltstack-v1.10.3.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-monitor-v1.9.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-qcloud-v1.8.10.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-artifacts-v1.0.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-service-mgmt-v0.7.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-notifications-v0.1.4.zip"
   "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-alicloud-v1.0.2.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-capacity-v1.0.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-capacity-v1.0.1.zip"
 )
 
-PLUGIN_CONFIG_PKG="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.7.0/plugin_best_practice.zip"
+PLUGIN_CONFIG_PKG="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.7.1/plugin_best_practice.zip"
 
 
 ################################################
