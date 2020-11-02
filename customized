@@ -17,6 +17,7 @@ PLUGIN_PKGS=(
   "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-capacity-v1.0.1.zip"
 )
 
+PLUGIN_CONFIG='标准安装配置'
 PLUGIN_CONFIG_PKG="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.7.1/plugin_best_practice.zip"
 
 
