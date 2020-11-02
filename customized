@@ -14,7 +14,6 @@ PLUGIN_PKGS=(
   "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-artifacts-v1.0.0.zip"
   "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-service-mgmt-v0.7.0.zip"
   "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-notification-v0.1.4.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-alicloud-v1.0.2.zip"
   "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-capacity-v1.0.1.zip"
 )
 
