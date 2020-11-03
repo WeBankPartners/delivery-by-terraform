@@ -5,10 +5,15 @@ set -e
 SYS_SETTINGS_ENV_FILE=$1
 source $SYS_SETTINGS_ENV_FILE
 
+[ ${#PLUGIN_PKGS[@]} -eq 0 ] && echo "No plugins need to be configured, skipped operations." && exit 0;
+
+
 PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
 PLUGIN_INSTALLER_PKG="$INSTALLER_DIR/wecube-plugin-installer.zip"
 PLUGIN_INSTALLER_DIR="$INSTALLER_DIR/wecube-plugins"
 COLLECTION_DIR="$PLUGIN_INSTALLER_DIR/wecube-auto-master"
+
+mkdir -p "$PLUGIN_INSTALLER_DIR"
 
 if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
 	echo 'Using Gitee as mirror for WeCube code repository in Mainland China.'
@@ -16,22 +21,22 @@ if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
 	COLLECTION_DIR="$PLUGIN_INSTALLER_DIR/wecube-auto"
 fi
 
-mkdir -p "$PLUGIN_INSTALLER_DIR"
 echo "Fetching wecube-plugin-installer from $PLUGIN_INSTALLER_URL"
 ../curl-with-retry.sh -fL $PLUGIN_INSTALLER_URL -o $PLUGIN_INSTALLER_PKG
 unzip -o -q $PLUGIN_INSTALLER_PKG -d $PLUGIN_INSTALLER_DIR
 
-echo -e "\nFetching plugin packages..."
+echo -e "\nInstalling the following WeCube plugin packages..."
+printf '  %s\n' "${PLUGIN_PKGS[@]}"
 PLUGIN_PKG_DIR="$PLUGIN_INSTALLER_DIR/plugin-packages"
 mkdir -p "$PLUGIN_PKG_DIR"
-PLUGIN_LIST_CSV="$PLUGIN_PKG_DIR/plugin-list.csv"
 PLUGIN_PKG_FILES=()
+PLUGIN_LIST_CSV="$PLUGIN_PKG_DIR/plugin-list.csv"
 echo "plugin_package_path" > $PLUGIN_LIST_CSV
 for PLUGIN_URL in "${PLUGIN_PKGS[@]}"; do
 	PLUGIN_PKG_FILE="$PLUGIN_PKG_DIR/${PLUGIN_URL##*'/'}"
-	PLUGIN_PKG_FILES+=("$PLUGIN_PKG_FILE")
 	echo -e "\nFetching from $PLUGIN_URL"
 	../curl-with-retry.sh -fL $PLUGIN_URL -o $PLUGIN_PKG_FILE
+	PLUGIN_PKG_FILES+=("$PLUGIN_PKG_FILE")
 	echo $PLUGIN_PKG_FILE >> $PLUGIN_LIST_CSV
 done
 
@@ -63,8 +68,14 @@ else
 	../curl-with-retry.sh -fL $PLUGIN_CONFIG_PKG -o $PLUGIN_CONFIG_PKG_FILE
 	unzip -o -q $PLUGIN_CONFIG_PKG_FILE -d $PLUGIN_CONFIG_DIR
 
+	EXTRA_CONFIG_STEP_DEF_FILE="$PLUGIN_CONFIG_DIR/extra-config-steps.sh"
+	if [ -f "$EXTRA_CONFIG_STEP_DEF_FILE" ]; then
+		echo "Found config steps script file at $EXTRA_CONFIG_STEP_DEF_FILE"
+		source "$EXTRA_CONFIG_STEP_DEF_FILE"
+	fi
+
 	find "$PLUGIN_CONFIG_DIR" -type f -name '*.sql' | while read SQL_SCRIPT_FILE; do
-		echo -e "\nImporting plugin SQL script file $SQL_SCRIPT_FILE"
+		echo -e "\nImporting SQL script file $SQL_SCRIPT_FILE"
 		PLUGIN_DB_NAME=$(basename $SQL_SCRIPT_FILE .sql)
 		../execute-sql-script-file.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
 			$PLUGIN_DB_NAME $PLUGIN_DB_USERNAME $PLUGIN_DB_PASSWORD \
@@ -80,7 +91,7 @@ else
 			continue
 		fi
 
-		echo -e "\nImporting plugin configurations for \"$PLUGIN_PKG_COORDS\" from $PLUGIN_CONFIG_FILE"
+		echo -e "\nImporting plugin service config for \"$PLUGIN_PKG_COORDS\" from $PLUGIN_CONFIG_FILE"
 		ACCESS_TOKEN=$(./api-utils/login.sh "$SYS_SETTINGS_ENV_FILE")
 		[ -z "$ACCESS_TOKEN" ] && echo -e "\n\e[0;31mFailed to get access token from WeCube platform! Installation aborted.\e[0m\n" && exit 1
 		http --ignore-stdin --check-status --follow \
@@ -95,7 +106,7 @@ else
 	done
 fi
 
-echo -e "\nEnabling all plugin configurations..."
+echo -e "\nEnabling all plugin service config..."
 read -d '' SQL_STMT <<-EOF || true
 	UPDATE ``plugin_configs``
 	   SET ``status`` = 'ENABLED'
@@ -105,13 +116,8 @@ EOF
 	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
 	"$SQL_STMT"
 
-if [ "${INSTALLED_PLUGIN_PKGS/wecmdb/}" != "$INSTALLED_PLUGIN_PKGS" ]; then
-	./configure-wecmdb.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR
-fi
-
-if [ "${INSTALLED_PLUGIN_PKGS/monitor/}" != "$INSTALLED_PLUGIN_PKGS" ]; then
-	./configure-open-monitor.sh $SYS_SETTINGS_ENV_FILE $COLLECTION_DIR $PLUGIN_PKG_DIR
-fi
-
-[ "${INSTALLED_PLUGIN_PKGS/artifacts/}" == "$INSTALLED_PLUGIN_PKGS" ] && SHOULD_CREATE_BUCKET='true'
-./configure-artifacts.sh $SYS_SETTINGS_ENV_FILE $SHOULD_CREATE_BUCKET
+echo -e "\nInvoking extra config steps: ${EXTRA_CONFIG_STEPS[*]}"
+for CONFIG_STEP in "${EXTRA_CONFIG_STEPS[@]}"; do
+	echo -e "\nInvoking config step \"$CONFIG_STEP\""
+	source "./config-steps/${CONFIG_STEP}.sh"
+done

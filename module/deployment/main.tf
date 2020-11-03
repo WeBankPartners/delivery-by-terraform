@@ -80,8 +80,7 @@ resource "null_resource" "app_deployments" {
       HOST_PRIVATE_IP=${var.resource_map.vm_by_name[var.deployment_plan.app[count.index].resource_name].private_ip}
       WECUBE_HOME=${var.wecube_home}
       WECUBE_RELEASE_VERSION=${var.wecube_release_version}
-      WECUBE_FEATURE_SET=${var.wecube_feature_set}
-      SHOULD_INSTALL_PLUGINS=${var.should_install_plugins}
+      WECUBE_CONFIG_SET=${var.wecube_config_set}
       INITIAL_PASSWORD=${var.initial_password}
       USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
 
@@ -181,10 +180,8 @@ resource "null_resource" "post_deployment_steps" {
       HOST_PRIVATE_IP=${var.resource_map.vm_by_name[var.deployment_plan.post_deploy[count.index].resource_name].private_ip}
       WECUBE_HOME=${var.wecube_home}
       WECUBE_RELEASE_VERSION=${var.wecube_release_version}
-      WECUBE_FEATURE_SET=${var.wecube_feature_set}
-      SHOULD_INSTALL_PLUGINS=${var.should_install_plugins}
+      WECUBE_CONFIG_SET=${var.wecube_config_set}
       INITIAL_PASSWORD=${var.initial_password}
-      SHOULD_INSTALL_PLUGINS=${var.should_install_plugins}
       USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
 
       %{ for var_name, var_value in var.deployment_plan.post_deploy[count.index].inject_env }

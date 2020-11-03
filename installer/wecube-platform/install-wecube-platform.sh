@@ -26,7 +26,6 @@ else
 	../curl-with-retry.sh -fL $RELEASE_URL -o $RELEASE_INFO_FILE
 
 	WECUBE_IMAGE_VERSION=""
-	PLUGIN_PKGS=()
 	COMPONENT_TABLE_MD=$(cat $RELEASE_INFO_FILE | grep -o '|[ ]*wecube image[ ]*|.*|\\r\\n' | sed -e 's/[ ]*|[ ]*/|/g')
 	while [ -n "$COMPONENT_TABLE_MD" ]; do
 		# process row by row
@@ -49,9 +48,16 @@ else
 	done
 fi
 
-[ -z "$WECUBE_IMAGE_VERSION" ] && echo -e "\n\e[0;31mFailed to determine WeCube image version! Installation aborted.\e[0m\n" && exit 1
+if [ -z "$WECUBE_IMAGE_VERSION" ]; then
+	echo -e "\n\e[0;31mFailed to determine WeCube image version! Installation aborted.\e[0m\n"
+	exit 1
+fi
+
+WECUBE_ENV_TEMPLATE_FILE="./wecube-platform.env.tpl"
+WECUBE_ENV_FILE="./wecube-platform.env"
+echo "Building WeCube platform env file $WECUBE_ENV_FILE"
+WECUBE_IMAGE_VERSION=$WECUBE_IMAGE_VERSION \
+  ../substitute-in-file.sh $ENV_FILE $WECUBE_ENV_TEMPLATE_FILE $WECUBE_ENV_FILE
 
 echo -e "\nInstalling WeCube platform with image version $WECUBE_IMAGE_VERSION"
-./setup-wecube-containers.sh $ENV_FILE $WECUBE_IMAGE_VERSION
-
-echo "Installation of wecube-platform completed."
+./setup-wecube-containers.sh $WECUBE_ENV_FILE

@@ -2,24 +2,15 @@
 
 set -e
 
-ENV_FILE=$1
-WECUBE_IMAGE_VERSION=$2
-
-source $ENV_FILE
-
-WECUBE_ENV_TEMPLATE_FILE="./wecube-platform.env.tpl"
-WECUBE_ENV_FILE="./wecube-platform.env"
-echo "Building WeCube env file $WECUBE_ENV_FILE"
-WECUBE_IMAGE_VERSION=$WECUBE_IMAGE_VERSION \
-  ../substitute-in-file.sh $ENV_FILE $WECUBE_ENV_TEMPLATE_FILE $WECUBE_ENV_FILE
+WECUBE_ENV_FILE=$1
 source $WECUBE_ENV_FILE
 
 echo "Starting WeCube containers..."
-DOCKER_COMPOSE_ENV_TEMPLATE_FILE="./wecube-platform.docker-compose.env.tpl"
 DOCKER_COMPOSE_ENV_FILE="./wecube-platform.docker-compose.env"
-WECUBE_IMAGE_VERSION=$WECUBE_IMAGE_VERSION \
-  ../substitute-in-file.sh $ENV_FILE $DOCKER_COMPOSE_ENV_TEMPLATE_FILE $DOCKER_COMPOSE_ENV_FILE
+  ../build-docker-compose-env.sh $WECUBE_ENV_FILE $DOCKER_COMPOSE_ENV_FILE
 docker-compose -f docker-compose.yml --env-file=$DOCKER_COMPOSE_ENV_FILE up -d
+
+echo -e "\nChecking service port readiness...\n"
 PORTS_TO_CHECK=(
   "$AUTH_SERVER_PORT"
   "$WECUBE_SERVER_PORT"

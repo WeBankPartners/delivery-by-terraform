@@ -1,13 +1,3 @@
-#!/bin/bash
-
-set -e
-
-SYS_SETTINGS_ENV_FILE=$1
-COLLECTION_DIR=$2
-PLUGIN_PKG_DIR=$3
-
-source $SYS_SETTINGS_ENV_FILE
-
 echo -e "\nConfiguring plugin Open-Monitor..."
 
 echo -e "\nRegistering monitoring target objects...\n"

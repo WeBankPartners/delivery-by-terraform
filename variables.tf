@@ -25,13 +25,13 @@ variable "availability_zones" {
 }
 
 variable "wecube_release_version" {
-  description = "The WeCube release version on GitHub that we use to determine target versions of specific components to be installed.\nValid options:\n- \"customized\" (include completed best practice for plugin configurations)\n- \"latest\" (latest release version)\n- \"v2.7.0\" (specific release version)"
-#  default     = "latest"
+  description = "The WeCube release version on GitHub that we use to determine target versions of specific components to be installed.\nValid options:\n- \"customized\" (include completed best practice for plugin configurations)\n- \"latest\" (latest release version)\n- \"v2.7.1\" (specific release version)"
+#  default     = "v2.7.1"
 }
 
-variable "wecube_feature_set" {
-  description = "Set of features provided by plugins and best practices desired during installation"
-  default     = "*"
+variable "wecube_config_set" {
+  description = "Set of features provided by plugins and best practices desired during installation.\nValid options:\n- \"standard\" (complete plugin installation and configurations)\n- \"bootcamp\" (used for bootcamp tutorial)\n- \"empty\" (no plugin will be installed)"
+#  default     = "standard"
 }
 
 variable "wecube_home" {
@@ -47,12 +47,6 @@ variable "initial_password" {
 variable "default_mysql_port" {
   description = "The listening port of MySQL instances"
   default     = "3307"
-}
-
-variable "should_install_plugins" {
-  description = "Whether we should install and configure WeCube plugins after WeCube platform is set up"
-  type        = bool
-  default     = true
 }
 
 variable "use_mirror_in_mainland_china" {
