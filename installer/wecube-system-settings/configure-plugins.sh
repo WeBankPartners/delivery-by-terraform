@@ -104,6 +104,11 @@ else
 			./api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_COORDS
 		fi
 	done
+
+	find "$PLUGIN_CONFIG_DIR" -type f -name '*.pds' | while read PROCESS_DEFINITION_FILE; do
+		echo -e "\nImporting and deploying process from file $PROCESS_DEFINITION_FILE"
+		./api-utils/deploy-process.sh $SYS_SETTINGS_ENV_FILE $PROCESS_DEFINITION_FILE
+	done
 fi
 
 echo -e "\nEnabling all plugin service config..."
