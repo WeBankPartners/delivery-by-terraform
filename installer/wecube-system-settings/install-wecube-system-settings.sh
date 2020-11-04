@@ -31,8 +31,8 @@ else
 	echo -e "\nFetching release info \"$WECUBE_RELEASE_VERSION\" from $RELEASE_URL\n"
 	../curl-with-retry.sh -fL $RELEASE_URL -o $RELEASE_INFO_FILE
 
-	echo -e "\nUsing WeCube config set \"$WECUBE_CONFIG_SET\""
-	source "./config-set/${WECUBE_CONFIG_SET}.sh"
+	echo -e "\nUsing WeCube settings \"$WECUBE_SETTINGS\""
+	source "./settings/${WECUBE_SETTINGS}.sh"
 
 	echo -e "\nLocating plugin packages...\n"
 	PLUGIN_PKGS=()

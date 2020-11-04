@@ -49,7 +49,7 @@ module "deployment" {
 
   wecube_home                  = var.wecube_home
   wecube_release_version       = var.wecube_release_version
-  wecube_config_set           = var.wecube_config_set
+  wecube_settings              = var.wecube_settings
   initial_password             = var.initial_password
   use_mirror_in_mainland_china = var.use_mirror_in_mainland_china
 

@@ -29,7 +29,7 @@ variable "wecube_release_version" {
 #  default     = "v2.7.1"
 }
 
-variable "wecube_config_set" {
+variable "wecube_settings" {
   description = "Set of features provided by plugins and best practices desired during installation.\nValid options:\n- \"standard\" (complete plugin installation and configurations)\n- \"bootcamp\" (used for bootcamp tutorial)\n- \"empty\" (no plugin will be installed)"
 #  default     = "standard"
 }

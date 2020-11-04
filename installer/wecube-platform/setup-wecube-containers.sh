@@ -19,9 +19,8 @@ PORTS_TO_CHECK=(
   "$PORTAL_PORT"
 )
 for PORT_TO_CHECK in "${PORTS_TO_CHECK[@]}"; do
-  ../wait-for-it.sh -t 120 "$HOST_PRIVATE_IP:$PORT_TO_CHECK" -- echo "Server listening at port $PORT_TO_CHECK is ready."
+	../wait-for-it.sh -t 120 "$HOST_PRIVATE_IP:$PORT_TO_CHECK" -- echo -e "Server listening at port $PORT_TO_CHECK is ready.\n"
 done
-echo -e "\nAll server containers are ready."
 
 # 再次启用IP转发并配置桥接来解决Docker容器对外部网络的通信问题
 cat <<EOF >/etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf
