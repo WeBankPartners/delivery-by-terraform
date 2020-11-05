@@ -7,8 +7,8 @@ resource "time_static" "end_time" {
 }
 locals {
   elapsed_time_unix    = time_static.end_time.unix - time_static.start_time.unix
-  elapsed_time_hours   = local.elapsed_time_unix < 3600 ? 0 : floor(local.elapsed_time_unix / 3600)
-  elapsed_time_minutes = local.elapsed_time_unix < 60   ? 0 : floor(local.elapsed_time_unix % 3600 / 60)
+  elapsed_time_hours   = floor(local.elapsed_time_unix / 3600)
+  elapsed_time_minutes = floor(local.elapsed_time_unix % 3600 / 60)
   elapsed_time_seconds = local.elapsed_time_unix % 60
   elapsed_time_text    = format("%s%s%s",
     local.elapsed_time_hours > 0 ? "${local.elapsed_time_hours}h" : "",
