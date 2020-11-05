@@ -5,7 +5,7 @@ set -e
 SYS_SETTINGS_ENV_FILE=$1
 source $SYS_SETTINGS_ENV_FILE
 
-[ ${#PLUGIN_PKGS[@]} -eq 0 ] && echo "No plugins need to be configured, skipped operations." && exit 0;
+[ ${#PLUGIN_PKGS[@]} -eq 0 ] && echo "No plugins need to be configured, skipped operation." && exit 0;
 
 
 PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
@@ -92,12 +92,7 @@ else
 		fi
 
 		echo -e "\nImporting plugin service config for \"$PLUGIN_PKG_COORDS\" from $PLUGIN_CONFIG_FILE"
-		ACCESS_TOKEN=$(./api-utils/login.sh "$SYS_SETTINGS_ENV_FILE")
-		[ -z "$ACCESS_TOKEN" ] && echo -e "\n\e[0;31mFailed to get access token from WeCube platform! Installation aborted.\e[0m\n" && exit 1
-		http --ignore-stdin --check-status --follow \
-			--form POST "http://${CORE_HOST}:19090/platform/v1/plugins/packages/import/$PLUGIN_PKG_COORDS" \
-			"Authorization:Bearer $ACCESS_TOKEN" \
-			xml-file@"$PLUGIN_CONFIG_FILE"
+		./api-utils/import-plugin-config.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_CONFIG_FILE
 
 		if [ "$PLUGIN_PKG_NAME" == "wecmdb" ]; then
 			echo "Restarting WeCMDB instance..."
