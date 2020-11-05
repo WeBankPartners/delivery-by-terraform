@@ -1,15 +1,34 @@
+# Timing stuff
+resource "time_static" "start_time" {}
+resource "time_static" "end_time" {
+  triggers = {
+    update = length(module.provisioning.resource_map) + length(module.deployment.deployment_step_ids)
+  }
+}
+locals {
+  elapsed_time_unix    = time_static.end_time.unix - time_static.start_time.unix
+  elapsed_time_hours   = local.elapsed_time_unix < 3600 ? 0 : floor(local.elapsed_time_unix / 3600)
+  elapsed_time_minutes = local.elapsed_time_unix < 60   ? 0 : floor(local.elapsed_time_unix % 3600 / 60)
+  elapsed_time_seconds = local.elapsed_time_unix % 60
+  elapsed_time_text    = format("%s%s%s",
+    local.elapsed_time_hours > 0 ? "${local.elapsed_time_hours}h" : "",
+    (local.elapsed_time_hours > 0 || local.elapsed_time_minutes > 0) ? "${local.elapsed_time_minutes}m" : "",
+    "${local.elapsed_time_seconds}s"
+  )
+}
+
 # Copy customized version spec files to installer directories if it exists
 resource "local_file" "wecub_platform_version_spec" {
-    count    = fileexists("${path.root}/${var.wecube_release_version}") ? 1 : 0
+  count    = fileexists("${path.root}/${var.wecube_release_version}") ? 1 : 0
 
-    content  = file("${path.root}/${var.wecube_release_version}")
-    filename = "${path.root}/installer/wecube-platform/${var.wecube_release_version}"
+  content  = file("${path.root}/${var.wecube_release_version}")
+  filename = "${path.root}/installer/wecube-platform/${var.wecube_release_version}"
 }
 resource "local_file" "wecube_system_settings_version_spec" {
-    count    = fileexists("${path.root}/${var.wecube_release_version}") ? 1 : 0
+  count    = fileexists("${path.root}/${var.wecube_release_version}") ? 1 : 0
 
-    content  = file("${path.root}/${var.wecube_release_version}")
-    filename = "${path.root}/installer/wecube-system-settings/${var.wecube_release_version}"
+  content  = file("${path.root}/${var.wecube_release_version}")
+  filename = "${path.root}/installer/wecube-system-settings/${var.wecube_release_version}"
 }
 
 provider "tencentcloud" {
@@ -58,6 +77,10 @@ module "deployment" {
   resource_map           = module.provisioning.resource_map
 }
 
+output "total_elapsed_time" {
+  value = local.elapsed_time_text
+}
+
 output "wecube_website_url" {
-  value="http://${lookup(module.provisioning.resource_map.entrypoint_ip_by_name, module.planning.entrypoint_host_name, "")}:19090"
+  value = "http://${lookup(module.provisioning.resource_map.entrypoint_ip_by_name, module.planning.entrypoint_host_name, "")}:19090"
 }
