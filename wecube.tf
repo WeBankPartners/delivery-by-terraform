@@ -19,13 +19,13 @@ locals {
 
 # Copy customized version spec files to installer directories if it exists
 resource "local_file" "wecub_platform_version_spec" {
-  count    = fileexists("${path.root}/${var.wecube_release_version}") ? 1 : 0
+  count    = try(fileexists("${path.root}/${var.wecube_release_version}") ? 1 : 0, 0)
 
   content  = file("${path.root}/${var.wecube_release_version}")
   filename = "${path.root}/installer/wecube-platform/${var.wecube_release_version}"
 }
 resource "local_file" "wecube_system_settings_version_spec" {
-  count    = fileexists("${path.root}/${var.wecube_release_version}") ? 1 : 0
+  count    = try(fileexists("${path.root}/${var.wecube_release_version}") ? 1 : 0, 0)
 
   content  = file("${path.root}/${var.wecube_release_version}")
   filename = "${path.root}/installer/wecube-system-settings/${var.wecube_release_version}"

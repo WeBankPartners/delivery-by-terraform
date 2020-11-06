@@ -9,7 +9,7 @@ source $SYS_SETTINGS_ENV_FILE
 
 SCRIPT_DIR=$(dirname "$0")
 
-ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
+[ -z "$ACCESS_TOKEN" ] && ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
 
 SUPER_ADMIN_ROLE_ID=$(http --ignore-stdin --check-status --follow \
 	--body GET "http://${CORE_HOST}:19090/platform/v1/users/roles" \

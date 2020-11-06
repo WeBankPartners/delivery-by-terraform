@@ -1,25 +1,10 @@
 echo -e "\nConfiguring plugin Open-Monitor..."
 
 echo -e "\nRegistering monitoring target objects...\n"
-docker run --rm -t \
-	-v "$COLLECTION_DIR:$COLLECTION_DIR" \
-	postman/newman \
-	run "$COLLECTION_DIR/021_wecube_init_plugin.postman_collection.json" \
-	--env-var "domain=$PUBLIC_DOMAIN" \
-	--env-var "username=$DEFAULT_ADMIN_USERNAME" \
-	--env-var "password=$DEFAULT_ADMIN_PASSWORD" \
-	--env-var "wecube_host=$CORE_HOST" \
-	--env-var "plugin_host=$PLUGIN_HOST" \
-	--env-var "node_exporter_port=$MONITOR_AGENT_PORT" \
-	--env-var "plugin_mysql_host=$PLUGIN_DB_HOST" \
-	--env-var "plugin_mysql_port=$PLUGIN_DB_PORT" \
-	--env-var "plugin_mysql_user=$PLUGIN_DB_USERNAME" \
-	--env-var "plugin_mysql_password=$PLUGIN_DB_PASSWORD" \
-	--env-var "core_host=$CORE_HOST" \
-	--env-var "core_jmx_port=$WECUBE_SERVER_JMX_PORT" \
-	--delay-request 2000 --disable-unicode \
-	--reporters cli \
-	--reporter-cli-no-banner --reporter-cli-no-console
+./api-utils/register-monitoring-targets-host.sh $SYS_SETTINGS_ENV_FILE
+./api-utils/register-monitoring-targets-mysql.sh $SYS_SETTINGS_ENV_FILE
+./api-utils/register-monitoring-targets-java.sh $SYS_SETTINGS_ENV_FILE
+
 
 echo -e "\nUploading monitor agent package for future use...\n"
 AGENT_PKG_FILENAME="node_exporter.tar.gz"

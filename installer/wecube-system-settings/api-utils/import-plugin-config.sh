@@ -10,7 +10,7 @@ source $SYS_SETTINGS_ENV_FILE
 SCRIPT_DIR=$(dirname "$0")
 PLUGIN_PKG_COORDS=$(basename $PLUGIN_CONFIG_FILE .xml)
 
-ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
+[ -z "$ACCESS_TOKEN" ] && ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
 http --ignore-stdin --check-status --follow \
 	--form --body POST "http://${CORE_HOST}:19090/platform/v1/plugins/packages/import/$PLUGIN_PKG_COORDS" \
 	"Authorization:Bearer $ACCESS_TOKEN" \

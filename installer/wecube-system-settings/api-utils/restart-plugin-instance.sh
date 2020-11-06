@@ -8,7 +8,7 @@ source $SYS_SETTINGS_ENV_FILE
 
 SCRIPT_DIR=$(dirname "$0")
 
-ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
+[ -z "$ACCESS_TOKEN" ] && ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
 INSANCE_JSON=$(http --ignore-stdin --check-status --follow \
 	--body GET "http://${CORE_HOST}:19090/platform/v1/packages/${PLUGIN_PKG_COORDS}/instances" \
 	"Authorization:Bearer $ACCESS_TOKEN" \
