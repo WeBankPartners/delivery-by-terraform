@@ -25,7 +25,7 @@ http --check-status --follow --timeout=120 \
 		      "callbackParameter": "1",
 		      "host_ip": "${PLUGIN_HOST}",
 		      "group": "default_host_group"
-		    }		    
+		    }
 		  ]
 		}
 	EOF
