@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    tencentcloud = {
+      source = "tencentcloudstack/tencentcloud"
+    }
+  }
+}
+
 # Timing stuff
 resource "time_static" "start_time" {}
 resource "time_static" "end_time" {
