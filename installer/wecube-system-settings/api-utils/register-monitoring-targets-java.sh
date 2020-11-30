@@ -50,7 +50,7 @@ for PACKAGE_COORD in $INSTALLED_PACKAGE_COORDS; do
 	done
 done
 http --check-status --follow --timeout=120 \
-	--body POST "http://${CORE_HOST}:19090/wecube-monitor/api/v1/agent/export/register/java" \
+	--body POST "http://${CORE_HOST}:19090/monitor/api/v1/agent/export/register/java" \
 	"Authorization:Bearer $ACCESS_TOKEN" <<-EOF \
 	| $SCRIPT_DIR/check-status-in-json.sh '.resultCode == "0"'
 		{

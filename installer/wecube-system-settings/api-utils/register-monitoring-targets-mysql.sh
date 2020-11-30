@@ -10,7 +10,7 @@ SCRIPT_DIR=$(dirname "$0")
 [ -z "$ACCESS_TOKEN" ] && ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
 
 http --check-status --follow --timeout=120 \
-	--body POST "http://${CORE_HOST}:19090/wecube-monitor/api/v1/agent/export/register/mysql" \
+	--body POST "http://${CORE_HOST}:19090/monitor/api/v1/agent/export/register/mysql" \
 	"Authorization:Bearer $ACCESS_TOKEN" <<-EOF \
 	| $SCRIPT_DIR/check-status-in-json.sh '.resultCode == "0"'
 		{
