@@ -210,7 +210,7 @@ locals {
     # 是否为主机分配公共网络IP
     allocate_public_ip         = true
     # 主机公共网络出向流量带宽
-    internet_max_bandwidth_out = 10
+    internet_max_bandwidth_out = 100
     # 主机初始化时需要额外执行的安装程序名称（位于目录installer下）
     provisioned_with           = ["yum-packages", "squid", "open-monitor-agent"]
   }
@@ -238,7 +238,7 @@ locals {
     # 是否为主机分配公共网络IP
     allocate_public_ip         = false
     # 主机公共网络出向流量带宽
-    internet_max_bandwidth_out = 10
+    internet_max_bandwidth_out = 100
     # 主机初始化时需要额外执行的安装程序名称（位于目录installer下）
     provisioned_with           = local.host_provisioners
   }
@@ -253,7 +253,7 @@ locals {
     password                   = var.initial_password
     private_ip                 = "10.40.201.2"
     allocate_public_ip         = false
-    internet_max_bandwidth_out = 10
+    internet_max_bandwidth_out = 100
     provisioned_with           = local.host_provisioners
   }
   plugin_host_1_cluster = {
@@ -267,7 +267,7 @@ locals {
     password                   = var.initial_password
     private_ip                 = "10.40.200.3"
     allocate_public_ip         = false
-    internet_max_bandwidth_out = 10
+    internet_max_bandwidth_out = 100
     provisioned_with           = local.host_provisioners
   }
   plugin_host_2_cluster = {
@@ -281,7 +281,7 @@ locals {
     password                   = var.initial_password
     private_ip                 = "10.40.201.3"
     allocate_public_ip         = false
-    internet_max_bandwidth_out = 10
+    internet_max_bandwidth_out = 100
     provisioned_with           = local.host_provisioners
   }
   host_provisioners = [
