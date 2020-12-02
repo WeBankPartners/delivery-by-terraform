@@ -96,7 +96,7 @@ locals {
     # 是否为主机分配公共网络IP
     allocate_public_ip         = true
     # 主机公共网络出向流量带宽
-    internet_max_bandwidth_out = 10
+    internet_max_bandwidth_out = 100
 
     # 主机初始化时需要额外执行的安装程序名称（位于目录installer下）
     provisioned_with = ["yum-packages", "docker", "mysql-docker", "minio-docker", "open-monitor-agent"]
