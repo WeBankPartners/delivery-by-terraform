@@ -24,7 +24,7 @@ PROCESS_DATA=$(http --ignore-stdin --check-status --follow \
 	uploadFile@"$PROCESS_DEFINITION_FILE" \
 	| $SCRIPT_DIR/check-status-in-json.sh \
 	| jq --exit-status --arg super_admin_role_id $SUPER_ADMIN_ROLE_ID \
-		'.data | setpath(["permissionToRole","MGMT"]; [$super_admin_role_id]) | setpath(["permissionToRole","USE"]; [])' \
+		'.data | setpath(["permissionToRole","MGMT"]; [$super_admin_role_id]) | setpath(["permissionToRole","USE"]; [$super_admin_role_id])' \
 )
 
 http --check-status --follow \

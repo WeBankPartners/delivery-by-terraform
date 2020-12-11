@@ -44,8 +44,8 @@ read -d '' ARTIFACT_CI_DATA_JSON <<-EOF || true
 	    "download_url": "${S3_URL}/${ARTIFACTS_S3_BUCKET_NAME}/ac97667fe83d5ae961206324aeb48e63_bootcamp-app-java-spring-boot_1.0.0.tar.gz",
 	    "should_decompress": "true",
 	    "deploy_script": "bootcamp-app-java-spring-boot_1.0.0/bin/deploy.sh",
-	    "start_script": "bootcamp-app-java-spring-boot_1.0.0/bin/start.sh",
-	    "stop_script": "bootcamp-app-java-spring-boot_1.0.0/bin/stop.sh"
+	    "start_script": "bootcamp-app-java-spring-boot_1.0.0/bin/start-current.sh",
+	    "stop_script": "bootcamp-app-java-spring-boot_1.0.0/bin/stop-current.sh"
 	  }
 	]
 EOF

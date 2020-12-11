@@ -37,9 +37,9 @@ http --check-status --follow \
 	]
 EOF
 
-echo "Updating system variables..."
-SQL_FILE_TEMPLATE="./update-resource-settings.sql.tpl"
-SQL_FILE="./update-resource-settings.sql"
+echo "Updating global system variables..."
+SQL_FILE_TEMPLATE="./update-global-system-variables.sql.tpl"
+SQL_FILE="./update-global-system-variables.sql"
 ../substitute-in-file.sh $SYS_SETTINGS_ENV_FILE $SQL_FILE_TEMPLATE $SQL_FILE
 ../execute-sql-script-file.sh $CORE_DB_HOST $CORE_DB_PORT \
 	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \

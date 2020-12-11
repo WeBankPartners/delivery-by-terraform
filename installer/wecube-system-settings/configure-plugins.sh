@@ -5,7 +5,7 @@ set -e
 SYS_SETTINGS_ENV_FILE=$1
 source $SYS_SETTINGS_ENV_FILE
 
-[ ${#PLUGIN_PKGS[@]} -eq 0 ] && echo "No plugins need to be configured, skipped operation." && exit 0;
+[ ${#PLUGIN_PKGS[@]} -eq 0 ] && echo -e "\e[0;33mNo plugins need to be configured, skipped operation.\e[0m" && exit 0;
 
 
 PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
@@ -60,7 +60,7 @@ INSTALLED_PLUGIN_PKGS=$(./api-utils/get-plugin-packages.sh $SYS_SETTINGS_ENV_FIL
 echo -e "\nInstalled plugin packages: $INSTALLED_PLUGIN_PKGS"
 
 if [ -z "$PLUGIN_CONFIG_PKG" ]; then
-	echo -e "\nNo plugin configuration package is specified and skipped importing."
+	echo -e "\n\e[0;33mNo plugin configuration package is specified and skipped importing.\e[0m"
 else
 	echo -e "\nFetching plugin configurations from $PLUGIN_CONFIG_PKG"
 	PLUGIN_CONFIG_PKG_FILE="$INSTALLER_DIR/plugin-configs.zip"
@@ -87,7 +87,7 @@ else
 		PLUGIN_PKG_NAME="${PLUGIN_PKG_COORDS%__*}"
 
 		if [ "${INSTALLED_PLUGIN_PKGS/$PLUGIN_PKG_COORDS/}" == "$INSTALLED_PLUGIN_PKGS" ]; then
-			echo -e "\nPlugin package \"$PLUGIN_PKG_COORDS\" is not installed, skipped importing plugin configuration from $PLUGIN_CONFIG_FILE"
+			echo -e "\n\e[0;33mPlugin package \"$PLUGIN_PKG_COORDS\" is not installed, skipped importing plugin configuration from $PLUGIN_CONFIG_FILE\e[0m"
 			continue
 		fi
 

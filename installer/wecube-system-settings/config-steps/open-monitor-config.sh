@@ -1,8 +1,12 @@
 echo -e "\nConfiguring plugin Open-Monitor..."
 
-echo -e "\nRegistering monitoring target objects...\n"
+echo -e "\nRegistering monitoring target objects for hosts...\n"
 ./api-utils/register-monitoring-targets-host.sh $SYS_SETTINGS_ENV_FILE
+
+echo -e "\nRegistering monitoring target objects for MySQL databases...\n"
 ./api-utils/register-monitoring-targets-mysql.sh $SYS_SETTINGS_ENV_FILE
+
+echo -e "\nRegistering monitoring target objects for Java applications...\n"
 ./api-utils/register-monitoring-targets-java.sh $SYS_SETTINGS_ENV_FILE
 
 
@@ -20,7 +24,8 @@ read -d '' SHELL_CMD <<-EOF || true
 EOF
 docker run --rm -t \
 	-v "$AGENT_PKG_PATH:/$AGENT_PKG_FILENAME" \
-	--entrypoint=/bin/sh minio/mc -c "$SHELL_CMD"
+	--entrypoint=/bin/sh \
+	minio/mc:RELEASE.2020-11-25T23-04-07Z -c "$SHELL_CMD"
 
 read -d '' SQL_STMT <<-EOF || true
 	UPDATE ``wecube``.``system_variables``
