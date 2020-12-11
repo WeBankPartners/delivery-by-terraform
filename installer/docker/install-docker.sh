@@ -47,7 +47,7 @@ yum install -y yum-utils device-mapper-persistent-data lvm2
 # 安装Docker Engine
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
-  echo 'Using mirror for docker yum repository in Mainland China.'
+  echo 'Using mirror for docker yum repository in Mainland China https://mirrors.cloud.tencent.com/docker-ce'
   sed -i 's+download.docker.com+mirrors.cloud.tencent.com/docker-ce+' /etc/yum.repos.d/docker-ce.repo
 fi
 yum makecache fast
@@ -64,7 +64,7 @@ chmod +x "$DOCKER_COMPOSE_BIN"
 mkdir -p /etc/systemd/system/docker.service.d
 DOCKER_START_CMD="/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:$DOCKER_PORT"
 if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
-  echo 'Using mirror for docker image registry in Mainland China.'
+  echo 'Using mirror for docker image registry in Mainland China https://mirror.ccs.tencentyun.com'
   DOCKER_START_CMD="$DOCKER_START_CMD --registry-mirror=https://mirror.ccs.tencentyun.com"
 fi
 cat >/etc/systemd/system/docker.service.d/docker-wecube-override-01-port.conf <<EOF

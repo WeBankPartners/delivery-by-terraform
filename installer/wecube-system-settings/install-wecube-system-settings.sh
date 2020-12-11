@@ -24,7 +24,7 @@ else
 	fi
 	RELEASE_URL="https://api.github.com/repos/WeBankPartners/wecube-platform/releases/$WECUBE_RELEASE_VERSION"
 	if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
-		echo 'Using Gitee as mirror for WeCube release in Mainland China.'
+		echo 'Using Gitee as mirror for WeCube release in Mainland China https://gitee.com/api/v5/repos/WeBankPartners/wecube-platform/'
 		RELEASE_URL="https://gitee.com/api/v5/repos/WeBankPartners/wecube-platform/releases/$WECUBE_RELEASE_VERSION"
 	fi
 	RELEASE_INFO_FILE="$WECUBE_HOME/installer/release-info"

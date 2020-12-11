@@ -16,7 +16,7 @@ COLLECTION_DIR="$PLUGIN_INSTALLER_DIR/wecube-auto-master"
 mkdir -p "$PLUGIN_INSTALLER_DIR"
 
 if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
-	echo 'Using Gitee as mirror for WeCube code repository in Mainland China.'
+	echo 'Using Gitee as mirror for WeCube code repository in Mainland China https://gitee.com/WeBankPartners/wecube-auto/'
 	PLUGIN_INSTALLER_URL="https://gitee.com/WeBankPartners/wecube-auto/repository/archive/master.zip"
 	COLLECTION_DIR="$PLUGIN_INSTALLER_DIR/wecube-auto"
 fi

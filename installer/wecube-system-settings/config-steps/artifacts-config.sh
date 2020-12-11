@@ -15,7 +15,7 @@ if [ -n "$ARTIFACTS_COS_REGION" ] && [ -n "$ARTIFACTS_COS_BUCKET" ] && [ -n "$AR
 
 	PIP_MIRROR_PARAM=""
 	if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
-		echo 'Using mirror for pip index in Mainland China.'
+		echo 'Using mirror for pip index in Mainland China https://pypi.tuna.tsinghua.edu.cn/simple'
 		PIP_MIRROR_PARAM="-i https://pypi.tuna.tsinghua.edu.cn/simple"
 	fi
 	read -d '' SHELL_CMD <<-EOF || true
