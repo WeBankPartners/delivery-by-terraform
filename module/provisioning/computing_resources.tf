@@ -163,6 +163,7 @@ resource "tencentcloud_instance" "vm_instances" {
       DATE_TIME=${timestamp()}
       HOST_PRIVATE_IP=${var.resource_plan.vm_instances[count.index].private_ip}
       WECUBE_HOME=${var.wecube_home}
+      INITIAL_PASSWORD='${var.initial_password}'
       USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
 
       # Network

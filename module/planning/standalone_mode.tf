@@ -99,7 +99,10 @@ locals {
     internet_max_bandwidth_out = 100
 
     # 主机初始化时需要额外执行的安装程序名称（位于目录installer下）
-    provisioned_with = ["yum-packages", "docker", "mysql-docker", "minio-docker", "open-monitor-agent"]
+    provisioned_with = [
+      "params-validator",
+      "yum-packages", "docker", "mysql-docker", "minio-docker", "open-monitor-agent"
+    ]
   }
 }
 
