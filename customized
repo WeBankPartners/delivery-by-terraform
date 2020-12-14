@@ -3,21 +3,16 @@
 ##################################################
 
 # Version of WeCube platform docker image
-WECUBE_IMAGE_VERSION="v2.7.1"
+WECUBE_IMAGE_VERSION="v2.8.0"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-wecmdb-v1.5.4.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-saltstack-v1.10.3.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-wecube-monitor-v1.9.0.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-qcloud-v1.8.10.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-artifacts-v1.0.0.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-service-mgmt-v0.7.0.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-notification-v0.1.4.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.4.0/wecube-plugins-capacity-v1.0.1.zip"
+  "https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/wecube-plugins-wecmdb-v1.5.5.7.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-saltstack-v1.10.4.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-monitor-v1.10.0.zip"
 )
 
-PLUGIN_CONFIG_PKG="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.7.1/standard.zip"
+PLUGIN_CONFIG_PKG="https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/bootcamp_dev.zip"
 
 
 ################################################
@@ -26,9 +21,10 @@ PLUGIN_CONFIG_PKG="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/v2.7.
 
 # Artifacts packages
 ARTIFACTS_PKGS=(
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/4523d14ea55a20293f6fa2e1da524618_demo-app-spring-boot_1.5.3.tar.gz"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/d502c4127f7c3cc6fb7a060eab1e31bb_demo-app-spring-boot-db_1.0.1.tar.gz"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/d87dd39bfb554f6b40286c5965925179_demo-app-nginx_0.1.1.tar.gz"
+#  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/4523d14ea55a20293f6fa2e1da524618_demo-app-spring-boot_1.5.3.tar.gz"
+#  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/d502c4127f7c3cc6fb7a060eab1e31bb_demo-app-spring-boot-db_1.0.1.tar.gz"
+#  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/d87dd39bfb554f6b40286c5965925179_demo-app-nginx_0.1.1.tar.gz"
+  "https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/bootcamp-app-java-spring-boot_1.0.0.tar.gz"
 )
 
 # TencentCloud COS parameters for application artifact packages

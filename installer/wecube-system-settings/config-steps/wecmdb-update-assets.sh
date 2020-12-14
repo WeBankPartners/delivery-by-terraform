@@ -1,4 +1,4 @@
-if [ -n "$REGION" ]; then
+if [ -z "$REGION" ]; then
 	echo "No region is given, skipped updating assets."
 else
 	echo "Updating region data in CMDB..."
