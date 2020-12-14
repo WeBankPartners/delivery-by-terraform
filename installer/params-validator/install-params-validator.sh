@@ -6,7 +6,7 @@ ENV_FILE=$1
 
 source $ENV_FILE
 
-echo "Validating installation parameter HOST_PRIVATE_IP=${HOST_PRIVATE_IP}..."
+echo "Validating installation parameters..."
 
 echo -e "\nChecking WeCube installation directory \"${WECUBE_HOME}\"..."
 if [ -d "${WECUBE_HOME}" ] && [ -n "$(ls --hide=delivery-by-terraform --hide=installer --hide=wecube-installer.zip ${WECUBE_HOME})" ]; then
