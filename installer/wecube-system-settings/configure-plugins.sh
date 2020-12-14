@@ -8,53 +8,18 @@ source $SYS_SETTINGS_ENV_FILE
 [ ${#PLUGIN_PKGS[@]} -eq 0 ] && echo -e "\e[0;33mNo plugins need to be configured, skipped operation.\e[0m" && exit 0;
 
 
-PLUGIN_INSTALLER_URL="https://github.com/WeBankPartners/wecube-auto/archive/master.zip"
-PLUGIN_INSTALLER_PKG="$INSTALLER_DIR/wecube-plugin-installer.zip"
-PLUGIN_INSTALLER_DIR="$INSTALLER_DIR/wecube-plugins"
-COLLECTION_DIR="$PLUGIN_INSTALLER_DIR/wecube-auto-master"
-
-mkdir -p "$PLUGIN_INSTALLER_DIR"
-
-if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
-	echo 'Using Gitee as mirror for WeCube code repository in Mainland China https://gitee.com/WeBankPartners/wecube-auto/'
-	PLUGIN_INSTALLER_URL="https://gitee.com/WeBankPartners/wecube-auto/repository/archive/master.zip"
-	COLLECTION_DIR="$PLUGIN_INSTALLER_DIR/wecube-auto"
-fi
-
-echo "Fetching wecube-plugin-installer from $PLUGIN_INSTALLER_URL"
-../curl-with-retry.sh -fL $PLUGIN_INSTALLER_URL -o $PLUGIN_INSTALLER_PKG
-unzip -o -q $PLUGIN_INSTALLER_PKG -d $PLUGIN_INSTALLER_DIR
-
 echo -e "\nInstalling the following WeCube plugin packages..."
 printf '  %s\n' "${PLUGIN_PKGS[@]}"
-PLUGIN_PKG_DIR="$PLUGIN_INSTALLER_DIR/plugin-packages"
+PLUGIN_PKG_DIR="$INSTALLER_DIR/plugin-packages"
 mkdir -p "$PLUGIN_PKG_DIR"
-PLUGIN_PKG_FILES=()
-PLUGIN_LIST_CSV="$PLUGIN_PKG_DIR/plugin-list.csv"
-echo "plugin_package_path" > $PLUGIN_LIST_CSV
 for PLUGIN_URL in "${PLUGIN_PKGS[@]}"; do
 	PLUGIN_PKG_FILE="$PLUGIN_PKG_DIR/${PLUGIN_URL##*'/'}"
-	echo -e "\nFetching from $PLUGIN_URL"
+	echo -e "\nFetching plugin package from $PLUGIN_URL"
 	../curl-with-retry.sh -fL $PLUGIN_URL -o $PLUGIN_PKG_FILE
-	PLUGIN_PKG_FILES+=("$PLUGIN_PKG_FILE")
-	echo $PLUGIN_PKG_FILE >> $PLUGIN_LIST_CSV
+	echo -e "\nInstalling plugin package $PLUGIN_PKG_FILE"
+	PLUGIN_PKG_COORDS=$(./api-utils/install-plugin-package.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_FILE)
+	./api-utils/launch-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_COORDS
 done
-
-echo -e "\nRegistering plugins, this may take a few minutes...\n"
-docker run --rm -t \
-	-v "$COLLECTION_DIR:$COLLECTION_DIR" \
-	-v "$PLUGIN_PKG_DIR:$PLUGIN_PKG_DIR" \
-	postman/newman \
-	run "$COLLECTION_DIR/020_wecube_plugin_register.postman_collection.json" \
-	-d "$PLUGIN_LIST_CSV" \
-	--env-var "domain=$PUBLIC_DOMAIN" \
-	--env-var "username=$DEFAULT_ADMIN_USERNAME" \
-	--env-var "password=$DEFAULT_ADMIN_PASSWORD" \
-	--env-var "wecube_host=$CORE_HOST" \
-	--env-var "plugin_host=$PLUGIN_HOST" \
-	--delay-request 2000 --disable-unicode \
-	--reporters cli \
-	--reporter-cli-no-banner --reporter-cli-no-console
 
 INSTALLED_PLUGIN_PKGS=$(./api-utils/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
 echo -e "\nInstalled plugin packages: $INSTALLED_PLUGIN_PKGS"

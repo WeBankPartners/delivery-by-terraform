@@ -18,7 +18,7 @@ SUPER_ADMIN_ROLE_ID=$(http --ignore-stdin --check-status --follow \
 	| jq --exit-status -r '.data[] | select(.name == "SUPER_ADMIN") | .id' \
 )
 
-PROCESS_DATA=$(http --ignore-stdin --check-status --follow \
+PROCESS_DATA=$(http --ignore-stdin --check-status --follow --timeout=300 \
 	--form --body POST "http://${CORE_HOST}:19090/platform/v1/process/definitions/import" \
 	"Authorization:Bearer $ACCESS_TOKEN" \
 	uploadFile@"$PROCESS_DEFINITION_FILE" \
