@@ -22,4 +22,5 @@ http --check-status --follow --timeout=120 \
 	--body POST "http://${CORE_HOST}:19090/platform/v1/models" \
 	"Authorization:Bearer $ACCESS_TOKEN" \
 	<<<"$DATA_MODEL" \
-	| $SCRIPT_DIR/check-status-in-json.sh
+	| $SCRIPT_DIR/check-status-in-json.sh \
+	| jq --exit-status '{status: .status, message: .message, data: {id: .data.id, version: .data.version, packageName: .data.packageName}}'
