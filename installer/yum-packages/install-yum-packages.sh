@@ -6,4 +6,4 @@ ENV_FILE=$1
 
 source $ENV_FILE
 
-yum install -y unzip httpie jq
+yum install -y unzip jq

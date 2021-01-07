@@ -1,18 +1,22 @@
 #!/bin/bash
 
 set -e
+set -o pipefail
 
 SYS_SETTINGS_ENV_FILE=$1
 source $SYS_SETTINGS_ENV_FILE
 
 SCRIPT_DIR=$(dirname "$0")
 
-[ -z "$ACCESS_TOKEN" ] && ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
+[ -z "${ACCESS_TOKEN}" ] && ACCESS_TOKEN=$(${SCRIPT_DIR}/login.sh ${SYS_SETTINGS_ENV_FILE})
 
-http --check-status --follow --timeout=120 \
-	--body POST "http://${CORE_HOST}:19090/monitor/api/v1/agent/export/register/host" \
-	"Authorization:Bearer $ACCESS_TOKEN" <<-EOF \
-	| $SCRIPT_DIR/check-status-in-json.sh '.resultCode == "0"'
+
+curl -sSfL \
+	--request POST "http://${CORE_HOST}:19090/monitor/api/v1/agent/export/register/host" \
+	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
+	--header 'Content-Type: application/json' \
+	--data @- <<-EOF \
+	| ${SCRIPT_DIR}/check-status-in-json.sh '.resultCode == "0"'
 		{
 		  "requestId": "1",
 		  "inputs": [

@@ -1,13 +1,13 @@
 echo -e "\nConfiguring plugin Open-Monitor..."
 
 echo -e "\nRegistering monitoring target objects for hosts...\n"
-./api-utils/register-monitoring-targets-host.sh $SYS_SETTINGS_ENV_FILE
+../api-utils/register-monitoring-targets-host.sh $SYS_SETTINGS_ENV_FILE
 
 echo -e "\nRegistering monitoring target objects for MySQL databases...\n"
-./api-utils/register-monitoring-targets-mysql.sh $SYS_SETTINGS_ENV_FILE
+../api-utils/register-monitoring-targets-mysql.sh $SYS_SETTINGS_ENV_FILE
 
 echo -e "\nRegistering monitoring target objects for Java applications...\n"
-./api-utils/register-monitoring-targets-java.sh $SYS_SETTINGS_ENV_FILE
+../api-utils/register-monitoring-targets-java.sh $SYS_SETTINGS_ENV_FILE
 
 
 echo -e "\nUploading monitor agent package for future use...\n"

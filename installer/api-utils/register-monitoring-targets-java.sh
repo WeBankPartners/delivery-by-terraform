@@ -1,13 +1,14 @@
 #!/bin/bash
 
 set -e
+set -o pipefail
 
 SYS_SETTINGS_ENV_FILE=$1
 source $SYS_SETTINGS_ENV_FILE
 
 SCRIPT_DIR=$(dirname "$0")
 
-[ -z "$ACCESS_TOKEN" ] && ACCESS_TOKEN=$($SCRIPT_DIR/login.sh $SYS_SETTINGS_ENV_FILE)
+[ -z "${ACCESS_TOKEN}" ] && ACCESS_TOKEN=$(${SCRIPT_DIR}/login.sh ${SYS_SETTINGS_ENV_FILE})
 
 read -d '' TARGET_INPUTS <<-EOF || true
     {
@@ -25,12 +26,13 @@ for PACKAGE_COORD in $INSTALLED_PACKAGE_COORDS; do
 	PACKAGE_NAME="${PACKAGE_COORD%__*}"
 	[ "${JAVA_PACKAGE_NAMES/$PACKAGE_NAME/}" == "$JAVA_PACKAGE_NAMES" ] && continue
 
-	INSTANCE_IDS=$(http --ignore-stdin --check-status --follow \
-		--body GET "http://${CORE_HOST}:19090/platform/v1/packages/${PACKAGE_COORD}/instances" \
-		"Authorization:Bearer $ACCESS_TOKEN" \
-		| $SCRIPT_DIR/check-status-in-json.sh  \
-		| jq --exit-status -r '[.data[] | .id] | join(" ")' \
+	INSTANCE_IDS=$(curl -sSfL \
+		--request GET "http://${CORE_HOST}:19090/platform/v1/packages/${PACKAGE_COORD}/instances" \
+		--header "Authorization: Bearer ${ACCESS_TOKEN}" \
+		| ${SCRIPT_DIR}/check-status-in-json.sh \
+		| jq --exit-status -r '[.data[] | .id] | join(" ")'
 	)
+
 	for INSTANCE_ID in $INSTANCE_IDS; do
 		PARTS=${INSTANCE_ID#*__}
 		INSTANCE_IP=${PARTS%__*}
@@ -49,10 +51,13 @@ for PACKAGE_COORD in $INSTALLED_PACKAGE_COORDS; do
 		# EOF
 	done
 done
-http --check-status --follow --timeout=120 \
-	--body POST "http://${CORE_HOST}:19090/monitor/api/v1/agent/export/register/java" \
-	"Authorization:Bearer $ACCESS_TOKEN" <<-EOF \
-	| $SCRIPT_DIR/check-status-in-json.sh '.resultCode == "0"'
+
+curl -sSfL \
+	--request POST "http://${CORE_HOST}:19090/monitor/api/v1/agent/export/register/java" \
+	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
+	--header 'Content-Type: application/json' \
+	--data @- <<-EOF \
+	| ${SCRIPT_DIR}/check-status-in-json.sh '.resultCode == "0"'
 		{
 		  "requestId": "1",
 		  "inputs": [

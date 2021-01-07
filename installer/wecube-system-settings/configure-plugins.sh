@@ -17,11 +17,11 @@ for PLUGIN_URL in "${PLUGIN_PKGS[@]}"; do
 	echo -e "\nFetching plugin package from $PLUGIN_URL"
 	../curl-with-retry.sh -fL $PLUGIN_URL -o $PLUGIN_PKG_FILE
 	echo -e "\nInstalling plugin package $PLUGIN_PKG_FILE"
-	PLUGIN_PKG_COORDS=$(./api-utils/install-plugin-package.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_FILE)
-	./api-utils/launch-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_COORDS
+	PLUGIN_PKG_COORDS=$(../api-utils/install-plugin-package.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_FILE)
+	../api-utils/launch-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_COORDS
 done
 
-INSTALLED_PLUGIN_PKGS=$(./api-utils/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
+INSTALLED_PLUGIN_PKGS=$(../api-utils/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
 echo -e "\nInstalled plugin packages: $INSTALLED_PLUGIN_PKGS"
 
 if [ -z "$PLUGIN_CONFIG_PKG" ]; then
@@ -57,17 +57,17 @@ else
 		fi
 
 		echo -e "\nImporting plugin service config for \"$PLUGIN_PKG_COORDS\" from $PLUGIN_CONFIG_FILE"
-		./api-utils/import-plugin-config.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_CONFIG_FILE
+		../api-utils/import-plugin-config.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_CONFIG_FILE
 
 		if [ "$PLUGIN_PKG_NAME" == "wecmdb" ]; then
 			echo "Restarting WeCMDB instance..."
-			./api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_COORDS
+			../api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_COORDS
 		fi
 	done
 
 	find "$PLUGIN_CONFIG_DIR" -type f -name '*.pds' | while read PROCESS_DEFINITION_FILE; do
 		echo -e "\nImporting and deploying process from file $PROCESS_DEFINITION_FILE"
-		./api-utils/deploy-process.sh $SYS_SETTINGS_ENV_FILE $PROCESS_DEFINITION_FILE
+		../api-utils/deploy-process.sh $SYS_SETTINGS_ENV_FILE $PROCESS_DEFINITION_FILE
 	done
 fi
 
