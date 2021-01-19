@@ -1,7 +1,14 @@
 terraform {
+  required_version = "~> 0.14.0"
+
   required_providers {
     tencentcloud = {
       source = "tencentcloudstack/tencentcloud"
+      version = "1.53.0"
+    }
+    aws = {
+      source = "hashicorp/aws"
+      version = "3.24.1"
     }
   }
 }
@@ -13,6 +20,7 @@ resource "time_static" "end_time" {
     update = length(module.provisioning.resource_map) + length(module.deployment.deployment_step_ids)
   }
 }
+
 locals {
   elapsed_time_unix    = time_static.end_time.unix - time_static.start_time.unix
   elapsed_time_hours   = floor(local.elapsed_time_unix / 3600)
@@ -23,7 +31,24 @@ locals {
     (local.elapsed_time_hours > 0 || local.elapsed_time_minutes > 0) ? "${local.elapsed_time_minutes}m" : "",
     "${local.elapsed_time_seconds}s"
   )
+
+  is_tencentcloud_enabled = var.cloud_provider == "TencentCloud"
+  is_aws_enabled          = var.cloud_provider == "AWS"
+
 }
+
+provider "tencentcloud" {
+  secret_id  = local.is_tencentcloud_enabled ? var.secret_id  : null
+  secret_key = local.is_tencentcloud_enabled ? var.secret_key : null
+  region     = local.is_tencentcloud_enabled ? var.region     : null
+}
+
+provider "aws" {
+  access_key = local.is_aws_enabled ? var.secret_id  : null
+  secret_key = local.is_aws_enabled ? var.secret_key : null
+  region     = local.is_aws_enabled ? var.region     : null
+}
+
 
 # Copy customized version spec files to installer directories if it exists
 resource "local_file" "wecub_platform_version_spec" {
@@ -39,11 +64,6 @@ resource "local_file" "wecube_system_settings_version_spec" {
   filename = "${path.root}/installer/wecube-system-settings/${var.wecube_release_version}"
 }
 
-provider "tencentcloud" {
-  secret_id  = var.secret_id
-  secret_key = var.secret_key
-  region     = var.region
-}
 
 module "planning" {
   source = "./module/planning"
@@ -63,6 +83,7 @@ module "provisioning" {
   source = "./module/provisioning"
 
   cloud_provider               = var.cloud_provider
+  availability_zones           = var.availability_zones
   wecube_release_version       = var.wecube_release_version
   wecube_settings              = var.wecube_settings
   wecube_home                  = var.wecube_home

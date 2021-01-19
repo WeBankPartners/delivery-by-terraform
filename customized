@@ -3,16 +3,16 @@
 ##################################################
 
 # Version of WeCube platform docker image
-WECUBE_IMAGE_VERSION="v2.8.0"
+WECUBE_IMAGE_VERSION="v2.8.1"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
-  "https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/wecube-plugins-wecmdb-v1.5.5.7.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-saltstack-v1.10.4.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-monitor-v1.10.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-wecmdb-v1.5.6.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-saltstack-v1.10.5.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-monitor-v1.11.0.zip"
 )
 
-PLUGIN_CONFIG_PKG="https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/bootcamp_dev.zip"
+PLUGIN_CONFIG_PKG="https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/bootcamp.zip"
 
 
 ################################################

@@ -1,3 +1,18 @@
+terraform {
+  required_version = "~> 0.14.0"
+
+  required_providers {
+    tencentcloud = {
+      source = "tencentcloudstack/tencentcloud"
+      version = "1.53.0"
+    }
+    aws = {
+      source = "hashicorp/aws"
+      version = "3.24.1"
+    }
+  }
+}
+
 locals {
   private_key_pem  = try(file(pathexpand(trimsuffix(var.public_key_file, ".pub"))), null)
   use_bastion_host = var.bastion_host_name != null

@@ -99,14 +99,29 @@ locals {
       cidr_ip           = "0.0.0.0/0"
       #cidr_ip           = local.my_public_ip
       ip_protocol       = "tcp"
-      port_range        = "22,3389"
+      port_range        = "22"
+      policy            = "accept"
+    },
+    {
+      type              = "ingress"
+      cidr_ip           = "0.0.0.0/0"
+      #cidr_ip           = local.my_public_ip
+      ip_protocol       = "tcp"
+      port_range        = "3389"
       policy            = "accept"
     },
     {
       type              = "egress"
       cidr_ip           = "0.0.0.0/0"
       ip_protocol       = "tcp"
-      port_range        = "80,443"
+      port_range        = "80"
+      policy            = "accept"
+    },
+    {
+      type              = "egress"
+      cidr_ip           = "0.0.0.0/0"
+      ip_protocol       = "tcp"
+      port_range        = "443"
       policy            = "accept"
     }
   ]

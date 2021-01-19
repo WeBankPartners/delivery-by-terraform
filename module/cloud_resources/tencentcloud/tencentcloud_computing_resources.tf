@@ -1,4 +1,59 @@
+data "tencentcloud_images" "centos7" {
+  image_type = ["PUBLIC_IMAGE"]
+  os_name    = "CentOS 7.4 64bit"
+}
+
+data "tencentcloud_instance_types" "S" {
+  for_each = toset(var.availability_zones)
+
+  filter {
+    name   = "zone"
+    values = [each.key]
+  }
+  cpu_core_count   = 1
+  memory_size      = 1
+  exclude_sold_out = true
+}
+
+data "tencentcloud_instance_types" "M" {
+  for_each = toset(var.availability_zones)
+
+  filter {
+    name   = "zone"
+    values = [each.key]
+  }
+  cpu_core_count   = 2
+  memory_size      = 4
+  exclude_sold_out = true
+}
+
+data "tencentcloud_instance_types" "L" {
+  for_each = toset(var.availability_zones)
+
+  filter {
+    name   = "zone"
+    values = [each.key]
+  }
+  cpu_core_count   = 4
+  memory_size      = 8
+  exclude_sold_out = true
+}
+
+data "tencentcloud_instance_types" "XL" {
+  for_each = toset(var.availability_zones)
+
+  filter {
+    name   = "zone"
+    values = [each.key]
+  }
+  cpu_core_count   = 4
+  memory_size      = 16
+  exclude_sold_out = true
+}
+
+
 locals {
+  image_id = data.tencentcloud_images.centos7.images[0].image_id
   private_key_pem = try(file(pathexpand(trimsuffix(var.public_key_file, ".pub"))), null)
   key_name        = try(tencentcloud_key_pair.wecube_installer[0].id, null)
   password        = local.key_name == null ? var.initial_password : null
@@ -12,14 +67,14 @@ resource "tencentcloud_key_pair" "wecube_installer" {
 }
 
 resource "tencentcloud_instance" "bastion_hosts" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.bastion_hosts) : 0
+  count = length(var.resource_plan.bastion_hosts)
 
   vpc_id                     = tencentcloud_vpc.vpcs[0].id
   availability_zone          = var.resource_plan.bastion_hosts[count.index].availability_zone
   subnet_id                  = local.subnet_id_map[var.resource_plan.bastion_hosts[count.index].subnet_name]
   instance_name              = var.resource_plan.bastion_hosts[count.index].name
-  instance_type              = var.resource_plan.bastion_hosts[count.index].instance_type
-  image_id                   = var.resource_plan.bastion_hosts[count.index].image_id
+  instance_type              = data.tencentcloud_instance_types.S[var.resource_plan.bastion_hosts[count.index].availability_zone].instance_types[0].instance_type
+  image_id                   = local.image_id
   system_disk_type           = var.resource_plan.bastion_hosts[count.index].system_disk_type
   key_name                   = local.key_name
   password                   = local.password
@@ -30,7 +85,7 @@ resource "tencentcloud_instance" "bastion_hosts" {
 }
 
 resource "tencentcloud_mysql_instance" "db_instances" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.db_instances) : 0
+  count = length(var.resource_plan.db_instances)
 
   vpc_id            = tencentcloud_vpc.vpcs[0].id
   availability_zone = var.resource_plan.db_instances[count.index].availability_zone
@@ -62,14 +117,14 @@ resource "tencentcloud_mysql_instance" "db_instances" {
 }
 
 resource "tencentcloud_instance" "waf_hosts" {
-  count = (local.is_tencent_cloud_enabled) ? length(var.resource_plan.waf_hosts) : 0
+  count = length(var.resource_plan.waf_hosts)
 
   vpc_id                     = tencentcloud_vpc.vpcs[0].id
   availability_zone          = var.resource_plan.waf_hosts[count.index].availability_zone
   subnet_id                  = local.subnet_id_map[var.resource_plan.waf_hosts[count.index].subnet_name]
   instance_name              = var.resource_plan.waf_hosts[count.index].name
-  instance_type              = var.resource_plan.waf_hosts[count.index].instance_type
-  image_id                   = var.resource_plan.waf_hosts[count.index].image_id
+  instance_type              = data.tencentcloud_instance_types.S[var.resource_plan.waf_hosts[count.index].availability_zone].instance_types[0].instance_type
+  image_id                   = local.image_id
   system_disk_type           = var.resource_plan.waf_hosts[count.index].system_disk_type
   key_name                   = local.key_name
   password                   = local.password
@@ -137,7 +192,7 @@ resource "tencentcloud_instance" "waf_hosts" {
 }
 
 resource "tencentcloud_instance" "vm_instances" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.vm_instances) : 0
+  count = length(var.resource_plan.vm_instances)
 
   depends_on = [tencentcloud_instance.waf_hosts]
 
@@ -145,8 +200,8 @@ resource "tencentcloud_instance" "vm_instances" {
   availability_zone          = var.resource_plan.vm_instances[count.index].availability_zone
   subnet_id                  = local.subnet_id_map[var.resource_plan.vm_instances[count.index].subnet_name]
   instance_name              = var.resource_plan.vm_instances[count.index].name
-  instance_type              = var.resource_plan.vm_instances[count.index].instance_type
-  image_id                   = var.resource_plan.vm_instances[count.index].image_id
+  instance_type              = data.tencentcloud_instance_types.XL[var.resource_plan.vm_instances[count.index].availability_zone].instance_types[0].instance_type
+  image_id                   = local.image_id
   system_disk_type           = var.resource_plan.vm_instances[count.index].system_disk_type
   system_disk_size           = var.resource_plan.vm_instances[count.index].system_disk_size
   key_name                   = local.key_name
@@ -220,7 +275,7 @@ resource "tencentcloud_instance" "vm_instances" {
 }
 
 resource "tencentcloud_clb_instance" "lb_instances" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.lb_instances) : 0
+  count = length(var.resource_plan.lb_instances)
 
   depends_on = [tencentcloud_instance.vm_instances]
 

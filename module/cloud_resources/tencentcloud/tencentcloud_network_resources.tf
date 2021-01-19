@@ -1,12 +1,12 @@
 resource "tencentcloud_vpc" "vpcs" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.vpcs) : 0
+  count = length(var.resource_plan.vpcs)
 
   name       = var.resource_plan.vpcs[count.index].name
   cidr_block = var.resource_plan.vpcs[count.index].cidr_block
 }
 
 resource "tencentcloud_subnet" "subnets" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.subnets) : 0
+  count = length(var.resource_plan.subnets)
 
   vpc_id            = tencentcloud_vpc.vpcs[0].id
   name              = var.resource_plan.subnets[count.index].name
@@ -15,21 +15,21 @@ resource "tencentcloud_subnet" "subnets" {
 }
 
 resource "tencentcloud_route_table" "route_tables" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.route_tables) : 0
+  count = length(var.resource_plan.route_tables)
 
   vpc_id = tencentcloud_vpc.vpcs[0].id
   name   = var.resource_plan.route_tables[count.index].name
 }
 
 resource "tencentcloud_security_group" "security_groups" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.security_groups) : 0
+  count = length(var.resource_plan.security_groups)
 
   name        = var.resource_plan.security_groups[count.index].name
   description = var.resource_plan.security_groups[count.index].description
 }
 
 resource "tencentcloud_security_group_rule" "security_group_rules" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.security_group_rules) : 0
+  count = length(var.resource_plan.security_group_rules)
 
   security_group_id = tencentcloud_security_group.security_groups[0].id
   type              = var.resource_plan.security_group_rules[count.index].type

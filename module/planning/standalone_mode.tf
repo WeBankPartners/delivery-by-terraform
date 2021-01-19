@@ -56,7 +56,21 @@ locals {
       type              = "ingress"
       cidr_ip           = "0.0.0.0/0"
       ip_protocol       = "tcp"
-      port_range        = "22,19090,9000"
+      port_range        = "19090"
+      policy            = "accept"
+    },
+    {
+      type              = "ingress"
+      cidr_ip           = "0.0.0.0/0"
+      ip_protocol       = "tcp"
+      port_range        = "9000"
+      policy            = "accept"
+    },
+    {
+      type              = "ingress"
+      cidr_ip           = "0.0.0.0/0"
+      ip_protocol       = "tcp"
+      port_range        = "22"
       policy            = "accept"
     },
     {
