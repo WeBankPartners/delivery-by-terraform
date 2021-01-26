@@ -12,7 +12,7 @@ SCRIPT_DIR=$(dirname "$0")
 
 read -d '' TARGET_INPUTS <<-EOF || true
     {
-      "callbackParameter": "1",
+      "callbackParameter": "31",
       "instance": "platform-core",
       "instance_ip": "${CORE_HOST}",
       "port": "${WECUBE_SERVER_JMX_PORT}",
@@ -56,7 +56,7 @@ curl -sSfL \
 	--data @- <<-EOF \
 	| ${SCRIPT_DIR}/check-status-in-json.sh '.resultCode == "0"'
 		{
-		  "requestId": "1",
+		  "requestId": "3",
 		  "inputs": [
 		${TARGET_INPUTS}
 		  ]

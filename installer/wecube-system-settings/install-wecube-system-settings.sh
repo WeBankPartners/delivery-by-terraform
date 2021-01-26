@@ -90,8 +90,12 @@ cat <<-EOF | tee -a "$SYS_SETTINGS_ENV_FILE"
 	ARTIFACTS_PKGS=(${ARTIFACTS_PKGS[@]})
 EOF
 
-echo -e "\nUpdating WeCube resource server settings...\n"
-./update-resource-settings.sh $SYS_SETTINGS_ENV_FILE
+echo -e "\nUpdating WeCube system settings...\n"
+./update-system-settings.sh $SYS_SETTINGS_ENV_FILE
 
 echo -e "\nConfiguring WeCube plugins...\n"
 ./configure-plugins.sh $SYS_SETTINGS_ENV_FILE
+
+#echo -e "\nChanging owner of WeCube home \"$WECUBE_HOME\" to \"$USER:$WECUBE_USER\"..."
+#sudo chown -R $USER:$WECUBE_USER $WECUBE_HOME
+#sudo chmod -R 0770 $WECUBE_HOME

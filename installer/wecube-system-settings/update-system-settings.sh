@@ -5,6 +5,7 @@ set -e
 SYS_SETTINGS_ENV_FILE=$1
 source $SYS_SETTINGS_ENV_FILE
 
+
 echo "Creating resource server records..."
 
 ACCESS_TOKEN=$(../api-utils/login.sh "$SYS_SETTINGS_ENV_FILE")
@@ -42,7 +43,11 @@ curl -sSfL \
 		]
 	EOF
 
+
 echo "Updating global system variables..."
+
+mkdir -p ${WECUBE_PLUGIN_BASE_MOUNT_PATH}
+
 SQL_FILE_TEMPLATE="./update-global-system-variables.sql.tpl"
 SQL_FILE="./update-global-system-variables.sql"
 ../substitute-in-file.sh $SYS_SETTINGS_ENV_FILE $SQL_FILE_TEMPLATE $SQL_FILE

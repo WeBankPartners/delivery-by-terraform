@@ -5,9 +5,11 @@ set -e
 ENV_FILE=$1
 source $ENV_FILE
 
-PLUGIN_DEPLOY_DIR="${WECUBE_HOME}/plugin"
+PLUGIN_DEPLOY_DIR="${WECUBE_HOME}/plugins"
 echo "Creating plugin deployment directory $PLUGIN_DEPLOY_DIR"
 mkdir -p "$PLUGIN_DEPLOY_DIR"
+sudo chown -R $USER:$WECUBE_USER $PLUGIN_DEPLOY_DIR
+sudo chmod -R 0770 $PLUGIN_DEPLOY_DIR
 
 echo -e "\nWaiting for WeCube platform initialization..."
 ../wait-for-it.sh -t 300 "$CORE_HOST:19100" -- echo "WeCube platform core is ready."
@@ -43,7 +45,7 @@ curl -sSfL \
 				"isAllocated": true,
 				"host": "${HOST_PRIVATE_IP}",
 				"port": "22",
-				"loginUsername": "root",
+				"loginUsername": "${WECUBE_USER}",
 				"loginPassword": "${INITIAL_PASSWORD}",
 				"purpose": "Plugin container hosting"
 				}

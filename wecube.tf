@@ -63,26 +63,34 @@ module "provisioning" {
   source = "./module/provisioning"
 
   cloud_provider               = var.cloud_provider
+  wecube_release_version       = var.wecube_release_version
+  wecube_settings              = var.wecube_settings
   wecube_home                  = var.wecube_home
+  wecube_user                  = var.wecube_user
   initial_password             = var.initial_password
+  public_key_file              = var.public_key_file
   default_mysql_port           = var.default_mysql_port
   use_mirror_in_mainland_china = var.use_mirror_in_mainland_china
 
-  resource_plan      = module.planning.resource_plan
+  resource_plan = module.planning.resource_plan
 }
 
 module "deployment" {
   source = "./module/deployment"
 
-  wecube_home                  = var.wecube_home
+  cloud_provider               = var.cloud_provider
   wecube_release_version       = var.wecube_release_version
   wecube_settings              = var.wecube_settings
+  wecube_home                  = var.wecube_home
+  wecube_user                  = var.wecube_user
   initial_password             = var.initial_password
+  public_key_file              = var.public_key_file
+  default_mysql_port           = var.default_mysql_port
   use_mirror_in_mainland_china = var.use_mirror_in_mainland_china
 
-  bastion_host_name      = module.planning.bastion_host_name
-  deployment_plan        = module.planning.deployment_plan
-  resource_map           = module.provisioning.resource_map
+  bastion_host_name = module.planning.bastion_host_name
+  deployment_plan   = module.planning.deployment_plan
+  resource_map      = module.provisioning.resource_map
 }
 
 output "total_elapsed_time" {

@@ -1,15 +1,5 @@
 echo -e "\nConfiguring plugin Open-Monitor..."
 
-echo -e "\nRegistering monitoring target objects for hosts...\n"
-../api-utils/register-monitoring-targets-host.sh $SYS_SETTINGS_ENV_FILE
-
-echo -e "\nRegistering monitoring target objects for MySQL databases...\n"
-../api-utils/register-monitoring-targets-mysql.sh $SYS_SETTINGS_ENV_FILE
-
-echo -e "\nRegistering monitoring target objects for Java applications...\n"
-../api-utils/register-monitoring-targets-java.sh $SYS_SETTINGS_ENV_FILE
-
-
 echo -e "\nUploading monitor agent package for future use...\n"
 AGENT_PKG_FILENAME="node_exporter.tar.gz"
 AGENT_PKG_PATH="$PLUGIN_PKG_DIR/$AGENT_PKG_FILENAME"
@@ -35,3 +25,13 @@ EOF
 ../execute-sql-statements.sh $CORE_DB_HOST $CORE_DB_PORT \
 	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
 	"$SQL_STMT"
+
+
+echo -e "\nRegistering monitoring target objects for hosts...\n"
+../api-utils/register-monitoring-targets-host.sh $SYS_SETTINGS_ENV_FILE
+
+echo -e "\nRegistering monitoring target objects for Java applications...\n"
+../api-utils/register-monitoring-targets-java.sh $SYS_SETTINGS_ENV_FILE
+
+echo -e "\nRegistering monitoring target objects for MySQL databases...\n"
+../api-utils/register-monitoring-targets-mysql.sh $SYS_SETTINGS_ENV_FILE

@@ -1,5 +1,18 @@
+locals {
+  private_key_pem = try(file(pathexpand(trimsuffix(var.public_key_file, ".pub"))), null)
+  key_name        = try(tencentcloud_key_pair.wecube_installer[0].id, null)
+  password        = local.key_name == null ? var.initial_password : null
+}
+
+resource "tencentcloud_key_pair" "wecube_installer" {
+  count = try(fileexists(pathexpand(var.public_key_file)) ? 1 : 0, 0)
+
+  key_name   = "wecube_installer"
+  public_key = file(pathexpand(var.public_key_file))
+}
+
 resource "tencentcloud_instance" "bastion_hosts" {
-  count = (local.is_tencent_cloud_enabled) ? length(var.resource_plan.bastion_hosts) : 0
+  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.bastion_hosts) : 0
 
   vpc_id                     = tencentcloud_vpc.vpcs[0].id
   availability_zone          = var.resource_plan.bastion_hosts[count.index].availability_zone
@@ -8,7 +21,8 @@ resource "tencentcloud_instance" "bastion_hosts" {
   instance_type              = var.resource_plan.bastion_hosts[count.index].instance_type
   image_id                   = var.resource_plan.bastion_hosts[count.index].image_id
   system_disk_type           = var.resource_plan.bastion_hosts[count.index].system_disk_type
-  password                   = var.resource_plan.bastion_hosts[count.index].password
+  key_name                   = local.key_name
+  password                   = local.password
   private_ip                 = var.resource_plan.bastion_hosts[count.index].private_ip
   allocate_public_ip         = var.resource_plan.bastion_hosts[count.index].allocate_public_ip
   internet_max_bandwidth_out = var.resource_plan.bastion_hosts[count.index].internet_max_bandwidth_out
@@ -57,7 +71,8 @@ resource "tencentcloud_instance" "waf_hosts" {
   instance_type              = var.resource_plan.waf_hosts[count.index].instance_type
   image_id                   = var.resource_plan.waf_hosts[count.index].image_id
   system_disk_type           = var.resource_plan.waf_hosts[count.index].system_disk_type
-  password                   = var.resource_plan.waf_hosts[count.index].password
+  key_name                   = local.key_name
+  password                   = local.password
   private_ip                 = var.resource_plan.waf_hosts[count.index].private_ip
   allocate_public_ip         = var.resource_plan.waf_hosts[count.index].allocate_public_ip
   internet_max_bandwidth_out = var.resource_plan.waf_hosts[count.index].internet_max_bandwidth_out
@@ -68,6 +83,7 @@ resource "tencentcloud_instance" "waf_hosts" {
     bastion_host = local.bastion_host_ip
     host         = local.use_bastion_host ? self.private_ip : self.public_ip
     user         = "root"
+    private_key  = local.private_key_pem
     password     = self.password
   }
 
@@ -133,7 +149,8 @@ resource "tencentcloud_instance" "vm_instances" {
   image_id                   = var.resource_plan.vm_instances[count.index].image_id
   system_disk_type           = var.resource_plan.vm_instances[count.index].system_disk_type
   system_disk_size           = var.resource_plan.vm_instances[count.index].system_disk_size
-  password                   = var.resource_plan.vm_instances[count.index].password
+  key_name                   = local.key_name
+  password                   = local.password
   private_ip                 = var.resource_plan.vm_instances[count.index].private_ip
   allocate_public_ip         = var.resource_plan.vm_instances[count.index].allocate_public_ip
   internet_max_bandwidth_out = var.resource_plan.vm_instances[count.index].internet_max_bandwidth_out
@@ -144,6 +161,7 @@ resource "tencentcloud_instance" "vm_instances" {
     bastion_host = local.bastion_host_ip
     host         = local.use_bastion_host ? self.private_ip : self.public_ip
     user         = "root"
+    private_key  = local.private_key_pem
     password     = self.password
   }
 
@@ -160,11 +178,14 @@ resource "tencentcloud_instance" "vm_instances" {
 
   provisioner "file" {
     content = <<-EOT
-      DATE_TIME=${timestamp()}
-      HOST_PRIVATE_IP=${var.resource_plan.vm_instances[count.index].private_ip}
-      WECUBE_HOME=${var.wecube_home}
+      DATE_TIME='${timestamp()}'
+      HOST_PRIVATE_IP='${var.resource_plan.vm_instances[count.index].private_ip}'
+      WECUBE_RELEASE_VERSION='${var.wecube_release_version}'
+      WECUBE_SETTINGS='${var.wecube_settings}'
+      WECUBE_HOME='${var.wecube_home}'
+      WECUBE_USER='${var.wecube_user}'
       INITIAL_PASSWORD='${var.initial_password}'
-      USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
+      USE_MIRROR_IN_MAINLAND_CHINA='${var.use_mirror_in_mainland_china}'
 
       # Network
       VPC_CIDR_IP=${var.resource_plan.vpcs[0].cidr_block}

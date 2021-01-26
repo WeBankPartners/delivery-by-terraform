@@ -26,7 +26,7 @@ variable "availability_zones" {
 
 variable "wecube_release_version" {
   description = "The WeCube release version on GitHub that we use to determine target versions of specific components to be installed.\nValid options:\n- \"latest\" (latest release version)\n- \"v2.7.1\" (specific release version)\n- \"customized\" (using a customized version spec file)"
-#  default     = "v2.7.1"
+#  default     = "latest"
 }
 
 variable "wecube_settings" {
@@ -39,9 +39,19 @@ variable "wecube_home" {
   default     = "/data/wecube"
 }
 
+variable "wecube_user" {
+  description = "The user to run WeCube"
+  default     = "wecube"
+}
+
 variable "initial_password" {
   description = "The initial password of root user on hosts and MySQL instances"
   default     = "Wecube@123456"
+}
+
+variable "public_key_file" {
+  description = "Public key file for ssh login"
+  default     = ""#"~/.ssh/id_rsa.pub"
 }
 
 variable "default_mysql_port" {

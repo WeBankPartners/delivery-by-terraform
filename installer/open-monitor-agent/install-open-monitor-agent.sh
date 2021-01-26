@@ -16,8 +16,9 @@ tar xzf $MONITOR_AGENT_PKG_FILE
 
 echo "Installing agent..."
 pushd "./node_exporter_v2.1" >/dev/null
-sh ./start.sh
+sudo sh ./start.sh
 popd >/dev/null
+
 ../wait-for-it.sh -t 120 "$HOST_PRIVATE_IP:$MONITOR_AGENT_PORT" -- echo "Agent is ready."
 
 echo "Installation of open-monitor-agent completed."

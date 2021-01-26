@@ -1,4 +1,5 @@
 locals {
+  private_key_pem  = try(file(pathexpand(trimsuffix(var.public_key_file, ".pub"))), null)
   use_bastion_host = var.bastion_host_name != null
 
   db_plan_env_by_name = {
@@ -33,6 +34,7 @@ resource "null_resource" "db_deployments" {
     bastion_host = local.use_bastion_host ? var.resource_map.vm_by_name[var.bastion_host_name].public_ip : null
     host         = local.use_bastion_host ? var.resource_map.vm_by_name[var.deployment_plan.db[count.index].client_resource_name].private_ip : var.resource_map.vm_by_name[var.deployment_plan.db[count.index].client_resource_name].public_ip
     user         = "root"
+    private_key  = local.private_key_pem
     password     = var.resource_map.vm_by_name[var.deployment_plan.db[count.index].client_resource_name].password
   }
 
@@ -41,6 +43,13 @@ resource "null_resource" "db_deployments" {
       DATE_TIME=${timestamp()}
       HOST_RESOURCE_NAME=${var.deployment_plan.db[count.index].client_resource_name}
       HOST_PRIVATE_IP=${var.resource_map.vm_by_name[var.deployment_plan.db[count.index].client_resource_name].private_ip}
+
+      WECUBE_RELEASE_VERSION=${var.wecube_release_version}
+      WECUBE_SETTINGS=${var.wecube_settings}
+      WECUBE_HOME='${var.wecube_home}'
+      WECUBE_USER='${var.wecube_user}'
+      INITIAL_PASSWORD=${var.initial_password}
+      USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
 
       DB_HOST=${local.db_plan_env_by_name[var.deployment_plan.db[count.index].name].db_host}
       DB_PORT=${local.db_plan_env_by_name[var.deployment_plan.db[count.index].name].db_port}
@@ -70,6 +79,7 @@ resource "null_resource" "app_deployments" {
     bastion_host = local.use_bastion_host ? var.resource_map.vm_by_name[var.bastion_host_name].public_ip : null
     host         = local.use_bastion_host ? var.resource_map.vm_by_name[var.deployment_plan.app[count.index].resource_name].private_ip : var.resource_map.vm_by_name[var.deployment_plan.app[count.index].resource_name].public_ip
     user         = "root"
+    private_key  = local.private_key_pem
     password     = var.resource_map.vm_by_name[var.deployment_plan.app[count.index].resource_name].password
   }
 
@@ -78,9 +88,11 @@ resource "null_resource" "app_deployments" {
       DATE_TIME=${timestamp()}
       HOST_RESOURCE_NAME=${var.deployment_plan.app[count.index].resource_name}
       HOST_PRIVATE_IP=${var.resource_map.vm_by_name[var.deployment_plan.app[count.index].resource_name].private_ip}
-      WECUBE_HOME=${var.wecube_home}
+
       WECUBE_RELEASE_VERSION=${var.wecube_release_version}
       WECUBE_SETTINGS=${var.wecube_settings}
+      WECUBE_HOME='${var.wecube_home}'
+      WECUBE_USER='${var.wecube_user}'
       INITIAL_PASSWORD=${var.initial_password}
       USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
 
@@ -170,6 +182,7 @@ resource "null_resource" "post_deployment_steps" {
     bastion_host = local.use_bastion_host ? var.resource_map.vm_by_name[var.bastion_host_name].public_ip : null
     host         = local.use_bastion_host ? var.resource_map.vm_by_name[var.deployment_plan.post_deploy[count.index].resource_name].private_ip : var.resource_map.vm_by_name[var.deployment_plan.post_deploy[count.index].resource_name].public_ip
     user         = "root"
+    private_key  = local.private_key_pem
     password     = var.resource_map.vm_by_name[var.deployment_plan.post_deploy[count.index].resource_name].password
   }
 
@@ -178,9 +191,11 @@ resource "null_resource" "post_deployment_steps" {
       DATE_TIME=${timestamp()}
       HOST_RESOURCE_NAME=${var.deployment_plan.post_deploy[count.index].resource_name}
       HOST_PRIVATE_IP=${var.resource_map.vm_by_name[var.deployment_plan.post_deploy[count.index].resource_name].private_ip}
-      WECUBE_HOME=${var.wecube_home}
+
       WECUBE_RELEASE_VERSION=${var.wecube_release_version}
       WECUBE_SETTINGS=${var.wecube_settings}
+      WECUBE_HOME='${var.wecube_home}'
+      WECUBE_USER='${var.wecube_user}'
       INITIAL_PASSWORD=${var.initial_password}
       USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
 

@@ -2,7 +2,7 @@ SET NAMES utf8 ;
 
 
 UPDATE `system_variables`
-   SET `value`='${WECUBE_HOME}'
+   SET `value`='${WECUBE_PLUGIN_BASE_MOUNT_PATH}'
  WHERE `id`='system__global__BASE_MOUNT_PATH'
    AND `name`='BASE_MOUNT_PATH';
 

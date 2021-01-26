@@ -21,12 +21,12 @@ curl -sSfL \
 		  "requestId": "1",
 		  "inputs": [
 		    {
-		      "callbackParameter": "1",
+		      "callbackParameter": "11",
 		      "host_ip": "${CORE_HOST}",
 		      "group": "default_host_group"
 		    },
 		    {
-		      "callbackParameter": "1",
+		      "callbackParameter": "12",
 		      "host_ip": "${PLUGIN_HOST}",
 		      "group": "default_host_group"
 		    }

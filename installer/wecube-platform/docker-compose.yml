@@ -7,8 +7,8 @@ services:
       - platform-gateway
       - platform-core
     volumes:
-      - ${WECUBE_HOME}/wecube-portal/log:/var/log/nginx
-      - ${WECUBE_HOME}/wecube-portal/data/ui-resources:/root/app/ui-resources
+      - ${WECUBE_PORTAL_LOG_PATH}:/var/log/nginx
+      - ${STATIC_RESOURCE_SERVER_PATH}:/root/app/ui-resources
       - /etc/localtime:/etc/localtime
     ports:
       - ${PORTAL_PORT}:8080
@@ -17,7 +17,7 @@ services:
       - GATEWAY_PORT=${GATEWAY_PORT}
       - PUBLIC_DOMAIN=${PUBLIC_DOMAIN}
       - TZ=Asia/Shanghai
-    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/nginx.tpl > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
+    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/nginx.tpl '$$GATEWAY_HOST $$GATEWAY_PORT $$PUBLIC_DOMAIN' > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
 
   platform-gateway:
     image: ${GATEWAY_IMAGE_NAME}:${GATEWAY_IMAGE_VERSION}
@@ -25,7 +25,7 @@ services:
     depends_on:
       - platform-core
     volumes:
-      - /data/wecube-gateway/log:${WECUBE_GATEWAY_LOG_PATH}
+      - ${WECUBE_GATEWAY_LOG_PATH}:${WECUBE_GATEWAY_LOG_PATH}
       - /etc/localtime:/etc/localtime
     ports:
       - ${GATEWAY_PORT}:8080
@@ -42,7 +42,7 @@ services:
     image: ${WECUBE_IMAGE_NAME}:${WECUBE_IMAGE_VERSION}
     restart: always
     volumes:
-      - /data/wecube/log:${APP_LOG_PATH}
+      - ${APP_LOG_PATH}:${APP_LOG_PATH}
       - /etc/localtime:/etc/localtime
     ports:
       - ${WECUBE_SERVER_PORT}:8080
@@ -78,7 +78,7 @@ services:
     image: ${AUTH_SERVER_IMAGE_NAME}:${AUTH_SERVER_IMAGE_VERSION}
     restart: always
     volumes:
-      - /data/auth_server/log:${AUTH_SERVER_LOG_PATH}
+      - ${AUTH_SERVER_LOG_PATH}:${AUTH_SERVER_LOG_PATH}
       - /etc/localtime:/etc/localtime
     ports:
       - ${AUTH_SERVER_PORT}:8080

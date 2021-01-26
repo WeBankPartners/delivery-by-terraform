@@ -17,10 +17,10 @@ curl -sSfL \
 	--data @- <<-EOF \
 	| ${SCRIPT_DIR}/check-status-in-json.sh '.resultCode == "0"'
 		{
-		  "requestId": "1",
+		  "requestId": "2",
 		  "inputs": [
 		    {
-		      "callbackParameter": "1",
+		      "callbackParameter": "21",
 		      "instance": "plugin_mysql1",
 		      "instance_ip": "${PLUGIN_DB_HOST}",
 		      "port": "${PLUGIN_DB_PORT}",

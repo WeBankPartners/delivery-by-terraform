@@ -19,7 +19,7 @@ read -d '' HOST_CI_DATA_JSON <<-EOF || true
 	  {
 	    "code": "WECUBE_HOST",
 	    "ip_address": "${CORE_HOST}",
-	    "username": "root",
+	    "username": "${WECUBE_USER}",
 	    "password": "${INITIAL_PASSWORD}"
 	  }
 	]

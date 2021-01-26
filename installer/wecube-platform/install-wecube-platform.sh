@@ -61,3 +61,7 @@ WECUBE_IMAGE_VERSION=$WECUBE_IMAGE_VERSION \
 
 echo -e "\nInstalling WeCube platform with image version $WECUBE_IMAGE_VERSION"
 ./setup-wecube-containers.sh $WECUBE_ENV_FILE
+
+#echo -e "\nChanging owner of WeCube home \"$WECUBE_HOME\" to \"$USER:$WECUBE_USER\"..."
+#sudo chown -R $USER:$WECUBE_USER $WECUBE_HOME
+#sudo chmod -R 0770 $WECUBE_HOME
