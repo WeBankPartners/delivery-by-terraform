@@ -4,7 +4,7 @@ set -e
 set -o pipefail
 
 SYS_SETTINGS_ENV_FILE=$1
-PLUGIN_PKG_COORDS=$2
+PLUGIN_PKG_ID=$2
 source $SYS_SETTINGS_ENV_FILE
 
 SCRIPT_DIR=$(dirname "$0")
@@ -26,9 +26,9 @@ INSTANCE_PORT=$(curl -sSfL \
 	| jq --exit-status -r '.data'
 )
 
-echo -e "\nLaunching new instance for $PLUGIN_PKG_COORDS at $INSTANCE_HOST:$INSTANCE_PORT"
+echo -e "\nLaunching new instance at $INSTANCE_HOST:$INSTANCE_PORT"
 curl -sSfL \
-	--request POST "http://${CORE_HOST}:19090/platform/v1/packages/${PLUGIN_PKG_COORDS}/hosts/${INSTANCE_HOST}/ports/${INSTANCE_PORT}/instance/launch" \
+	--request POST "http://${CORE_HOST}:19090/platform/v1/packages/${PLUGIN_PKG_ID}/hosts/${INSTANCE_HOST}/ports/${INSTANCE_PORT}/instance/launch" \
 	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 	| ${SCRIPT_DIR}/check-status-in-json.sh
 

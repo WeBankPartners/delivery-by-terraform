@@ -17,12 +17,13 @@ for PLUGIN_URL in "${PLUGIN_PKGS[@]}"; do
 	echo -e "\nFetching plugin package from $PLUGIN_URL"
 	../curl-with-retry.sh -fL $PLUGIN_URL -o $PLUGIN_PKG_FILE
 	echo -e "\nInstalling plugin package $PLUGIN_PKG_FILE"
-	PLUGIN_PKG_COORDS=$(../api-utils/install-plugin-package.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_FILE)
-	../api-utils/launch-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_COORDS
+	PLUGIN_PKG_ID=$(../api-utils/install-plugin-package.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_FILE)
+	../api-utils/launch-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_ID
 done
 
 INSTALLED_PLUGIN_PKGS=$(../api-utils/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
-echo -e "\nInstalled plugin packages: $INSTALLED_PLUGIN_PKGS"
+echo -e "\nInstalled plugin packages:"
+jq <<<"$INSTALLED_PLUGIN_PKGS"
 
 if [ -z "$PLUGIN_CONFIG_PKG" ]; then
 	echo -e "\n\e[0;33mNo plugin configuration package is specified and skipped importing.\e[0m"
@@ -50,26 +51,19 @@ else
 	find "$PLUGIN_CONFIG_DIR" -type f -name '*.xml' | while read PLUGIN_CONFIG_FILE; do
 		PLUGIN_PKG_COORDS=$(basename $PLUGIN_CONFIG_FILE .xml)
 		PLUGIN_PKG_NAME="${PLUGIN_PKG_COORDS%__*}"
-		TARGET_PLUGIN_PKG=''
+		PLUGIN_PKG_ID=$(jq -r --arg name $PLUGIN_PKG_NAME '.[] | select(.name == $name) | .id' <<<"$INSTALLED_PLUGIN_PKGS")
 
-		for INSTALLED_PLUGIN_PKG in $INSTALLED_PLUGIN_PKGS; do
-			if [ "${INSTALLED_PLUGIN_PKG/$PLUGIN_PKG_NAME/}" != "$INSTALLED_PLUGIN_PKG" ]; then
-				TARGET_PLUGIN_PKG="${INSTALLED_PLUGIN_PKG}"
-				break
-			fi
-		done
-
-		if [ -z "${TARGET_PLUGIN_PKG}" ]; then
+		if [ -z "${PLUGIN_PKG_ID}" ]; then
 			echo -e "\n\e[0;33mPlugin package \"$PLUGIN_PKG_NAME\" is not installed, skipped importing plugin configuration from $PLUGIN_CONFIG_FILE\e[0m"
 			continue
 		fi
 
-		echo -e "\nImporting plugin service config for \"$TARGET_PLUGIN_PKG\" from $PLUGIN_CONFIG_FILE"
-		../api-utils/import-plugin-config.sh $SYS_SETTINGS_ENV_FILE $TARGET_PLUGIN_PKG $PLUGIN_CONFIG_FILE
+		echo -e "\nImporting plugin service config for \"$PLUGIN_PKG_NAME\" from $PLUGIN_CONFIG_FILE"
+		../api-utils/import-plugin-config.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_ID $PLUGIN_CONFIG_FILE
 
 		if [ "$PLUGIN_PKG_NAME" == "wecmdb" ]; then
 			echo "Restarting WeCMDB instance..."
-			../api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $TARGET_PLUGIN_PKG
+			../api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_ID
 		fi
 	done
 

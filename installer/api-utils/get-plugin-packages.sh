@@ -14,4 +14,4 @@ curl -sSfL \
 	--request GET "http://${CORE_HOST}:19090/platform/v1/packages" \
 	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 	| ${SCRIPT_DIR}/check-status-in-json.sh \
-	| jq --exit-status -r '[.data[] | .name + "__" + .version ] | join(" ")'
+	| jq --exit-status '.data | map({id: .id, name: .name, version: .version})'

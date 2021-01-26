@@ -20,37 +20,34 @@ read -d '' TARGET_INPUTS <<-EOF || true
     }
 EOF
 
-JAVA_PACKAGE_NAMES="wecmdb service-mgmt"
-INSTALLED_PACKAGE_COORDS=$(ACCESS_TOKEN="$ACCESS_TOKEN" $SCRIPT_DIR/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
-for PACKAGE_COORD in $INSTALLED_PACKAGE_COORDS; do
-	PACKAGE_NAME="${PACKAGE_COORD%__*}"
-	[ "${JAVA_PACKAGE_NAMES/$PACKAGE_NAME/}" == "$JAVA_PACKAGE_NAMES" ] && continue
+INSTALLED_PLUGIN_PKGS=$(ACCESS_TOKEN="$ACCESS_TOKEN" $SCRIPT_DIR/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
+jq -r '.[] | select(contains({name: "wecmdb"}) or contains({name: "service-mgmt"})) | .id' <<<"$INSTALLED_PLUGIN_PKGS" | \
+	while read -r PLUGIN_PKG_ID; do
+		INSTANCE_IDS=$(curl -sSfL \
+			--request GET "http://${CORE_HOST}:19090/platform/v1/packages/${PLUGIN_PKG_ID}/instances" \
+			--header "Authorization: Bearer ${ACCESS_TOKEN}" \
+			| ${SCRIPT_DIR}/check-status-in-json.sh \
+			| jq --exit-status -r '[.data[] | .id] | join(" ")'
+		)
 
-	INSTANCE_IDS=$(curl -sSfL \
-		--request GET "http://${CORE_HOST}:19090/platform/v1/packages/${PACKAGE_COORD}/instances" \
-		--header "Authorization: Bearer ${ACCESS_TOKEN}" \
-		| ${SCRIPT_DIR}/check-status-in-json.sh \
-		| jq --exit-status -r '[.data[] | .id] | join(" ")'
-	)
-
-	for INSTANCE_ID in $INSTANCE_IDS; do
-		PARTS=${INSTANCE_ID#*__}
-		INSTANCE_IP=${PARTS%__*}
-		INSTSNCE_PORT=${PARTS#*__}
-		INSTANCE_JMX_PORT=$(( $INSTSNCE_PORT + 10000 ))
-		# read -d '' TARGET_INPUTS <<-EOF || true
-		# 	${TARGET_INPUTS}
-		# 	,
-		#     {
-		#       "callbackParameter": "1",
-		#       "instance": "${INSTANCE_ID}",
-		#       "instance_ip": "${INSTANCE_IP}",
-		#       "port": "${INSTANCE_JMX_PORT}",
-		#       "group": "default_java_group"
-		#     }
-		# EOF
+		for INSTANCE_ID in $INSTANCE_IDS; do
+			PARTS=${INSTANCE_ID#*__}
+			INSTANCE_IP=${PARTS%__*}
+			INSTSNCE_PORT=${PARTS#*__}
+			INSTANCE_JMX_PORT=$(( $INSTSNCE_PORT + 10000 ))
+			# read -d '' TARGET_INPUTS <<-EOF || true
+			# 	${TARGET_INPUTS}
+			# 	,
+			#     {
+			#       "callbackParameter": "1",
+			#       "instance": "${INSTANCE_ID}",
+			#       "instance_ip": "${INSTANCE_IP}",
+			#       "port": "${INSTANCE_JMX_PORT}",
+			#       "group": "default_java_group"
+			#     }
+			# EOF
+		done
 	done
-done
 
 curl -sSfL \
 	--request POST "http://${CORE_HOST}:19090/monitor/api/v1/agent/export/register/java" \

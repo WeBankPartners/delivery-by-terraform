@@ -4,15 +4,9 @@ ACCESS_TOKEN=$(../api-utils/login.sh $SYS_SETTINGS_ENV_FILE)
 
 
 INSTALLED_PLUGIN_PKGS=$(ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
+CMDB_PKG_ID=$(jq -r '.[] | select(.name == "wecmdb") | .id' <<<"$INSTALLED_PLUGIN_PKGS")
 
-for PLUGIN_PKG_COORDS in $INSTALLED_PLUGIN_PKGS; do
-	PLUGIN_PKG_NAME="${PLUGIN_PKG_COORDS%__*}"
-	[ "$PLUGIN_PKG_NAME" == "wecmdb" ] && \
-		CMDB_PKG_COORDS="$PLUGIN_PKG_COORDS" && \
-		break
-done
-
-CMDB_INSANCE_JSON=$(ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/get-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $CMDB_PKG_COORDS)
+CMDB_INSANCE_JSON=$(ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/get-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $CMDB_PKG_ID)
 CMDB_INSTANCE_HOST=$(jq --exit-status -r '.host' <<<"$CMDB_INSANCE_JSON")
 CMDB_INSTANCE_PORT=$(jq --exit-status '.port' <<<"$CMDB_INSANCE_JSON")
 CMDB_INSTANCE_NAME=$(jq --exit-status -r '.instanceName' <<<"$CMDB_INSANCE_JSON")
@@ -30,7 +24,7 @@ read -d '' HOST_CI_DATA_JSON <<-EOF || true
 	  }
 	]
 EOF
-../api-utils/wecmdb-batch-create-ci-data.sh $SYS_SETTINGS_ENV_FILE \
+ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/wecmdb-batch-create-ci-data.sh $SYS_SETTINGS_ENV_FILE \
 	$CMDB_INSTANCE_HOST $CMDB_INSTANCE_PORT $CMDB_INSTANCE_NAME \
 	$HOST_CI_TYPE_ID "$HOST_CI_DATA_JSON"
 
@@ -49,6 +43,6 @@ read -d '' ARTIFACT_CI_DATA_JSON <<-EOF || true
 	  }
 	]
 EOF
-../api-utils/wecmdb-batch-create-ci-data.sh $SYS_SETTINGS_ENV_FILE \
+ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/wecmdb-batch-create-ci-data.sh $SYS_SETTINGS_ENV_FILE \
 	$CMDB_INSTANCE_HOST $CMDB_INSTANCE_PORT $CMDB_INSTANCE_NAME \
 	$ARTIFACT_CI_TYPE_ID "$ARTIFACT_CI_DATA_JSON"
