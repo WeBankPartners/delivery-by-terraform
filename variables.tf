@@ -41,7 +41,7 @@ variable "wecube_home" {
 
 variable "wecube_user" {
   description = "The user to run WeCube"
-  default     = "wecube"
+  default     = "root"
 }
 
 variable "initial_password" {
