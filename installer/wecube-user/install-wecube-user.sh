@@ -5,6 +5,11 @@ set -e
 ENV_FILE=$1
 source $ENV_FILE
 
+if [ "$WECUBE_USER" == "root" ]; then
+	echo "Using root as WeCube user, no further step is needed."
+	exit 0;
+fi
+
 echo "Creating user and group \"$WECUBE_USER\"..."
 id -u $WECUBE_USER >/dev/null 2>&1 || sudo useradd -U $WECUBE_USER
 sudo chpasswd <<<"${WECUBE_USER}:${INITIAL_PASSWORD}"
