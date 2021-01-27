@@ -10,11 +10,11 @@ echo "Installing docker on $HOST_PRIVATE_IP"
 
 echo -e "\nChecking Docker...\n"
 PREREQUISITES_SATISFIED=''
-if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(docker version >/dev/null 2>&1); then
+if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(sudo docker version >/dev/null 2>&1); then
 	echo 'Docker Engine is not properly installed!'
 	PREREQUISITES_SATISFIED='false'
 fi
-if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(docker-compose version >/dev/null 2>&1); then
+if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(sudo docker-compose version >/dev/null 2>&1); then
 	echo 'Docker Compose is not properly installed!'
 	PREREQUISITES_SATISFIED='false'
 fi
