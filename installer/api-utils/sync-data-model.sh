@@ -12,12 +12,6 @@ SCRIPT_DIR=$(dirname "$0")
 
 [ -z "${ACCESS_TOKEN}" ] && ACCESS_TOKEN=$(${SCRIPT_DIR}/login.sh ${SYS_SETTINGS_ENV_FILE})
 
-ALLOWED_METHODS=$(curl -sSfLi \
-	--request OPTIONS "http://${CORE_HOST}:19090/platform/v1/models/package/${PLUGIN_PACKAGE_NAME}" \
-	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
-	| grep 'Allow:'
-)
-
 RESPONSE_JSON=$(curl -sSfL \
 	--request GET "http://${CORE_HOST}:19090/platform/v1/models/package/${PLUGIN_PACKAGE_NAME}" \
 	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
@@ -25,6 +19,11 @@ RESPONSE_JSON=$(curl -sSfL \
 )
 DATA_MODEL=$(jq '.data' <<<"$RESPONSE_JSON")
 
+ALLOWED_METHODS=$(curl -sSfLi \
+	--request OPTIONS "http://${CORE_HOST}:19090/platform/v1/models" \
+	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
+	| grep 'Allow:'
+)
 if [ "${ALLOWED_METHODS/POST/}" != "${ALLOWED_METHODS}" ]; then
 	curl -sSfL --request POST "http://${CORE_HOST}:19090/platform/v1/models" \
 		--header "Authorization: Bearer ${ACCESS_TOKEN}" \
