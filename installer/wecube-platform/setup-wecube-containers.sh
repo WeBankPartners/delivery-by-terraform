@@ -42,7 +42,7 @@ for PORT_TO_CHECK in "${PORTS_TO_CHECK[@]}"; do
 done
 
 # 再次启用IP转发并配置桥接来解决Docker容器对外部网络的通信问题
-sudo cat <<-EOF >/etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf
+sudo cat <<-EOF | sudo tee /etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf >/dev/null
 	net.ipv4.ip_forward = 1
 	net.bridge.bridge-nf-call-ip6tables = 1
 	net.bridge.bridge-nf-call-iptables = 1
