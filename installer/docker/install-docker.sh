@@ -67,7 +67,7 @@ if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
 	echo 'Using mirror for docker image registry in Mainland China https://mirror.ccs.tencentyun.com'
 	DOCKER_START_CMD="$DOCKER_START_CMD --registry-mirror=https://mirror.ccs.tencentyun.com"
 fi
-sudo cat <<-EOF >/etc/systemd/system/docker.service.d/docker-wecube-override-01-port.conf
+sudo cat <<-EOF | sudo tee /etc/systemd/system/docker.service.d/docker-wecube-override-01-port.conf >/dev/null
 	[Service]
 	ExecStart=
 	ExecStart=$DOCKER_START_CMD
@@ -82,7 +82,7 @@ sudo docker run --rm -t hello-world
 # 启用IP转发并配置桥接来解决Docker容器对外部网络的通信问题
 sudo modprobe overlay
 sudo modprobe br_netfilter
-sudo cat <<-EOF >/etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf
+sudo cat <<-EOF | sudo tee /etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf >/dev/null
 	net.ipv4.ip_forward = 1
 	net.bridge.bridge-nf-call-ip6tables = 1
 	net.bridge.bridge-nf-call-iptables = 1

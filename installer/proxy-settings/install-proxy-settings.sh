@@ -19,7 +19,7 @@ read -d '' PROXY_SETTINGS_ENV <<-EOF || true
 	export no_proxy="localhost,127.0.0.1,$VPC_CIDR_IP"
 EOF
 
-sudo cat <<<"$PROXY_SETTINGS_ENV" >/etc/profile.d/proxy_settings_for_wecube.sh
+sudo cat <<<"$PROXY_SETTINGS_ENV" | sudo tee /etc/profile.d/proxy_settings_for_wecube.sh >/dev/null
 cat <<<"$PROXY_SETTINGS_ENV" >>~/.bashrc
 
 ../wait-for-it.sh -t 60 "$PROXY_HOST:$PROXY_PORT" -- echo "Connection to proxy is ready."
