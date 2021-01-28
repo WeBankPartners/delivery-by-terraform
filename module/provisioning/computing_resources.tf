@@ -25,39 +25,73 @@ resource "tencentcloud_instance" "bastion_hosts" {
   password                   = local.password
   private_ip                 = var.resource_plan.bastion_hosts[count.index].private_ip
   allocate_public_ip         = var.resource_plan.bastion_hosts[count.index].allocate_public_ip
-  internet_max_bandwidth_out = var.resource_plan.bastion_hosts[count.index].internet_max_bandwidth_out
+  internet_max_bandwidth_out = var.resource_plan.bastion_hosts[count.index].allocate_public_ip ? var.resource_plan.bastion_hosts[count.index].internet_max_bandwidth_out : null
   security_groups            = tencentcloud_security_group.security_groups.*.id
 }
 
-resource "tencentcloud_mysql_instance" "db_instances" {
-  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.db_instances) : 0
+resource "tencentcloud_mysql_instance" "core_db_instance" {
+  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.core_db_instance) : 0
 
   vpc_id            = tencentcloud_vpc.vpcs[0].id
-  availability_zone = var.resource_plan.db_instances[count.index].availability_zone
-  subnet_id         = local.subnet_id_map[var.resource_plan.db_instances[count.index].subnet_name]
-  instance_name     = var.resource_plan.db_instances[count.index].name
+  availability_zone = var.resource_plan.core_db_instance[count.index].availability_zone
+  subnet_id         = local.subnet_id_map[var.resource_plan.core_db_instance[count.index].subnet_name]
+  instance_name     = var.resource_plan.core_db_instance[count.index].name
 
-  engine_version    = var.resource_plan.db_instances[count.index].engine_version
-  mem_size          = var.resource_plan.db_instances[count.index].mem_size
-  volume_size       = var.resource_plan.db_instances[count.index].volume_size
-  root_password     = var.resource_plan.db_instances[count.index].root_password
-  intranet_port     = var.resource_plan.db_instances[count.index].intranet_port
-  internet_service  = var.resource_plan.db_instances[count.index].internet_service
-  slave_deploy_mode = var.resource_plan.db_instances[count.index].slave_deploy_mode
-  slave_sync_mode   = var.resource_plan.db_instances[count.index].slave_sync_mode
-  first_slave_zone  = var.resource_plan.db_instances[count.index].first_slave_zone
-  second_slave_zone = var.resource_plan.db_instances[count.index].second_slave_zone
+  engine_version    = var.resource_plan.core_db_instance[count.index].engine_version
+  mem_size          = var.resource_plan.core_db_instance[count.index].mem_size
+  volume_size       = var.resource_plan.core_db_instance[count.index].volume_size
+  root_password     = var.resource_plan.core_db_instance[count.index].root_password
+  intranet_port     = var.resource_plan.core_db_instance[count.index].intranet_port
+  internet_service  = var.resource_plan.core_db_instance[count.index].internet_service
+  slave_deploy_mode = var.resource_plan.core_db_instance[count.index].slave_deploy_mode
+  slave_sync_mode   = var.resource_plan.core_db_instance[count.index].slave_sync_mode
+  first_slave_zone  = var.resource_plan.core_db_instance[count.index].first_slave_zone
+  second_slave_zone = var.resource_plan.core_db_instance[count.index].second_slave_zone
   security_groups   = tencentcloud_security_group.security_groups.*.id
 
   tags = {
-    name = var.resource_plan.db_instances[count.index].name
+    name = var.resource_plan.core_db_instance[count.index].name
   }
 
   parameters = {
-    max_connections        = var.resource_plan.db_instances[count.index].parameters.max_connections
-    lower_case_table_names = var.resource_plan.db_instances[count.index].parameters.lower_case_table_names
-    max_allowed_packet     = var.resource_plan.db_instances[count.index].parameters.max_allowed_packet
-    character_set_server   = var.resource_plan.db_instances[count.index].parameters.character_set_server
+    max_connections        = var.resource_plan.core_db_instance[count.index].parameters.max_connections
+    lower_case_table_names = var.resource_plan.core_db_instance[count.index].parameters.lower_case_table_names
+    max_allowed_packet     = var.resource_plan.core_db_instance[count.index].parameters.max_allowed_packet
+    character_set_server   = var.resource_plan.core_db_instance[count.index].parameters.character_set_server
+  }
+}
+
+resource "tencentcloud_mysql_instance" "plugin_db_instance" {
+  count = local.is_tencent_cloud_enabled ? length(var.resource_plan.plugin_db_instance) : 0
+
+  depends_on = [tencentcloud_mysql_instance.core_db_instance]
+
+  vpc_id            = tencentcloud_vpc.vpcs[0].id
+  availability_zone = var.resource_plan.plugin_db_instance[count.index].availability_zone
+  subnet_id         = local.subnet_id_map[var.resource_plan.plugin_db_instance[count.index].subnet_name]
+  instance_name     = var.resource_plan.plugin_db_instance[count.index].name
+
+  engine_version    = var.resource_plan.plugin_db_instance[count.index].engine_version
+  mem_size          = var.resource_plan.plugin_db_instance[count.index].mem_size
+  volume_size       = var.resource_plan.plugin_db_instance[count.index].volume_size
+  root_password     = var.resource_plan.plugin_db_instance[count.index].root_password
+  intranet_port     = var.resource_plan.plugin_db_instance[count.index].intranet_port
+  internet_service  = var.resource_plan.plugin_db_instance[count.index].internet_service
+  slave_deploy_mode = var.resource_plan.plugin_db_instance[count.index].slave_deploy_mode
+  slave_sync_mode   = var.resource_plan.plugin_db_instance[count.index].slave_sync_mode
+  first_slave_zone  = var.resource_plan.plugin_db_instance[count.index].first_slave_zone
+  second_slave_zone = var.resource_plan.plugin_db_instance[count.index].second_slave_zone
+  security_groups   = tencentcloud_security_group.security_groups.*.id
+
+  tags = {
+    name = var.resource_plan.plugin_db_instance[count.index].name
+  }
+
+  parameters = {
+    max_connections        = var.resource_plan.plugin_db_instance[count.index].parameters.max_connections
+    lower_case_table_names = var.resource_plan.plugin_db_instance[count.index].parameters.lower_case_table_names
+    max_allowed_packet     = var.resource_plan.plugin_db_instance[count.index].parameters.max_allowed_packet
+    character_set_server   = var.resource_plan.plugin_db_instance[count.index].parameters.character_set_server
   }
 }
 
@@ -75,7 +109,7 @@ resource "tencentcloud_instance" "waf_hosts" {
   password                   = local.password
   private_ip                 = var.resource_plan.waf_hosts[count.index].private_ip
   allocate_public_ip         = var.resource_plan.waf_hosts[count.index].allocate_public_ip
-  internet_max_bandwidth_out = var.resource_plan.waf_hosts[count.index].internet_max_bandwidth_out
+  internet_max_bandwidth_out = var.resource_plan.waf_hosts[count.index].allocate_public_ip ? var.resource_plan.waf_hosts[count.index].internet_max_bandwidth_out : null
   security_groups            = tencentcloud_security_group.security_groups.*.id
 
   connection {
@@ -102,8 +136,12 @@ resource "tencentcloud_instance" "waf_hosts" {
     content = <<-EOT
       DATE_TIME=${timestamp()}
       HOST_PRIVATE_IP=${var.resource_plan.waf_hosts[count.index].private_ip}
-      WECUBE_HOME=${var.wecube_home}
-      USE_MIRROR_IN_MAINLAND_CHINA=${var.use_mirror_in_mainland_china}
+      WECUBE_RELEASE_VERSION='${var.wecube_release_version}'
+      WECUBE_SETTINGS='${var.wecube_settings}'
+      WECUBE_HOME='${var.wecube_home}'
+      WECUBE_USER='${var.wecube_user}'
+      INITIAL_PASSWORD='${var.initial_password}'
+      USE_MIRROR_IN_MAINLAND_CHINA='${var.use_mirror_in_mainland_china}'
 
       # Network
       VPC_CIDR_IP=${var.resource_plan.vpcs[0].cidr_block}
@@ -153,7 +191,7 @@ resource "tencentcloud_instance" "vm_instances" {
   password                   = local.password
   private_ip                 = var.resource_plan.vm_instances[count.index].private_ip
   allocate_public_ip         = var.resource_plan.vm_instances[count.index].allocate_public_ip
-  internet_max_bandwidth_out = var.resource_plan.vm_instances[count.index].internet_max_bandwidth_out
+  internet_max_bandwidth_out = var.resource_plan.vm_instances[count.index].allocate_public_ip ? var.resource_plan.vm_instances[count.index].internet_max_bandwidth_out : null
   security_groups            = tencentcloud_security_group.security_groups.*.id
 
   connection {

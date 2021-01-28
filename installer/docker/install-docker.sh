@@ -61,13 +61,14 @@ sudo ../curl-with-retry.sh -fL $DOCKER_COMPOSE_URL -o $DOCKER_COMPOSE_BIN
 sudo chmod +x "$DOCKER_COMPOSE_BIN"
 
 # 配置Docker Engine以监听远程API请求
+echo "Configuring Docker daemon..."
 sudo mkdir -p /etc/systemd/system/docker.service.d
 DOCKER_START_CMD="/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:$DOCKER_PORT"
 if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
 	echo 'Using mirror for docker image registry in Mainland China https://mirror.ccs.tencentyun.com'
 	DOCKER_START_CMD="$DOCKER_START_CMD --registry-mirror=https://mirror.ccs.tencentyun.com"
 fi
-sudo cat <<-EOF | sudo tee /etc/systemd/system/docker.service.d/docker-wecube-override-01-port.conf >/dev/null
+cat <<-EOF | sudo tee /etc/systemd/system/docker.service.d/docker-wecube-override-01-port.conf
 	[Service]
 	ExecStart=
 	ExecStart=$DOCKER_START_CMD
@@ -82,7 +83,7 @@ sudo docker run --rm -t hello-world
 # 启用IP转发并配置桥接来解决Docker容器对外部网络的通信问题
 sudo modprobe overlay
 sudo modprobe br_netfilter
-sudo cat <<-EOF | sudo tee /etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf >/dev/null
+cat <<-EOF | sudo tee /etc/sysctl.d/zzz.net-forward-and-bridge-for-docker.conf >/dev/null
 	net.ipv4.ip_forward = 1
 	net.bridge.bridge-nf-call-ip6tables = 1
 	net.bridge.bridge-nf-call-iptables = 1

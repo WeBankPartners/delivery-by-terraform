@@ -5,11 +5,25 @@ set -e
 ENV_FILE=$1
 source $ENV_FILE
 
-PLUGIN_DEPLOY_DIR="${WECUBE_HOME}/plugins"
-echo "Creating plugin deployment directory $PLUGIN_DEPLOY_DIR"
-mkdir -p "$PLUGIN_DEPLOY_DIR"
-sudo chown -R $USER:$WECUBE_USER $PLUGIN_DEPLOY_DIR
-sudo chmod -R 0770 $PLUGIN_DEPLOY_DIR
+PLUGIN_HOSTING_ENV_TEMPLATE_FILE="./wecube-plugin-hosting.env.tpl"
+PLUGIN_HOSTING_ENV_FILE="./wecube-plugin-hosting.env"
+echo "Building WeCube plugin hosting env file $PLUGIN_HOSTING_ENV_FILE"
+../substitute-in-file.sh $ENV_FILE $PLUGIN_HOSTING_ENV_TEMPLATE_FILE $PLUGIN_HOSTING_ENV_FILE
+source $PLUGIN_HOSTING_ENV_FILE
+
+
+echo "Creating WeCube plugin hosting directories..."
+PLUGIN_HOSTING_DIRS=(
+	"${WECUBE_PLUGIN_DEPLOY_PATH}"
+	"${WECUBE_PLUGIN_BASE_MOUNT_PATH}"
+)
+for PLUGIN_HOSTING_DIR in "${PLUGIN_HOSTING_DIRS[@]}"; do
+	echo "  - ${PLUGIN_HOSTING_DIR}"
+	mkdir -p $PLUGIN_HOSTING_DIR
+	sudo chown -R $USER:$WECUBE_USER $PLUGIN_HOSTING_DIR
+	sudo chmod -R 0770 $PLUGIN_HOSTING_DIR
+done
+
 
 echo -e "\nWaiting for WeCube platform initialization..."
 ../wait-for-it.sh -t 300 "$CORE_HOST:19100" -- echo "WeCube platform core is ready."
@@ -17,8 +31,8 @@ echo -e "\nWaiting for WeCube platform initialization..."
 echo -e "\nCreating resource server record..."
 
 CREDENTIALS=$(jq -n \
-	--arg username "umadmin" \
-	--arg password "umadmin" \
+	--arg username "$DEFAULT_ADMIN_USERNAME" \
+	--arg password "$DEFAULT_ADMIN_PASSWORD" \
 	'{username: $username, password: $password}'
 )
 ACCESS_TOKEN=$(curl -sSfL \

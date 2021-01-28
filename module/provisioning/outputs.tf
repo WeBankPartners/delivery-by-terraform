@@ -1,8 +1,15 @@
 output "resource_map" {
   value = {
-    vm_by_name = {for vm in local.combined_vm_instances              : vm.instance_name => vm}
-    db_by_name = {for db in tencentcloud_mysql_instance.db_instances : db.instance_name => db}
-    lb_by_name = {for lb in tencentcloud_clb_instance.lb_instances   : lb.clb_name      => lb}
+    vm_by_name = {for vm in local.combined_vm_instances : vm.instance_name => vm}
+
+    db_by_name = merge({
+        for db in tencentcloud_mysql_instance.core_db_instance   : db.instance_name => db
+      }, {
+        for db in tencentcloud_mysql_instance.plugin_db_instance : db.instance_name => db
+      }
+    )
+
+    lb_by_name = {for lb in tencentcloud_clb_instance.lb_instances : lb.clb_name => lb}
 
     asset_id_by_name = merge({
         for vpc in tencentcloud_vpc.vpcs : "vpc/${vpc.name}" => vpc.id
@@ -15,7 +22,9 @@ output "resource_map" {
       }, {
         for vm in local.combined_vm_instances : "vm/${vm.instance_name}" => vm.id
       }, {
-        for db in tencentcloud_mysql_instance.db_instances : "db/${db.instance_name}" => db.id
+        for db in tencentcloud_mysql_instance.core_db_instance : "db/${db.instance_name}" => db.id
+      }, {
+        for db in tencentcloud_mysql_instance.plugin_db_instance : "db/${db.instance_name}" => db.id
       }, {
         for lb in tencentcloud_clb_instance.lb_instances : "lb/${lb.clb_name}" => lb.id
       }
@@ -24,7 +33,9 @@ output "resource_map" {
     private_ip_by_name = merge({
         for vm in local.combined_vm_instances : vm.instance_name => vm.private_ip
       }, {
-        for db in tencentcloud_mysql_instance.db_instances : db.instance_name => db.intranet_ip
+        for db in tencentcloud_mysql_instance.core_db_instance : db.instance_name => db.intranet_ip
+      }, {
+        for db in tencentcloud_mysql_instance.plugin_db_instance : db.instance_name => db.intranet_ip
       }, {
         for lb in tencentcloud_clb_instance.lb_instances : lb.clb_name => lb.clb_vips[0]
       }

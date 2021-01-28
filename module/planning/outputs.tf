@@ -13,7 +13,8 @@ output "resource_plan" {
     bastion_hosts        = local.cluster_mode ? local.bastion_hosts_cluster        : []
     waf_hosts            = local.cluster_mode ? local.waf_hosts_cluster            : []
     vm_instances         = local.cluster_mode ? local.hosts_cluster                : [local.host_standalone]
-    db_instances         = local.cluster_mode ? local.db_instances_cluster         : []
+    core_db_instance     = local.cluster_mode ? [local.core_db_instance_cluster]   : []
+    plugin_db_instance   = local.cluster_mode ? [local.plugin_db_instance_cluster] : []
     lb_instances         = local.cluster_mode ? local.lb_instances_cluster         : []
   }
 }

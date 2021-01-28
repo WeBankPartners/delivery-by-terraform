@@ -18,8 +18,8 @@ locals {
     for lb_plan in var.deployment_plan.lb : [
       for back_end in lb_plan.back_ends : merge(back_end, {
         clb_id      = lookup(var.resource_map.lb_by_name, lb_plan.resource_name, {id=null}).id
-        listener_id = lookup(local.lb_listener_by_name, lb_plan.name, {id=null}).id
-        rule_id     = lookup(local.lb_listener_rule_by_lisener_id, lookup(local.lb_listener_by_name, lb_plan.name, {id=null}).id, {id=null}).id
+        listener_id = lookup(local.lb_listener_by_name, lb_plan.name, {listener_id=null}).listener_id
+        rule_id     = lookup(local.lb_listener_rule_by_lisener_id, lookup(local.lb_listener_by_name, lb_plan.name, {listener_id=""}).listener_id, {rule_id=null}).rule_id
         instance_id = lookup(var.resource_map.vm_by_name, back_end.resource_name, {id=null}).id
       })
     ]
@@ -138,7 +138,7 @@ resource "tencentcloud_clb_listener_rule" "lb_listener_rules" {
   count = length(var.deployment_plan.lb)
 
   clb_id                     = var.resource_map.lb_by_name[var.deployment_plan.lb[count.index].resource_name].id
-  listener_id                = local.lb_listener_by_name[var.deployment_plan.lb[count.index].name].id
+  listener_id                = local.lb_listener_by_name[var.deployment_plan.lb[count.index].name].listener_id
   domain                     = var.resource_map.lb_by_name[var.deployment_plan.lb[count.index].resource_name].clb_vips[0]
   url                        = var.deployment_plan.lb[count.index].path
   health_check_switch        = true

@@ -53,10 +53,11 @@ else
 
 		if [ "$COMPONENT_NAME" == 'wecube image' ]; then
 			continue
-		elif [ -n "$COMPONENT_NAME" ] && \
-			 [ "${PLUGIN_NAMES/$COMPONENT_NAME/}" != "$PLUGIN_NAMES" ]; then
-			echo "Found plugin package for \"$COMPONENT_NAME\" at $COMPONENT_LINK"
-			PLUGIN_PKGS+=("$COMPONENT_LINK")
+		elif [ -n "$COMPONENT_NAME" ]; then
+			if [ "$PLUGIN_NAMES" == '*' ] || [ "${PLUGIN_NAMES/$COMPONENT_NAME/}" != "$PLUGIN_NAMES" ]; then
+				echo "Found plugin package for \"$COMPONENT_NAME\" at $COMPONENT_LINK"
+				PLUGIN_PKGS+=("$COMPONENT_LINK")
+			fi
 		fi
 	done
 

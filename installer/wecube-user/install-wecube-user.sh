@@ -22,6 +22,6 @@ sudo chown -R $USER:$WECUBE_USER $WECUBE_HOME
 sudo chmod -R 0770 $WECUBE_HOME
 
 echo "Enabling group \"${WECUBE_USER}\" to run all commands using \"sudo\" without password..."
-sudo cat <<-EOF | sudo tee "/etc/sudoers.d/zzz-allow-group-${WECUBE_USER}-with-no-password" >/dev/null
+cat <<-EOF | sudo tee "/etc/sudoers.d/zzz-allow-group-${WECUBE_USER}-with-no-password"
 	%${WECUBE_USER}        ALL=(ALL)       NOPASSWD: ALL
 EOF

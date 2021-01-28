@@ -136,9 +136,11 @@ locals {
   ]
 
   # 数据库
-  db_instances_cluster = [
-    local.core_db,
-    local.plugin_db,
+  core_db_instance_cluster   = local.core_db
+  plugin_db_instance_cluster = local.plugin_db
+  db_instances_cluster       = [
+    local.core_db_instance_cluster,
+    local.plugin_db_instance_cluster
   ]
 
   # 负载均衡器
@@ -317,7 +319,7 @@ locals {
     # 数据复制模式：0 - 异步复制，1 - 半同步复制，2 - 强同步复制
     slave_sync_mode   = 1
     # 数据库从节点部署模式：0 - 单可用区，1 - 多可用区
-    slave_deploy_mode = 0
+    slave_deploy_mode = 1
     # 
     first_slave_zone  = local.primary_availability_zone
     second_slave_zone = local.secondary_availability_zone
@@ -337,8 +339,8 @@ locals {
     volume_size       = 50
     root_password     = var.initial_password
     intranet_port     = var.default_mysql_port
-    internet_service  = 1
-    slave_deploy_mode = 0
+    internet_service  = 0
+    slave_deploy_mode = 1
     slave_sync_mode   = 1
     first_slave_zone  = local.primary_availability_zone
     second_slave_zone = local.secondary_availability_zone
@@ -395,7 +397,7 @@ locals {
         name                 = "plugin-db-cluster"
         installer            = "db-connectivity"
         client_resource_name = local.plugin_host_1_cluster.name
-        db_resource_name     = local.plugin_db.name
+        db_resource_name     = local.plugin_db_instance_cluster.name
         db_name              = "mysql"
       },
     ]
