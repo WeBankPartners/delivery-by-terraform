@@ -1,0 +1,14 @@
+---
+
+- name: Build minio-docker env file
+  ansible.builtin.template:
+    src: minio-docker.env.j2
+    dest: &env_file "{{ installer_dir }}/minio-docker.env"
+
+- name: Invoke installer minio-docker
+  ansible.builtin.command:
+    chdir: "{{ installer_dir }}"
+    argv:
+      - ./invoke-installer.sh
+      - *env_file
+      - minio-docker

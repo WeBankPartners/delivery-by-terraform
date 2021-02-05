@@ -422,7 +422,6 @@ locals {
           # 定义格式：变量名称前缀 = 数据库组件部署计划名称
           CORE_DB        = "core-db-cluster"
           AUTH_SERVER_DB = "auth-server-db-cluster"
-          PLUGIN_DB      = "plugin-db-cluster"
         }
       },
       {
@@ -436,7 +435,6 @@ locals {
         inject_db_plan_env = {
           CORE_DB        = "core-db-cluster"
           AUTH_SERVER_DB = "auth-server-db-cluster"
-          PLUGIN_DB      = "plugin-db-cluster"
         }
       },
       {
@@ -447,7 +445,6 @@ locals {
           CORE_HOST = local.core_host_1_cluster.name
         }
         inject_db_plan_env = {
-          CORE_DB = "core-db-cluster"
         }
       },
       {
@@ -458,7 +455,6 @@ locals {
           CORE_HOST = local.core_host_1_cluster.name
         }
         inject_db_plan_env = {
-          CORE_DB = "core-db-cluster"
         }
       },
     ]
@@ -602,10 +598,11 @@ locals {
         # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的私有网络IP地址
         inject_private_ip = {
           # 定义格式：变量名称 = 资源名称[,资源名称]...
-          CORE_HOST   = local.core_host_1_cluster.name
-          S3_HOST     = local.core_host_1_cluster.name
-          PLUGIN_HOST = local.plugin_host_1_cluster.name
-          PORTAL_HOST = local.core_host_1_cluster.name
+          CORE_HOST          = local.core_host_1_cluster.name
+          S3_HOST            = local.core_host_1_cluster.name
+          PLUGIN_HOST        = local.plugin_host_1_cluster.name
+          PORTAL_ENTRYPOINT  = local.lb_internal_1_cluster.name
+          GATEWAY_ENTRYPOINT = local.lb_internal_2_cluster.name
         }
         # 在部署后执行步骤使用的环境变量配置文件中注入以下已完成部署的数据库组件环境参数（数据库实例所在主机、端口、数据库名称、用户名、密码）
         inject_db_plan_env = {

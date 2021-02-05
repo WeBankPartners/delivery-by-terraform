@@ -3,15 +3,12 @@
 set -e
 
 ENV_FILE=$1
-
-echo "Installing proxy settings for docker on $HOST_PRIVATE_IP"
-
 source $ENV_FILE
 
 DOCKER_CONF_DIR="/etc/systemd/system/docker.service.d"
 DOCKER_CONF_FILE="$DOCKER_CONF_DIR/docker-wecube-override-02-proxy.conf"
 sudo mkdir -p "$DOCKER_CONF_DIR"
-echo "Saving proxy settings for docker into \"$DOCKER_CONF_FILE\"..."
+echo "Saving proxy settings for Docker daemon into \"$DOCKER_CONF_FILE\"..."
 cat <<-EOF | sudo tee "$DOCKER_CONF_FILE"
 	[Service]
 	Environment="HTTP_PROXY=http://$PROXY_HOST:$PROXY_PORT"
@@ -23,5 +20,3 @@ EOF
 
 sudo systemctl daemon-reload
 sudo systemctl restart docker
-
-echo "Installation of proxy settings for docker completed."

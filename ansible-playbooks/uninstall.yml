@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+  tasks:
+    - name: Removing WeCube containers
+      shell: docker rm -f $(docker ps -a -q -f name=wecube -f name=open-monitor -f name=service-mgmt)
+      ignore_errors: yes
+
+    - name: Clearing WeCube installation directory
+      file:
+        path: "{{ dest_dir }}"
+        state: absent
+      ignore_errors: yes

@@ -12,11 +12,6 @@ UPDATE `system_variables`
    AND `name`='S3_SERVER_URL';
 
 UPDATE `system_variables`
-   SET `value`='http://${PORTAL_HOST}:19090'
- WHERE `id`='system__global__CORE_ADDR'
-   AND `name`='CORE_ADDR';
-
-UPDATE `system_variables`
-   SET `value`='http://${PORTAL_HOST}:19110'
+   SET `value`='http://${GATEWAY_ENTRYPOINT}:19110'
  WHERE `id`='system__global__GATEWAY_URL'
    AND `name`='GATEWAY_URL';

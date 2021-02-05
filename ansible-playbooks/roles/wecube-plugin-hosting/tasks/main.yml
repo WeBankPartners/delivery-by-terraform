@@ -1,0 +1,14 @@
+---
+
+- name: Build wecube-plugin-hosting env file
+  ansible.builtin.template:
+    src: wecube-plugin-hosting.env.j2
+    dest: &env_file "{{ installer_dir }}/wecube-plugin-hosting.env"
+
+- name: Invoke installer wecube-plugin-hosting
+  ansible.builtin.command:
+    chdir: "{{ installer_dir }}"
+    argv:
+      - ./invoke-installer.sh
+      - *env_file
+      - wecube-plugin-hosting

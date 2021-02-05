@@ -179,7 +179,6 @@ locals {
           # 定义格式：变量名称前缀 = 数据库组件部署计划名称
           CORE_DB        = "core-db-standalone"
           AUTH_SERVER_DB = "auth-server-db-standalone"
-          PLUGIN_DB      = "plugin-db-standalone"
         }
       },
       {
@@ -190,7 +189,6 @@ locals {
           CORE_HOST = local.host_standalone.name
         }
         inject_db_plan_env = {
-          CORE_DB  = "core-db-standalone"
         }
       },
     ]
@@ -235,10 +233,11 @@ locals {
         # 在部署后执行步骤使用的环境变量配置文件中注入以下资源的私有网络IP地址
         inject_private_ip = {
           # 定义格式：变量名称 = 资源名称[,资源名称]...
-          CORE_HOST   = local.host_standalone.name
-          S3_HOST     = local.host_standalone.name
-          PLUGIN_HOST = local.host_standalone.name
-          PORTAL_HOST = local.host_standalone.name
+          CORE_HOST          = local.host_standalone.name
+          S3_HOST            = local.host_standalone.name
+          PLUGIN_HOST        = local.host_standalone.name
+          PORTAL_ENTRYPOINT  = local.host_standalone.name
+          GATEWAY_ENTRYPOINT = local.host_standalone.name
         }
         # 在部署后执行步骤使用的环境变量配置文件中注入以下已完成部署的数据库组件环境参数（数据库实例所在主机、端口、数据库名称、用户名、密码）
         inject_db_plan_env = {

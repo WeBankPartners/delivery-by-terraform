@@ -1,0 +1,16 @@
+---
+
+- name: Build wecube-system-settings env file
+  ansible.builtin.template:
+    src: wecube-system-settings.env.j2
+    dest: &env_file "{{ installer_dir }}/wecube-system-settings.env"
+  run_once: true
+
+- name: Invoke installer wecube-system-settings
+  ansible.builtin.command:
+    chdir: "{{ installer_dir }}"
+    argv:
+      - ./invoke-installer.sh
+      - *env_file
+      - wecube-system-settings
+  run_once: true

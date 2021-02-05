@@ -3,9 +3,6 @@
 set -e
 
 ENV_FILE=$1
-
-echo "Installing squid on $HOST_PRIVATE_IP"
-
 source $ENV_FILE
 
 sudo yum install squid -y
@@ -40,5 +37,3 @@ sudo systemctl enable squid
 sudo systemctl start squid
 
 ../wait-for-it.sh -t 60 "$HOST_PRIVATE_IP:$PROXY_PORT" -- echo "Squid is ready."
-
-echo "Installation of squid completed."

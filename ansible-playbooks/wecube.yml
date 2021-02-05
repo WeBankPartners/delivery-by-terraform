@@ -1,0 +1,64 @@
+---
+
+- hosts: all
+  roles:
+    - role: common
+
+
+- hosts: platform_db_server
+  roles:
+    - role: mysql-docker
+
+    - role: db-connectivity
+      vars:
+        db_name: wecube
+
+    - role: db-connectivity
+      vars:
+        db_name: auth_server
+
+
+- hosts: platform_s3_server
+  roles:
+    - minio-docker
+
+
+- hosts: platform_server
+  roles:
+    - role: wecube-platform
+      vars:
+        platform_group_name:    platform_server
+        platform_s3_group_name: platform_s3_server
+        platform_db_group_name: platform_db_server
+
+
+- hosts: plugin_hosting_server
+  roles:
+    - role: wecube-plugin-hosting
+      vars:
+        platform_group_name: platform_server
+
+
+- hosts: plugin_db_server
+  roles:
+    - role: mysql-docker
+
+    - role: db-connectivity
+      vars:
+        db_name: mysql
+
+
+- hosts: lb_server
+  roles:
+    - role: wecube-lb
+      vars:
+        platform_group_name: platform_server
+
+    - role: wecube-system-settings
+      vars:
+        platform_group_name:       platform_server
+        platform_s3_group_name:    platform_s3_server
+        platform_db_group_name:    platform_db_server
+        plugin_hosting_group_name: plugin_hosting_server
+        plugin_db_group_name:      plugin_db_server
+        lb_group_name:             lb_server

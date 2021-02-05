@@ -1,0 +1,12 @@
+version: "2"
+services:
+  wecube-haproxy:
+    image: haproxy:lts-alpine
+    restart: always
+    ports:
+      - ${GATEWAY_PORT}:${GATEWAY_PORT}
+      - ${PORTAL_PORT}:${PORTAL_PORT}
+    volumes:
+      - ${HAPROXY_CONF_DIR}:/usr/local/etc/haproxy
+      - ${HAPROXY_LOG_DIR}:${HAPROXY_LOG_DIR}
+      - /etc/localtime:/etc/localtime

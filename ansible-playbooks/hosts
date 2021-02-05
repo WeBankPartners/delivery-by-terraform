@@ -1,0 +1,20 @@
+[platform_server]
+172.16.16.2
+172.16.16.4
+
+[platform_db_server]
+172.16.16.2
+
+[platform_s3_server]
+172.16.16.4
+
+[plugin_hosting_server]
+172.16.16.11
+172.16.16.16
+
+[plugin_db_server]
+172.16.16.16
+
+[lb_server]
+172.16.16.17 lb_vip=172.16.16.100 lb_vip_mask=20 lb_state=MASTER lb_priority=255 lb_peer=172.16.16.8
+172.16.16.8  lb_vip=172.16.16.100 lb_vip_mask=20 lb_state=BACKUP lb_priority=100 lb_peer=172.16.16.17

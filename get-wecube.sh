@@ -44,13 +44,13 @@ wecube_release_version=${wecube_release_version:-$wecube_release_version_default
 read -p "Please specify WeCube settings [standard, bootcamp, empty] ($wecube_settings_default): " wecube_settings
 wecube_settings=${wecube_settings:-$wecube_settings_default}
 
-read -p "Please specify destination dir ($dest_dir_default): " dest_dir
+read -p "Please specify destination directory ($dest_dir_default): " dest_dir
 dest_dir=${dest_dir:-$dest_dir_default}
 
-read -p "Please specify wecube user ($wecube_user_default): " wecube_user
+read -p "Please specify WeCube user ($wecube_user_default): " wecube_user
 wecube_user=${wecube_user:-$wecube_user_default}
 
-read -s -p "Please enter password for wecube user and mysql root user ($initial_password_default): " initial_password_1 && echo ""
+read -s -p "Please enter password for WeCube user and MySQL root user ($initial_password_default): " initial_password_1 && echo ""
 [ -n "$initial_password_1" ] && read -s -p "Please re-enter the password to confirm: " initial_password_2 && echo ""
 [ -n "$initial_password_1" ] && [ "$initial_password_1" != "$initial_password_2" ] && echo 'Inputs do not match!' && exit 1
 initial_password=${initial_password_1:-$initial_password_default}
@@ -213,12 +213,6 @@ AUTH_SERVER_DB_PORT=3307
 AUTH_SERVER_DB_NAME=auth_server
 AUTH_SERVER_DB_USERNAME=root
 AUTH_SERVER_DB_PASSWORD='${initial_password}'
-
-PLUGIN_DB_HOST='${install_target_host}'
-PLUGIN_DB_PORT=3307
-PLUGIN_DB_NAME=mysql
-PLUGIN_DB_USERNAME=root
-PLUGIN_DB_PASSWORD='${initial_password}'
 EOF
 )
 ./invoke-installer.sh "$WECUBE_PLATFORM_ENV_FILE" wecube-platform
@@ -235,12 +229,6 @@ INITIAL_PASSWORD='${initial_password}'
 USE_MIRROR_IN_MAINLAND_CHINA='${use_mirror_in_mainland_china}'
 
 CORE_HOST='${install_target_host}'
-
-CORE_DB_HOST='${install_target_host}'
-CORE_DB_PORT=3307
-CORE_DB_NAME=wecube
-CORE_DB_USERNAME=root
-CORE_DB_PASSWORD='${initial_password}'
 EOF
 )
 ./invoke-installer.sh "$WECUBE_PLUGIN_HOSTING_ENV_FILE" wecube-plugin-hosting
@@ -264,7 +252,8 @@ ARTIFACTS_S3_BUCKET_NAME=wecube-artifacts
 CORE_HOST='${install_target_host}'
 S3_HOST='${install_target_host}'
 PLUGIN_HOST='${install_target_host}'
-PORTAL_HOST='${install_target_host}'
+PORTAL_ENTRYPOINT='${install_target_host}'
+GATEWAY_ENTRYPOINT='${install_target_host}'
 
 CORE_DB_HOST='${install_target_host}'
 CORE_DB_PORT=3307

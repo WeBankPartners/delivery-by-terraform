@@ -1,0 +1,26 @@
+---
+
+- name: Distribute WeCube installer directory
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../installer/"
+    dest: "{{ installer_dir }}"
+    mode: preserve
+
+- name: Build provisioning env file
+  ansible.builtin.template:
+    src: provisioning.env.j2
+    dest: &env_file "{{ installer_dir }}/provisioning.env"
+
+- name: Invoke installers for provisioning
+  ansible.builtin.command:
+    chdir: "{{ installer_dir }}"
+    argv:
+      - ./invoke-installer.sh
+      - *env_file
+      - "{{ item }}"
+  loop:
+    - params-validator
+    - yum-packages
+    - wecube-user
+    - docker
+    - open-monitor-agent

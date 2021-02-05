@@ -1,0 +1,14 @@
+---
+
+- name: Build db-connectivity env file
+  ansible.builtin.template:
+    src: db-connectivity.env.j2
+    dest: &env_file "{{ installer_dir }}/db-connectivity-{{db_name}}.env"
+
+- name: Invoke installer db-connectivity
+  ansible.builtin.command:
+    chdir: "{{ installer_dir }}"
+    argv:
+      - ./invoke-installer.sh
+      - *env_file
+      - db-connectivity

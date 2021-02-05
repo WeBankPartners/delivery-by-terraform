@@ -1,0 +1,14 @@
+---
+
+- name: Build wecube-platform env file
+  ansible.builtin.template:
+    src: wecube-platform.env.j2
+    dest: &env_file "{{ installer_dir }}/wecube-platform.env"
+
+- name: Invoke installer wecube-platform
+  ansible.builtin.command:
+    chdir: "{{ installer_dir }}"
+    argv:
+      - ./invoke-installer.sh
+      - *env_file
+      - wecube-platform
