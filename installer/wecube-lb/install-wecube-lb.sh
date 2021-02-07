@@ -119,7 +119,7 @@ cat <<-EOF | sudo tee $KEEPALIVED_CONF_FILE
 	    no_preempt
 	    priority ${KEEPALIVED_VRRP_INSTANCE_PRIORITY}
 	    advert_int 1
-	    
+
 	    authentication {
 	        auth_type PASS
 	        auth_pass wecubelb
