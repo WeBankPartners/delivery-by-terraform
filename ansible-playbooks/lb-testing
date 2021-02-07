@@ -1,0 +1,15 @@
+[platform_server]
+
+[platform_db_server]
+
+[platform_s3_server]
+
+[plugin_hosting_server]
+
+[plugin_db_server]
+
+[lb_server]
+192.168.100.101 lb_vip=192.168.100.100 lb_vip_mask=24 lb_interface=eth1 lb_state=MASTER lb_priority=150 lb_peer=192.168.100.102
+192.168.100.102 lb_vip=192.168.100.100 lb_vip_mask=24 lb_interface=eth1 lb_state=BACKUP lb_priority=100 lb_peer=192.168.100.101
+
+[config_server]

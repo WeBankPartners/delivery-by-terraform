@@ -1,0 +1,34 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+
+  config.vm.provision "file", source: File.expand_path("~/.ssh/id_rsa"), destination: "$HOME/.ssh/"
+  config.vm.provision "shell" do |s|
+    public_key = File.read(File.expand_path("~/.ssh/id_rsa.pub"))
+    s.inline = <<-EOF
+      echo 'Copying localhost public SSH Keys to the VM'
+      mkdir -p /home/vagrant/.ssh
+      chmod 700 /home/vagrant/.ssh
+      echo '#{public_key}' >> /home/vagrant/.ssh/authorized_keys
+      chmod -R 600 /home/vagrant/.ssh/authorized_keys
+      echo 'Host *' >> /home/vagrant/.ssh/config
+      echo '  StrictHostKeyChecking no' >> /home/vagrant/.ssh/config
+      echo '  UserKnownHostsFile /dev/null' >> /home/vagrant/.ssh/config
+      chmod -R 600 /home/vagrant/.ssh/config
+
+      mkdir -p /data
+      chown -R vagrant:vagrant /data
+    EOF
+  end
+
+  config.vm.define "lb1" do |lb1|
+    lb1.vm.network "private_network", ip: "192.168.100.101"
+    lb1.vm.provision "file", source: "../installer", destination: "$HOME/"
+    lb1.vm.provision "file", source: "../ansible-playbooks", destination: "$HOME/"
+    lb1.vm.provision "shell", inline: "sudo yum install -y epel-release"
+    lb1.vm.provision "shell", inline: "sudo yum install -y ansible"
+  end
+
+  config.vm.define "lb2" do |lb2|
+    lb2.vm.network "private_network", ip: "192.168.100.102"
+  end
+end

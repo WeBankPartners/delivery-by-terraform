@@ -16,5 +16,8 @@
 172.16.16.16
 
 [lb_server]
-172.16.16.17 lb_vip=172.16.16.100 lb_vip_mask=20 lb_state=MASTER lb_priority=255 lb_peer=172.16.16.8
-172.16.16.8  lb_vip=172.16.16.100 lb_vip_mask=20 lb_state=BACKUP lb_priority=100 lb_peer=172.16.16.17
+172.16.16.17 lb_vip=172.16.16.100 lb_vip_mask=20 lb_interface=eth0 lb_state=MASTER lb_priority=150 lb_peer=172.16.16.8
+172.16.16.8  lb_vip=172.16.16.100 lb_vip_mask=20 lb_interface=eth0 lb_state=BACKUP lb_priority=100 lb_peer=172.16.16.17
+
+[config_server]
+172.16.16.17

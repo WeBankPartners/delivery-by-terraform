@@ -95,6 +95,8 @@ done
 
 
 echo -e "\nInstalling keepalived..."
+#curl http://www.nosuchhost.net/~cheese/fedora/packages/epel-7/x86_64/cheese-release-7-1.noarch.rpm -o cheese-release.rpm
+#sudo rpm -Uvh cheese-release.rpm
 sudo yum install -y keepalived
 
 KEEPALIVED_CONF_FILE="/etc/keepalived/keepalived.conf"
@@ -106,25 +108,38 @@ cat <<-EOF | sudo tee $KEEPALIVED_CONF_FILE
 	    vrrp_gna_interval 0
 	}
 
+	#vrrp_track_process track_dockerd {
+	#    process "dockerd"
+	#}
+
 	vrrp_instance VI_1 {
 	    state ${KEEPALIVED_VRRP_INSTANCE_STATE}
-	    interface eth0
+	    interface ${KEEPALIVED_VRRP_INSTANCE_INTERFACE}
 	    virtual_router_id 51
-	    nopreempt
-	    preempt_delay 10
+	    no_preempt
 	    priority ${KEEPALIVED_VRRP_INSTANCE_PRIORITY}
 	    advert_int 1
+	    
 	    authentication {
 	        auth_type PASS
 	        auth_pass wecubelb
 	    }
+
 	    unicast_src_ip ${KEEPALIVED_SRC_IP}
 	    unicast_peer {
 	        ${KEEPALIVED_PEER_IP}
 	    }
+
 	    virtual_ipaddress {
 	        ${KEEPALIVED_VIRTUAL_IP}
 	    }
+
+	    track_interface {
+	        ${KEEPALIVED_VRRP_INSTANCE_INTERFACE}
+	    }
+	#    track_process {
+	#        track_dockerd
+	#    }
 	}
 EOF
 

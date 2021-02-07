@@ -2,3 +2,7 @@
 **/*.tfstate
 **/*.tfstate.backup
 **/*.tfvars
+
+**/.vagrant/
+
+**/.DS_Store

@@ -54,6 +54,8 @@
       vars:
         platform_group_name: platform_server
 
+- hosts: config_server
+  roles:
     - role: wecube-system-settings
       vars:
         platform_group_name:       platform_server
