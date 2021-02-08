@@ -31,20 +31,6 @@ if [ -n "$ARTIFACTS_COS_REGION" ] && [ -n "$ARTIFACTS_COS_BUCKET" ] && [ -n "$AR
 		python:3 /bin/sh -c "$SHELL_CMD"
 fi
 
-echo -e "\nVerifying MD5 checksum..."
-find "$DOWNLOAD_DIR" -type f | while read FILE; do
-	BASE_NAME=$(basename $FILE)
-	DIR_NAME=$(dirname $FILE)
-	MD5_CHECKSUM=$(md5sum "$FILE" | awk '{ print $1 }')
-	if [ "${BASE_NAME:0:33}" == "${MD5_CHECKSUM}_" ]; then
-		echo "Skipped file $BASE_NAME"
-	else
-		FILE_WITH_MD5_CHECKSUM="${DIR_NAME}/${MD5_CHECKSUM}_${BASE_NAME}"
-		mv "$FILE" "$FILE_WITH_MD5_CHECKSUM"
-		echo "Processed file $FILE_WITH_MD5_CHECKSUM"
-	fi
-done
-
 echo -e "\nUploading artifacts to plugin storage..."
 SHELL_SCRIPT_FILE=$(realpath "./upload-all-files-in-dir-to-minio.sh")
 docker run --rm -t \
