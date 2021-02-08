@@ -9,5 +9,7 @@ if [ -n "$SHOULD_CREATE_ARTIFACTS_BUCKET" ]; then
 fi
 
 find "$DOWNLOAD_DIR" -type f | while read FILE; do
-	mc cp "$FILE" "wecubeS3/$ARTIFACTS_S3_BUCKET_NAME/$(basename $FILE)"
+	FILE_BASE_NAME=$(basename $FILE)
+	echo -e "\nUploading file \"${FILE_BASE_NAME}\"..."
+	mc cp "$FILE" "wecubeS3/$ARTIFACTS_S3_BUCKET_NAME/${FILE_BASE_NAME}"
 done
