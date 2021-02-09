@@ -5,8 +5,9 @@ ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
 
 wecube_release_version:       latest
 wecube_settings:              standard
-dest_dir:                     /data/wecube
+wecube_home:                  /data/wecube
 wecube_user:                  wecube
 initial_password:             Wecube@123456
 use_mirror_in_mainland_china: true
-installer_dir:                "{{ dest_dir }}/installer"
+
+installer_dir:                "{{ wecube_home }}/installer"

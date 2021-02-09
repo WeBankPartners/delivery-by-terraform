@@ -8,6 +8,6 @@
 
     - name: Clearing WeCube installation directory
       file:
-        path: "{{ dest_dir }}"
+        path: "{{ wecube_home }}"
         state: absent
       ignore_errors: yes
