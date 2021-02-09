@@ -6,8 +6,6 @@ ENV_FILE=$1
 
 source $ENV_FILE
 
-echo "Installing docker on $HOST_PRIVATE_IP"
-
 echo -e "\nChecking Docker...\n"
 PREREQUISITES_SATISFIED=''
 if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(sudo docker version >/dev/null 2>&1); then
@@ -103,5 +101,3 @@ echo -e "\nVerifying Docker installation...\n"
 sudo docker version || (echo -e '\n\e[0;31mDocker Engine is not properly installed!\e[0m\n' && exit 1)
 sudo docker-compose version || (echo -e '\n\e[0;31mDocker Compose is not properly installed!\e[0m\n' && exit 1)
 curl -sSLf "http://$HOST_PRIVATE_IP:$DOCKER_PORT/version" || (echo -e '\n\e[0;31mDocker Engine is not listening on TCP port $DOCKER_PORT!\e[0m\n' && exit 1)
-
-echo "Docker installation completed."
