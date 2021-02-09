@@ -28,7 +28,7 @@ catch() {
 }
 
 
-echo -e "Please specify the configuration parameters for WeCube installation.\n"
+echo -e "\nPlease specify the configuration parameters for WeCube installation.\n"
 #### Configuration Section ####
 INSTALL_TARGET_HOST_DEFAULT='127.0.0.1'
 WECUBE_RELEASE_VERSION_DEFAULT='latest'
