@@ -54,15 +54,15 @@ WECUBE_HOME=${WECUBE_HOME:-$WECUBE_HOME_DEFAULT}
 read -p "- WeCube user [$WECUBE_USER_DEFAULT]: " WECUBE_USER
 WECUBE_USER=${WECUBE_USER:-$WECUBE_USER_DEFAULT}
 
-read -s -p "Initial password for WeCube user and MySQL root user [$INITIAL_PASSWORD_DEFAULT]: " INITIAL_PASSWORD_1 && echo ""
+read -s -p "- Initial password for WeCube user and MySQL root user [$INITIAL_PASSWORD_DEFAULT]: " INITIAL_PASSWORD_1 && echo ""
 [ -n "$INITIAL_PASSWORD_1" ] && read -s -p "Please re-enter the password to confirm: " INITIAL_PASSWORD_2 && echo ""
 [ -n "$INITIAL_PASSWORD_1" ] && [ "$INITIAL_PASSWORD_1" != "$INITIAL_PASSWORD_2" ] && echo 'Inputs do not match!' && exit 1
 INITIAL_PASSWORD=${INITIAL_PASSWORD_1:-$INITIAL_PASSWORD_DEFAULT}
 
-read -p "Should use mirror sites in Mainland China [$USE_MIRROR_IN_MAINLAND_CHINA_DEFAULT]: " USE_MIRROR_IN_MAINLAND_CHINA
+read -p "- Should use mirror sites in Mainland China [$USE_MIRROR_IN_MAINLAND_CHINA_DEFAULT]: " USE_MIRROR_IN_MAINLAND_CHINA
 USE_MIRROR_IN_MAINLAND_CHINA=${USE_MIRROR_IN_MAINLAND_CHINA:-$USE_MIRROR_IN_MAINLAND_CHINA_DEFAULT}
 
-echo ""
+echo -e "\nPlease review the following configuration:\n"
 cat <<-EOF | tee "$INSTALLER_LOG_DIR/input-params.log"
 	- INSTALL_TARGET_HOST          = ${INSTALL_TARGET_HOST}
 	- WECUBE_RELEASE_VERSION       = ${WECUBE_RELEASE_VERSION}
@@ -72,6 +72,7 @@ cat <<-EOF | tee "$INSTALLER_LOG_DIR/input-params.log"
 	- INITIAL_PASSWORD             = (*hidden*)
 	- USE_MIRROR_IN_MAINLAND_CHINA = ${USE_MIRROR_IN_MAINLAND_CHINA}
 EOF
+echo ""
 
 read -p "Continue? [y/Y] " -n 1 -r && echo ""
 [[ ! $REPLY =~ ^[Yy]$ ]] && echo "Installation aborted." && exit 1
