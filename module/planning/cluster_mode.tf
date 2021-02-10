@@ -569,9 +569,6 @@ locals {
           AZ_ASSET_NAME            = "TX_GZ_PRD1,TX_GZ_PRD2"
           AZ                       = "${local.primary_availability_zone},${local.secondary_availability_zone}"
 
-          ARTIFACTS_COS_SECRETID   = var.secret_id
-          ARTIFACTS_COS_SECRETKEY  = var.secret_key
-
           S3_ACCESS_KEY            = "access_key"
           S3_SECRET_KEY            = "secret_key"
           AGENT_S3_BUCKET_NAME     = "wecube-agent"

@@ -13,8 +13,6 @@ sudo sed -i "1i\http_access allow wecubehosts whitelist" /etc/squid/squid.conf
 sudo sed -i "1i\http_access allow wecubehosts whitelist_url" /etc/squid/squid.conf
 sudo sed -i "1i\http_access allow wecubehosts internal" /etc/squid/squid.conf
 
-sudo sed -i "1i\acl whitelist dstdomain -i pypi.tuna.tsinghua.edu.cn" /etc/squid/squid.conf
-sudo sed -i "1i\acl whitelist dstdomain -i pypi.python.org" /etc/squid/squid.conf
 sudo sed -i "1i\acl whitelist dstdomain -i .gitee.com" /etc/squid/squid.conf
 sudo sed -i "1i\acl whitelist dstdomain -i .githubusercontent.com" /etc/squid/squid.conf
 sudo sed -i "1i\acl whitelist dstdomain -i .github.com" /etc/squid/squid.conf

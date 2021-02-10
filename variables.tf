@@ -64,11 +64,3 @@ variable "use_mirror_in_mainland_china" {
   type        = bool
   default     = true
 }
-
-variable "artifact_repo_secret_id"  {
-  description = "Secret id used when connecting to artifacts repository"
-}
-
-variable "artifact_repo_secret_key" {
-  description = "Secret key used when connecting to artifacts repository"
-}

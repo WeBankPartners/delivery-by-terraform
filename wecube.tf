@@ -54,9 +54,6 @@ module "planning" {
   availability_zones     = var.availability_zones
   initial_password       = var.initial_password
   default_mysql_port     = var.default_mysql_port
-
-  artifact_repo_secret_id  = var.artifact_repo_secret_id
-  artifact_repo_secret_key = var.artifact_repo_secret_key
 }
 
 module "provisioning" {

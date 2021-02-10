@@ -5,8 +5,6 @@ variable "availability_zones" {}
 variable "initial_password" {}
 variable "default_mysql_port" {}
 
-variable "artifact_repo_secret_id" {}
-variable "artifact_repo_secret_key" {}
 
 locals {
   cluster_mode                = length(var.availability_zones) > 1

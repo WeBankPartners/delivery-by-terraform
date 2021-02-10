@@ -213,9 +213,6 @@ locals {
           AZ_ASSET_NAME            = "TX_BJ_PRD1"
           AZ                       = local.primary_availability_zone
 
-          ARTIFACTS_COS_SECRETID   = var.artifact_repo_secret_id
-          ARTIFACTS_COS_SECRETKEY  = var.artifact_repo_secret_key
-
           S3_ACCESS_KEY            = "access_key"
           S3_SECRET_KEY            = "secret_key"
           AGENT_S3_BUCKET_NAME     = "wecube-agent"
