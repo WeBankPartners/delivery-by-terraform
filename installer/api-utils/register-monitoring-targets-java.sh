@@ -24,36 +24,3 @@ ACCESS_TOKEN="${ACCESS_TOKEN}" ${SCRIPT_DIR}/register-monitoring-target.sh \
 			"exporter": false
 		}
 	EOF
-
-
-# INSTALLED_PLUGIN_PKGS=$(ACCESS_TOKEN="$ACCESS_TOKEN" $SCRIPT_DIR/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
-# jq -r '.[] | select(contains({name: "wecmdb"}) or contains({name: "service-mgmt"})) | .id' <<<"$INSTALLED_PLUGIN_PKGS" | \
-# 	while read -r PLUGIN_PKG_ID; do
-# 		INSTANCE_IDS=$(curl -sSfL \
-# 			--request GET "http://${CORE_HOST}:19090/platform/v1/packages/${PLUGIN_PKG_ID}/instances" \
-# 			--header "Authorization: Bearer ${ACCESS_TOKEN}" \
-# 			| ${SCRIPT_DIR}/check-status-in-json.sh \
-# 			| jq --exit-status -r '[.data[] | .id] | join(" ")'
-# 		)
-
-# 		for INSTANCE_ID in $INSTANCE_IDS; do
-# 			PARTS=${INSTANCE_ID#*__}
-# 			INSTANCE_IP=${PARTS%__*}
-# 			INSTSNCE_PORT=${PARTS#*__}
-# 			INSTANCE_JMX_PORT=$(( $INSTSNCE_PORT + 10000 ))
-
-# 			ACCESS_TOKEN="${ACCESS_TOKEN}" ${SCRIPT_DIR}/register-monitoring-target.sh \
-# 				${SYS_SETTINGS_ENV_FILE} <<-EOF
-# 					{
-# 						"type": "java",
-# 						"name": "platform-core",
-# 						"ip": "${INSTANCE_IP}",
-# 						"port": "${INSTANCE_JMX_PORT}",
-# 						"user": "",
-# 						"password": "",
-# 						"agent_manager": true,
-# 						"exporter": false
-# 					}
-# 				EOF
-# 		done
-# 	done

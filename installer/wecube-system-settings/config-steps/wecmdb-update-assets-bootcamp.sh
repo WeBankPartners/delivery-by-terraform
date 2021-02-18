@@ -6,10 +6,10 @@ ACCESS_TOKEN=$(../api-utils/login.sh $SYS_SETTINGS_ENV_FILE)
 INSTALLED_PLUGIN_PKGS=$(ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/get-plugin-packages.sh $SYS_SETTINGS_ENV_FILE)
 CMDB_PKG_ID=$(jq -r '.[] | select(.name == "wecmdb") | .id' <<<"$INSTALLED_PLUGIN_PKGS")
 
-CMDB_INSANCE_JSON=$(ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/get-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $CMDB_PKG_ID)
-CMDB_INSTANCE_HOST=$(jq --exit-status -r '.host' <<<"$CMDB_INSANCE_JSON")
-CMDB_INSTANCE_PORT=$(jq --exit-status '.port' <<<"$CMDB_INSANCE_JSON")
-CMDB_INSTANCE_NAME=$(jq --exit-status -r '.instanceName' <<<"$CMDB_INSANCE_JSON")
+CMDB_INSTANCE_JSON=$(ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/get-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $CMDB_PKG_ID)
+CMDB_INSTANCE_HOST=$(jq --exit-status -r '.host' <<<"$CMDB_INSTANCE_JSON")
+CMDB_INSTANCE_PORT=$(jq --exit-status '.port' <<<"$CMDB_INSTANCE_JSON")
+CMDB_INSTANCE_NAME=$(jq --exit-status -r '.instanceName' <<<"$CMDB_INSTANCE_JSON")
 
 
 echo -e "\nCreating CI data entry for data type \"host\"..."
