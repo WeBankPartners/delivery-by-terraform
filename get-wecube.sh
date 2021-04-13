@@ -34,7 +34,7 @@ INSTALL_TARGET_HOST_DEFAULT='127.0.0.1'
 WECUBE_RELEASE_VERSION_DEFAULT='latest'
 WECUBE_SETTINGS_DEFAULT='standard'
 WECUBE_HOME_DEFAULT='/data/wecube'
-WECUBE_USER_DEFAULT='wecube'
+WECUBE_USER_DEFAULT='root'
 INITIAL_PASSWORD_DEFAULT='Wecube@123456'
 USE_MIRROR_IN_MAINLAND_CHINA_DEFAULT='true'
 #### End of Configuration Section ####
@@ -51,10 +51,10 @@ WECUBE_SETTINGS=${WECUBE_SETTINGS:-$WECUBE_SETTINGS_DEFAULT}
 read -p "- WeCube installation directory [$WECUBE_HOME_DEFAULT]: " WECUBE_HOME
 WECUBE_HOME=${WECUBE_HOME:-$WECUBE_HOME_DEFAULT}
 
-read -p "- WeCube user [$WECUBE_USER_DEFAULT]: " WECUBE_USER
+read -p "- User to run WeCube [$WECUBE_USER_DEFAULT]: " WECUBE_USER
 WECUBE_USER=${WECUBE_USER:-$WECUBE_USER_DEFAULT}
 
-read -s -p "- Initial password for WeCube user and MySQL root user [$INITIAL_PASSWORD_DEFAULT]: " INITIAL_PASSWORD_1 && echo ""
+read -s -p "- User password (As initial password for MySQL root) [$INITIAL_PASSWORD_DEFAULT]: " INITIAL_PASSWORD_1 && echo ""
 [ -n "$INITIAL_PASSWORD_1" ] && read -s -p "Please re-enter the password to confirm: " INITIAL_PASSWORD_2 && echo ""
 [ -n "$INITIAL_PASSWORD_1" ] && [ "$INITIAL_PASSWORD_1" != "$INITIAL_PASSWORD_2" ] && echo 'Inputs do not match!' && exit 1
 INITIAL_PASSWORD=${INITIAL_PASSWORD_1:-$INITIAL_PASSWORD_DEFAULT}
