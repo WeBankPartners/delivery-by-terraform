@@ -11,7 +11,7 @@ locals {
     # 私有网络名称
     name       = "TGR1_MGMT"
     # 私有网络CIDR IP地址空间块
-    cidr_block = "10.0.130.0/16"
+    cidr_block = "10.0.128.0/20"
   }
 
   # 子网
@@ -19,7 +19,7 @@ locals {
     # 子网名称
     name       = "TGR1_MGMT_APP"
     # 子网的CIDR IP地址空间块
-    cidr_block = "10.0.130.0/24"
+    cidr_block = "10.0.128.0/24"
     # 子网所在的可用区
     availability_zone = local.primary_availability_zone
   }
@@ -92,7 +92,7 @@ locals {
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP
-    private_ip                 = "10.0.130.3"
+    private_ip                 = "10.0.128.3"
     # 是否为主机分配公共网络IP
     allocate_public_ip         = true
     # 主机公共网络出向流量带宽
