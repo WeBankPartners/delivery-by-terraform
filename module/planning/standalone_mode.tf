@@ -9,17 +9,17 @@ locals {
   # 私有网络
   vpc_standalone = {
     # 私有网络名称
-    name       = "TX_BJ_PRD_MGMT"
+    name       = "TGR1_MGMT"
     # 私有网络CIDR IP地址空间块
-    cidr_block = "10.128.200.0/22"
+    cidr_block = "10.0.130.0/16"
   }
 
   # 子网
   subnet_standalone = {
     # 子网名称
-    name       = "TX_BJ_PRD1_MGMT_APP"
+    name       = "TGR1_MGMT_APP"
     # 子网的CIDR IP地址空间块
-    cidr_block = "10.128.202.0/24"
+    cidr_block = "10.0.130.0/24"
     # 子网所在的可用区
     availability_zone = local.primary_availability_zone
   }
@@ -92,7 +92,7 @@ locals {
     # 主机root用户的初始密码
     password                   = var.initial_password
     # 主机使用的私有网络IP
-    private_ip                 = "10.128.202.3"
+    private_ip                 = "10.0.130.3"
     # 是否为主机分配公共网络IP
     allocate_public_ip         = true
     # 主机公共网络出向流量带宽
@@ -208,9 +208,9 @@ locals {
         resource_name   = local.host_standalone.name
         # 在部署后执行步骤使用的环境变量配置文件中注入以下变量和值
         inject_env = {
-          REGION_ASSET_NAME        = "TX_BJ_PRD"
+          REGION_ASSET_NAME        = "TGR1"
           REGION                   = var.region
-          AZ_ASSET_NAME            = "TX_BJ_PRD1"
+          AZ_ASSET_NAME            = "R1Z1"
           AZ                       = local.primary_availability_zone
 
           S3_ACCESS_KEY            = "access_key"
