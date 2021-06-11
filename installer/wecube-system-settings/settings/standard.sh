@@ -6,4 +6,7 @@ ARTIFACTS=(
   "demo-app-spring-boot"
   "demo-app-spring-boot-db"
   "demo-app-nginx"
+  "demo-core"
+  "demo-proxy"
+  "um_auth"
 )
