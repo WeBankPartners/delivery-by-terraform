@@ -76,7 +76,7 @@ locals {
   # 主机
   host_standalone = {
     # 主机实例名称
-    name                       = "txbjwecubehost"
+    name                       = "mapphost1"
     # 主机所在的可用区名称
     availability_zone          = local.primary_availability_zone
     # 主机所在的私有网络中的子网名称
