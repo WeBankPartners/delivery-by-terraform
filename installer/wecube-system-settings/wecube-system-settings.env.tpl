@@ -12,4 +12,4 @@ S3_URL=http://${S3_HOST}:9000
 S3_ACCESS_KEY=access_key
 S3_SECRET_KEY=secret_key
 
-PLUGIN_CMDB_DB_NAME=wecmdb_embedded
+PLUGIN_CMDB_DB_NAME=wecmdb_pro

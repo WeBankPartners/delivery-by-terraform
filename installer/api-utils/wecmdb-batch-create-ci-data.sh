@@ -17,7 +17,7 @@ SCRIPT_DIR=$(dirname "$0")
 [ -z "${ACCESS_TOKEN}" ] && ACCESS_TOKEN=$(${SCRIPT_DIR}/login.sh ${SYS_SETTINGS_ENV_FILE})
 
 curl -sSfL \
-	--request POST "http://${CMDB_INSTANCE_HOST}:${CMDB_INSTANCE_PORT}/${CMDB_INSTANCE_NAME}/ui/v2/ci-types/${CI_TYPE_ID}/ci-data/batch-create" \
+	--request POST "http://${CMDB_INSTANCE_HOST}:${CMDB_INSTANCE_PORT}/${CMDB_INSTANCE_NAME}/api/v1/ci-data/do/Add/${CI_TYPE_ID}" \
 	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 	--header 'Content-Type: application/json' \
 	--data @- <<<"${CI_DATA_JSON}" \

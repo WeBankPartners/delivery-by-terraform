@@ -13,7 +13,7 @@ CMDB_INSTANCE_NAME=$(jq --exit-status -r '.instanceName' <<<"$CMDB_INSTANCE_JSON
 
 
 echo -e "\nCreating CI data entry for data type \"host\"..."
-HOST_CI_TYPE_ID='67'
+HOST_CI_TYPE_ID='host_resource'
 read -d '' HOST_CI_DATA_JSON <<-EOF || true
 	[
 	  {
@@ -30,7 +30,7 @@ ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/wecmdb-batch-create-ci-data.sh $SYS_SE
 
 
 echo -e "\nCreating CI data entry for data type \"artifact\"..."
-ARTIFACT_CI_TYPE_ID='68'
+ARTIFACT_CI_TYPE_ID='deploy_package'
 read -d '' ARTIFACT_CI_DATA_JSON <<-EOF || true
 	[
 	  {

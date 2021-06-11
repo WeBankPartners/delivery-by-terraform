@@ -27,10 +27,8 @@ else
 
 	echo "Updating vpc asset data in CMDB..."
 	read -d '' SQL_STMT <<-EOF || true
-		UPDATE ``network_segment``
-		   SET ``vpc_asset_id``            = '${WECUBE_VPC_ASSET_ID}',
-			   ``route_table_asset_id``    = '${WECUBE_ROUTE_TABLE_ASSET_ID}',
-			   ``security_group_asset_id`` = '${WECUBE_SECURITY_GROUP_ASSET_ID}'
+		UPDATE ``network_zone``
+		   SET ``asset_id``            = '${WECUBE_VPC_ASSET_ID}'
 		 WHERE ``name``                    = '${WECUBE_VPC_ASSET_NAME}';
 	EOF
 	../execute-sql-statements.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
@@ -42,8 +40,8 @@ else
 	WECUBE_SUBNET_ASSET_ID=(${WECUBE_SUBNET_ASSET_ID//,/ })
 	for INDEX in ${!WECUBE_SUBNET_ASSET_NAME[@]}; do
 		read -d '' SQL_STMT <<-EOF || true
-			UPDATE ``network_segment``
-			   SET ``subnet_asset_id`` = '${WECUBE_SUBNET_ASSET_ID[$INDEX]}'
+			UPDATE ``network_subzone``
+			   SET ``asset_id``        = '${WECUBE_SUBNET_ASSET_ID[$INDEX]}'
 			 WHERE ``name``            = '${WECUBE_SUBNET_ASSET_NAME[$INDEX]}';
 		EOF
 		../execute-sql-statements.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
@@ -57,7 +55,7 @@ else
 	WECUBE_HOST_PRIVATE_IP=(${WECUBE_HOST_PRIVATE_IP//,/ })
 	for INDEX in ${!WECUBE_HOST_ASSET_NAME[@]}; do
 		read -d '' SQL_STMT <<-EOF || true
-			UPDATE ``host_resource_instance``
+			UPDATE ``host_resource``
 			   SET ``asset_id``   = '${WECUBE_HOST_ASSET_ID[$INDEX]}',
 				   ``ip_address`` = '${WECUBE_HOST_PRIVATE_IP[$INDEX]}'
 			 WHERE ``name``       = '${WECUBE_HOST_ASSET_NAME[$INDEX]}';
@@ -73,7 +71,7 @@ else
 	WECUBE_DB_PRIVATE_IP=(${WECUBE_DB_PRIVATE_IP//,/ })
 	for INDEX in ${!WECUBE_DB_ASSET_NAME[@]}; do
 		read -d '' SQL_STMT <<-EOF || true
-			UPDATE ``rdb_resource_instance``
+			UPDATE ``rdb_resource``
 			   SET ``asset_id``   = '${WECUBE_DB_ASSET_ID[$INDEX]}',
 				   ``ip_address`` = '${WECUBE_DB_PRIVATE_IP[$INDEX]}'
 			 WHERE ``key_name``   = '${WECUBE_DB_ASSET_NAME[$INDEX]}';
@@ -89,7 +87,7 @@ else
 	WECUBE_LB_PRIVATE_IP=(${WECUBE_LB_PRIVATE_IP//,/ })
 	for INDEX in ${!WECUBE_LB_ASSET_NAME[@]}; do
 		read -d '' SQL_STMT <<-EOF || true
-			UPDATE ``lb_resource_instance``
+			UPDATE ``lb_resource``
 			   SET ``asset_id``   = '${WECUBE_LB_ASSET_ID[$INDEX]}',
 				   ``ip_address`` = '${WECUBE_LB_PRIVATE_IP[$INDEX]}'
 			 WHERE ``key_name``   = '${WECUBE_LB_ASSET_NAME[$INDEX]}';
