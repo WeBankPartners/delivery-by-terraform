@@ -8,5 +8,5 @@ ARTIFACTS=(
   "demo-app-nginx"
   "demo-core"
   "demo-proxy"
-  "um_auth"
+  "um-auth"
 )
