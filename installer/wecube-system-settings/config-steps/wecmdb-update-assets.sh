@@ -29,7 +29,7 @@ else
 	read -d '' SQL_STMT <<-EOF || true
 		UPDATE ``network_zone``
 		   SET ``asset_id``            = '${WECUBE_VPC_ASSET_ID}'
-		 WHERE ``name``                    = '${WECUBE_VPC_ASSET_NAME}';
+		 WHERE ``key_name``                    = '${WECUBE_VPC_ASSET_NAME}';
 	EOF
 	../execute-sql-statements.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
 		$PLUGIN_CMDB_DB_NAME $PLUGIN_DB_USERNAME $PLUGIN_DB_PASSWORD \
@@ -42,7 +42,7 @@ else
 		read -d '' SQL_STMT <<-EOF || true
 			UPDATE ``network_subzone``
 			   SET ``asset_id``        = '${WECUBE_SUBNET_ASSET_ID[$INDEX]}'
-			 WHERE ``name``            = '${WECUBE_SUBNET_ASSET_NAME[$INDEX]}';
+			 WHERE ``key_name``            = '${WECUBE_SUBNET_ASSET_NAME[$INDEX]}';
 		EOF
 		../execute-sql-statements.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
 			$PLUGIN_CMDB_DB_NAME $PLUGIN_DB_USERNAME $PLUGIN_DB_PASSWORD \
