@@ -107,7 +107,8 @@ done
 [ $RETRIES -eq 0 ] && echo 'Failed to fetch installer package! Installation aborted.' && exit 1
 
 # install yum packages
-./invoke-installer.sh "" yum-packages
+yum install epel-release -y
+yum install unzip jq -y
 
 unzip -o -q $INSTALLER_PKG -d $WECUBE_HOME
 cp -R $INSTALLER_SOURCE_CODE_DIR $WECUBE_HOME
