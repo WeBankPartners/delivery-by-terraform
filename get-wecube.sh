@@ -106,6 +106,9 @@ while [ $RETRIES -gt 0 ]; do
 done
 [ $RETRIES -eq 0 ] && echo 'Failed to fetch installer package! Installation aborted.' && exit 1
 
+# install yum packages
+./invoke-installer.sh "" yum-packages
+
 unzip -o -q $INSTALLER_PKG -d $WECUBE_HOME
 cp -R $INSTALLER_SOURCE_CODE_DIR $WECUBE_HOME
 
@@ -150,7 +153,7 @@ PROVISIONING_ENV_FILE="$INSTALLER_DIR/provisioning.env"
 	MYSQL_PASSWORD='${INITIAL_PASSWORD}'
 EOF
 )
-./invoke-installer.sh "$PROVISIONING_ENV_FILE" yum-packages wecube-user docker mysql-docker minio-docker open-monitor-agent
+./invoke-installer.sh "$PROVISIONING_ENV_FILE" wecube-user docker mysql-docker minio-docker open-monitor-agent
 
 WECUBE_DB_ENV_FILE="$INSTALLER_DIR/db-deployment-wecube-db-standalone.env"
 (umask 066 && cat <<-EOF >"$WECUBE_DB_ENV_FILE"
