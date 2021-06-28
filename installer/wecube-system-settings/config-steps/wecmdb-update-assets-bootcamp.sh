@@ -13,14 +13,15 @@ CMDB_INSTANCE_NAME=$(jq --exit-status -r '.instanceName' <<<"$CMDB_INSTANCE_JSON
 
 
 echo -e "\nCreating CI data entry for data type \"host\"..."
-HOST_CI_TYPE_ID='host_resource'
+HOST_CI_TYPE_ID='host'
 read -d '' HOST_CI_DATA_JSON <<-EOF || true
 	[
 	  {
 	    "code": "WECUBE_HOST",
 	    "ip_address": "${CORE_HOST}",
 	    "username": "${WECUBE_USER}",
-	    "password": "${INITIAL_PASSWORD}"
+	    "password": "${INITIAL_PASSWORD}",
+	    "login_port": "22"
 	  }
 	]
 EOF
@@ -30,12 +31,12 @@ ACCESS_TOKEN="$ACCESS_TOKEN" ../api-utils/wecmdb-batch-create-ci-data.sh $SYS_SE
 
 
 echo -e "\nCreating CI data entry for data type \"artifact\"..."
-ARTIFACT_CI_TYPE_ID='deploy_package'
+ARTIFACT_CI_TYPE_ID='artifact'
 read -d '' ARTIFACT_CI_DATA_JSON <<-EOF || true
 	[
 	  {
 	    "code": "bootcamp-app-java-spring-boot_1.0.0",
-	    "download_url": "${S3_URL}/${ARTIFACTS_S3_BUCKET_NAME}/ac97667fe83d5ae961206324aeb48e63_bootcamp-app-java-spring-boot_1.0.0.tar.gz",
+	    "download_url": "${S3_URL}/${ARTIFACTS_S3_BUCKET_NAME}/bootcamp-app-java-spring-boot_1.0.0.tar.gz",
 	    "should_decompress": "true",
 	    "deploy_script": "bootcamp-app-java-spring-boot_1.0.0/bin/deploy.sh",
 	    "start_script": "bootcamp-app-java-spring-boot_1.0.0/bin/start-current.sh",
