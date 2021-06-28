@@ -16,7 +16,7 @@ SUPER_ADMIN_ROLE_ID=$(curl -sSfL \
 	--request GET "http://${CORE_HOST}:19090/platform/v1/users/roles" \
 	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 	| ${SCRIPT_DIR}/check-status-in-json.sh \
-	| jq --exit-status -r '.data[] | select(.name == "SUPER_ADMIN") | .id' \
+	| jq --exit-status -r '.data[] | select(.name == "SUPER_ADMIN") | .name' \
 )
 
 PROCESS_DATA=$(curl -sSfL \
