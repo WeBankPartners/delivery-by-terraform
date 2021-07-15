@@ -89,7 +89,7 @@ INSTALLER_SOURCE_CODE_DIR="$WECUBE_HOME/delivery-by-terraform-master/installer"
 if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
   echo 'Using Gitee as mirror for WeCube code repository in Mainland China.'
   INSTALLER_URL="https://gitee.com/WeBankPartners/delivery-by-terraform/repository/archive/master.zip"
-  INSTALLER_SOURCE_CODE_DIR="$WECUBE_HOME/delivery-by-terraform/installer"
+  INSTALLER_SOURCE_CODE_DIR="$WECUBE_HOME/delivery-by-terraform-master/installer"
 fi
 
 echo -e "\nFetching WeCube installer from \"$INSTALLER_URL\"..."
