@@ -66,6 +66,15 @@ else
 			../api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_ID
 		fi
 	done
+	echo -e "\nEnabling all plugin service config..."
+	read -d '' SQL_STMT <<-EOF || true
+		UPDATE ``plugin_configs``
+	   	SET ``status`` = 'ENABLED'
+	 	WHERE ``register_name`` != '';
+	EOF
+../execute-sql-statements.sh $CORE_DB_HOST $CORE_DB_PORT \
+	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
+	"$SQL_STMT"
 
 	find "$PLUGIN_CONFIG_DIR" -type f -name '*.pds' | while read PROCESS_DEFINITION_FILE; do
 		echo -e "\nImporting and deploying process from file $PROCESS_DEFINITION_FILE"
