@@ -72,9 +72,9 @@ else
 	   	SET ``status`` = 'ENABLED'
 	 	WHERE ``register_name`` != '';
 	EOF
-../execute-sql-statements.sh $CORE_DB_HOST $CORE_DB_PORT \
-	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
-	"$SQL_STMT"
+	../execute-sql-statements.sh $CORE_DB_HOST $CORE_DB_PORT \
+		$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
+		"$SQL_STMT"
 
 	find "$PLUGIN_CONFIG_DIR" -type f -name '*.pds' | while read PROCESS_DEFINITION_FILE; do
 		echo -e "\nImporting and deploying process from file $PROCESS_DEFINITION_FILE"
