@@ -65,6 +65,11 @@ else
 			echo "Restarting WeCMDB instance..."
 			../api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_ID
 		fi
+		
+		if [ "$PLUGIN_PKG_NAME" == "terminal" ]; then
+			echo "Restarting terminal instance..."
+			../api-utils/restart-plugin-instance.sh $SYS_SETTINGS_ENV_FILE $PLUGIN_PKG_ID
+		fi
 	done
 	echo -e "\nEnabling all plugin service config..."
 	read -d '' SQL_STMT <<-EOF || true
