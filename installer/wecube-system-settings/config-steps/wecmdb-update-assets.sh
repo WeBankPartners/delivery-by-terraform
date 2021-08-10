@@ -4,7 +4,7 @@ else
 	echo "Updating region data in CMDB..."
 	read -d '' SQL_STMT <<-EOF || true
 		UPDATE ``data_center``
-		   SET ``location`` = 'Region=${REGION}'
+		   SET ``asset_id`` = '${REGION}'
 		 WHERE ``key_name`` = '${REGION_ASSET_NAME}';
 	EOF
 	../execute-sql-statements.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
@@ -17,7 +17,7 @@ else
 	for INDEX in ${!AZ_ASSET_NAME[@]}; do
 		read -d '' SQL_STMT <<-EOF || true
 			UPDATE ``data_center``
-			 SET ``location`` = 'Region=${REGION}'
+			 SET ``asset_id`` = '${REGION}'
 			WHERE ``key_name`` = '${REGION_ASSET_NAME}';
 		EOF
 		../execute-sql-statements.sh $PLUGIN_DB_HOST $PLUGIN_DB_PORT \
