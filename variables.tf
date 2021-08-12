@@ -13,14 +13,14 @@ variable "secret_key" {
 
 variable "region" {
   description = "The region of the public cloud where resources are to be created"
-  default     = "ap-beijing"
+  default     = "ap-shanghai"
 }
 
 variable "availability_zones" {
   description = "The availability zones in the region where resources are to be created (STANDALONE mode will be used if SINGLE AZ is specified and CLUSTER mode will be used for 2 AZs)"
   type        = list(string)
   default     = [
-    "ap-beijing-4"
+    "ap-shanghai-4"
   ]
 }
 
