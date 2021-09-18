@@ -21,7 +21,7 @@ for VOLUME_DIR in "${VOLUME_DIRECTORIES[@]}"; do
 	echo "  - ${VOLUME_DIR}"
 	mkdir -p $VOLUME_DIR
 	sudo chown -R $USER:$WECUBE_USER $VOLUME_DIR
-	sudo chmod -R 0770 $VOLUME_DIR
+	sudo chmod -R 0777 $VOLUME_DIR
 done
 
 
