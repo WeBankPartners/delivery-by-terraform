@@ -82,7 +82,7 @@ locals {
     # 主机所在的私有网络中的子网名称
     subnet_name                = local.subnet_standalone.name
     # 主机规格类型
-    instance_type              = "S6.LARGE16"
+    instance_type              = "S5.LARGE16"
     # 主机初始化使用的虚拟机镜像名称
     image_id                   = "img-oikl1tzv"
     # 主机存储系统磁盘类型

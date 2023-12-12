@@ -20,7 +20,7 @@ variable "availability_zones" {
   description = "The availability zones in the region where resources are to be created (STANDALONE mode will be used if SINGLE AZ is specified and CLUSTER mode will be used for 2 AZs)"
   type        = list(string)
   default     = [
-    "ap-shanghai-5"
+    "ap-shanghai-2"
   ]
 }
 
