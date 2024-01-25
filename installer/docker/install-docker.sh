@@ -53,7 +53,7 @@ sudo yum install -y docker-ce docker-ce-cli containerd.io
 
 # 安装Docker Compose
 echo "Installing Docker Compose..."
-DOCKER_COMPOSE_URL="https://github.com/docker/compose/releases/download/1.25.4/run.sh"
+DOCKER_COMPOSE_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/docker-compose-Linux-x86_64_1_25_4"
 DOCKER_COMPOSE_BIN="/usr/bin/docker-compose"
 sudo ../curl-with-retry.sh -fL $DOCKER_COMPOSE_URL -o $DOCKER_COMPOSE_BIN
 sudo chmod +x "$DOCKER_COMPOSE_BIN"
