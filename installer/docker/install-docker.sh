@@ -43,13 +43,19 @@ sudo yum remove docker \
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 
 # 安装Docker Engine
-sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
-	echo 'Using mirror for docker yum repository in Mainland China https://mirrors.cloud.tencent.com/docker-ce'
-	sudo sed -i 's+download.docker.com+mirrors.cloud.tencent.com/docker-ce+' /etc/yum.repos.d/docker-ce.repo
-fi
-sudo yum makecache fast
-sudo yum install -y docker-ce docker-ce-cli containerd.io
+#sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+#if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
+#	echo 'Using mirror for docker yum repository in Mainland China https://mirrors.cloud.tencent.com/docker-ce'
+#	sudo sed -i 's+download.docker.com+mirrors.cloud.tencent.com/docker-ce+' /etc/yum.repos.d/docker-ce.repo
+#fi
+#sudo yum makecache fast
+#sudo yum install -y docker-ce docker-ce-cli containerd.io
+echo "Installing Docker ..."
+DOCKER_PACKAGE_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/docker-19.03.15.tgz"
+sudo ../curl-with-retry.sh -fL $DOCKER_PACKAGE_URL -o /tmp/docker-19.03.15.tgz
+sudo tar xzvf /tmp/docker-19.03.15.tgz
+sudo chmod +x /tmp/docker/*
+sudo mv /tmp/docker/* /usr/bin
 
 # 安装Docker Compose
 echo "Installing Docker Compose..."
@@ -70,6 +76,30 @@ cat <<-EOF | sudo tee /etc/systemd/system/docker.service.d/docker-wecube-overrid
 	[Service]
 	ExecStart=
 	ExecStart=$DOCKER_START_CMD
+EOF
+
+cat <<-EOF | sudo tee /lib/systemd/system/docker.service
+	[Unit]
+  Description=docker
+
+  [Service]
+  Environment=QCLOUD_NORM_URL=
+  Type=notify
+  ExecStart=$DOCKER_START_CMD
+  ExecStartPre=/bin/rm -f /var/run/docker.pid
+  ExecStartPost=-/sbin/iptables -I FORWARD -s 0.0.0.0/0 -j ACCEPT
+  ExecReload=/bin/kill -s HUP $MAINPID
+  LimitNOFILE=1048576
+  LimitNPROC=1048576
+  LimitCORE=infinity
+  TimeoutStartSec=0
+  Delegate=yes
+  KillMode=process
+  Restart=always
+  RestartSec=10
+
+  [Install]
+  WantedBy=multi-user.target
 EOF
 
 # 启动Docker服务
