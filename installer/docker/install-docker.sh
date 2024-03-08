@@ -53,7 +53,7 @@ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 echo "Installing Docker ..."
 DOCKER_PACKAGE_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/docker-19.03.15.tgz"
 sudo ../curl-with-retry.sh -fL $DOCKER_PACKAGE_URL -o /tmp/docker-19.03.15.tgz
-sudo tar xzvf /tmp/docker-19.03.15.tgz
+sudo tar xzvf /tmp/docker-19.03.15.tgz -C /tmp
 sudo chmod +x /tmp/docker/*
 sudo mv /tmp/docker/* /usr/bin
 
@@ -66,21 +66,22 @@ sudo chmod +x "$DOCKER_COMPOSE_BIN"
 
 # 配置Docker Engine以监听远程API请求
 echo "Configuring Docker daemon..."
-sudo mkdir -p /etc/systemd/system/docker.service.d
-DOCKER_START_CMD="/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:$DOCKER_PORT"
-if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
-	echo 'Using mirror for docker image registry in Mainland China https://mirror.ccs.tencentyun.com'
-	DOCKER_START_CMD="$DOCKER_START_CMD --registry-mirror=https://mirror.ccs.tencentyun.com"
-fi
-cat <<-EOF | sudo tee /etc/systemd/system/docker.service.d/docker-wecube-override-01-port.conf
-	[Service]
-	ExecStart=
-	ExecStart=$DOCKER_START_CMD
-EOF
+sudo mkdir -p /etc/systemd/system/docker.service.d /etc/docker
+sudo cp daemon.json /etc/docker/
+DOCKER_START_CMD="/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:$DOCKER_PORT"
+#if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
+#	echo 'Using mirror for docker image registry in Mainland China https://mirror.ccs.tencentyun.com'
+#	DOCKER_START_CMD="$DOCKER_START_CMD --registry-mirror=https://mirror.ccs.tencentyun.com"
+#fi
+#cat <<-EOF | sudo tee /etc/systemd/system/docker.service.d/docker-wecube-override-01-port.conf
+#	[Service]
+#	ExecStart=
+#	ExecStart=$DOCKER_START_CMD
+#EOF
 
-cat <<-EOF | sudo tee /lib/systemd/system/docker.service
+cat <<-EOF | sudo tee /lib/systemd/system/dockerd.service
 	[Unit]
-  Description=docker
+  Description=dockerd
 
   [Service]
   Environment=QCLOUD_NORM_URL=
@@ -103,8 +104,8 @@ cat <<-EOF | sudo tee /lib/systemd/system/docker.service
 EOF
 
 # 启动Docker服务
-sudo systemctl enable docker.service
-sudo systemctl start docker.service
+sudo systemctl enable dockerd.service
+sudo systemctl start dockerd.service
 ../wait-for-it.sh -t 60 "$HOST_PRIVATE_IP:$DOCKER_PORT" -- echo "Docker Engine is ready."
 sudo docker run --rm -t hello-world
 
