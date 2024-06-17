@@ -56,7 +56,7 @@ ACCESS_TOKEN=$(curl -sSfL \
 	--request POST "http://${CORE_HOST}:19090/auth/v1/api/login" \
 	--header 'Content-Type: application/json' \
 	--data @- <<<"${CREDENTIALS}" \
-	| ../api-utils/check-status-in-json.sh '.status == "OK" and .message == "success"' \
+	| ../api-utils/check-status-in-json.sh '.status == "OK"' \
 	| jq -r '.data[] | select(.tokenType == "accessToken") | .token'
 )
 

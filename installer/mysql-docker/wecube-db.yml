@@ -1,7 +1,7 @@
 version: "2"
 services:
   mysql-wecube:
-    image: ccr.ccs.tencentyun.com/webankpartners/mysql:5.6
+    image: ccr.ccs.tencentyun.com/webankpartners/mysql:latest
     restart: always
     command:
       [

@@ -165,6 +165,7 @@ WECUBE_DB_ENV_FILE="$INSTALLER_DIR/db-deployment-wecube-db-standalone.env"
 	DB_NAME=wecube
 	DB_USERNAME=root
 	DB_PASSWORD='${INITIAL_PASSWORD}'
+	WECUBE_RELEASE_VERSION='${WECUBE_RELEASE_VERSION}'
 EOF
 )
 ./invoke-installer.sh "$WECUBE_DB_ENV_FILE" db-connectivity

@@ -65,3 +65,9 @@ echo -e "\nInstalling WeCube platform with image version $WECUBE_IMAGE_VERSION"
 #echo -e "\nChanging owner of WeCube home \"$WECUBE_HOME\" to \"$USER:$WECUBE_USER\"..."
 #sudo chown -R $USER:$WECUBE_USER $WECUBE_HOME
 #sudo chmod -R 0770 $WECUBE_HOME
+mkdir -p $WECUBE_HOME/minio-storage/data/wecube-plugin-package-bucket
+mkdir -p $WECUBE_HOME/minio-storage/data/salt-tmp
+mkdir -p $WECUBE_HOME/minio-storage/data/taskman-file
+mkdir -p $WECUBE_HOME/minio-storage/data/terminal
+mkdir -p $WECUBE_HOME/minio-storage/data/wecube-agent
+mkdir -p $WECUBE_HOME/minio-storage/data/wecube-artifacts

@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   wecube-portal:
     image: ${PORTAL_IMAGE}:${PORTAL_IMAGE_VERSION}
@@ -17,7 +17,8 @@ services:
       - GATEWAY_PORT=${GATEWAY_PORT}
       - PUBLIC_DOMAIN=${PUBLIC_DOMAIN}
       - TZ=Asia/Shanghai
-    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/nginx.tpl '$$GATEWAY_HOST $$GATEWAY_PORT $$PUBLIC_DOMAIN' > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
+    command: /bin/bash -c "/etc/nginx/start_platform_portal.sh"
+
 
   platform-gateway:
     image: ${GATEWAY_IMAGE_NAME}:${GATEWAY_IMAGE_VERSION}
@@ -25,72 +26,83 @@ services:
     depends_on:
       - platform-core
     volumes:
-      - ${WECUBE_GATEWAY_LOG_PATH}:${WECUBE_GATEWAY_LOG_PATH}
+      - ${WECUBE_GATEWAY_LOG_PATH}:/app/platform-gateway/logs
       - /etc/localtime:/etc/localtime
     ports:
       - ${GATEWAY_PORT}:8080
     environment:
       - TZ=Asia/Shanghai
+      - LOG_LEVEL=info
       - GATEWAY_ROUTE_CONFIG_SERVER=${GATEWAY_ROUTE_CONFIG_SERVER}
       - GATEWAY_ROUTE_CONFIG_URI=${GATEWAY_ROUTE_CONFIG_URI}
       - GATEWAY_ROUTE_ACCESS_KEY=${GATEWAY_ROUTE_ACCESS_KEY}
-      - WECUBE_CORE_HOST=${WECUBE_CORE_HOST}
-      - AUTH_SERVER_HOST=${AUTH_SERVER_HOST}
-      - WECUBE_GATEWAY_LOG_PATH=${WECUBE_GATEWAY_LOG_PATH}
+      - WECUBE_CORE_ADDRESS=${WECUBE_CORE_HOST}:${WECUBE_SERVER_PORT}
+      - AUTH_SERVER_ADDRESS=${AUTH_SERVER_HOST}:${AUTH_SERVER_PORT}
 
   platform-core:
     image: ${WECUBE_IMAGE_NAME}:${WECUBE_IMAGE_VERSION}
     restart: always
     volumes:
-      - ${APP_LOG_PATH}:${APP_LOG_PATH}
+      - ${APP_LOG_PATH}:/app/platform-core/logs
       - /etc/localtime:/etc/localtime
     ports:
       - ${WECUBE_SERVER_PORT}:8080
-      - ${WECUBE_SERVER_JMX_PORT}:${WECUBE_SERVER_JMX_PORT}
     environment:
       - TZ=Asia/Shanghai
-      - MYSQL_SERVER_ADDR=${MYSQL_SERVER_ADDR}
-      - MYSQL_SERVER_PORT=${MYSQL_SERVER_PORT}
-      - MYSQL_SERVER_DATABASE_NAME=${MYSQL_SERVER_DATABASE_NAME}
-      - MYSQL_USER_NAME=${MYSQL_USER_NAME}
-      - MYSQL_USER_PASSWORD=${MYSQL_USER_PASSWORD}
-      - S3_ENDPOINT=${S3_URL}
-      - S3_ACCESS_KEY=${S3_ACCESS_KEY}
-      - S3_SECRET_KEY=${S3_SECRET_KEY}
-      - STATIC_RESOURCE_SERVER_IP=${STATIC_RESOURCE_SERVER_IP}
-      - STATIC_RESOURCE_SERVER_USER=${STATIC_RESOURCE_SERVER_USER}
-      - STATIC_RESOURCE_SERVER_PASSWORD=${STATIC_RESOURCE_SERVER_PASSWORD}
-      - STATIC_RESOURCE_SERVER_PORT=${STATIC_RESOURCE_SERVER_PORT}
-      - STATIC_RESOURCE_SERVER_PATH=${STATIC_RESOURCE_SERVER_PATH}
-      - GATEWAY_HOST_PORTS=${GATEWAY_URL}
-      - GATEWAY_URL=${GATEWAY_URL}
-      - GATEWAY_HOST=${GATEWAY_HOST}
-      - GATEWAY_PORT=${GATEWAY_PORT}
-      - JWT_SSO_AUTH_URI=${JWT_SSO_AUTH_URI}
-      - JWT_SSO_TOKEN_URI=${JWT_SSO_TOKEN_URI}
-      - WECUBE_PLUGIN_DEPLOY_PATH=${WECUBE_PLUGIN_DEPLOY_PATH}
-      - WECUBE_SERVER_JMX_PORT=${WECUBE_SERVER_JMX_PORT}
-      - WECUBE_BUCKET=${WECUBE_BUCKET}
-      - WECUBE_CORE_HOST=${WECUBE_CORE_HOST}
-      - WECUBE_CUSTOM_PARAM=${WECUBE_CUSTOM_PARAM}
-      - APP_LOG_PATH=${APP_LOG_PATH}
+      - version=${WECUBE_IMAGE_VERSION}
+      - log_level=info
+      - https_enable=false
+      - http_port=8080
+      - db_server=${MYSQL_SERVER_ADDR}
+      - db_port=${MYSQL_SERVER_PORT}
+      - db_database=${MYSQL_SERVER_DATABASE_NAME}
+      - db_user=${MYSQL_USER_NAME}
+      - db_pass=${MYSQL_USER_PASSWORD}
+      - auth_server_url=http://${WECUBE_CORE_HOST}:${AUTH_SERVER_PORT}
+      - jwt_signing_key=Platform+Auth+Server+Secret
+      - s3_address=${S3_URL}
+      - s3_access_key=${S3_ACCESS_KEY}
+      - s3_secret_key=${S3_SECRET_KEY}
+      - static_resource_server_ips=${STATIC_RESOURCE_SERVER_IP}
+      - static_resource_server_user=${STATIC_RESOURCE_SERVER_USER}
+      - static_resource_server_password=${STATIC_RESOURCE_SERVER_PASSWORD}
+      - static_resource_server_port=${STATIC_RESOURCE_SERVER_PORT}
+      - static_resource_server_path=${STATIC_RESOURCE_SERVER_PATH}
+      - plugin_base_mount_path=/data
+      - plugin_deploy_path=/data/app/plugin-image
+      - gateway_host_ports=${GATEWAY_URL}
+      - gateway_url=${GATEWAY_URL}
+      - password_private_key_path=
+      - plugin_password_pub_key_path=
+      - resource_server_password_seed=defaultSeed
+      - sub_system_private_key=
+      - cron_keep_batch_exec_days=20
+      - host_ip=${WECUBE_CORE_HOST}
 
   auth-server:
     image: ${AUTH_SERVER_IMAGE_NAME}:${AUTH_SERVER_IMAGE_VERSION}
     restart: always
     volumes:
-      - ${AUTH_SERVER_LOG_PATH}:${AUTH_SERVER_LOG_PATH}
+      - ${AUTH_SERVER_LOG_PATH}:/app/platform-auth-server/logs
       - /etc/localtime:/etc/localtime
     ports:
       - ${AUTH_SERVER_PORT}:8080
     environment:
       - TZ=Asia/Shanghai
+      - LOG_LEVEL=info
       - MYSQL_SERVER_ADDR=${AUTH_SERVER_MYSQL_ADDR}
       - MYSQL_SERVER_PORT=${AUTH_SERVER_MYSQL_PORT}
       - MYSQL_SERVER_DATABASE_NAME=${AUTH_SERVER_DATABASE_NAME}
       - MYSQL_USER_NAME=${AUTH_SERVER_MYSQL_USER_NAME}
       - MYSQL_USER_PASSWORD=${AUTH_SERVER_MYSQL_USER_PASSWORD}
-      - AUTH_CUSTOM_PARAM=${AUTH_CUSTOM_PARAM}
-      - AUTH_SERVER_LOG_PATH=${AUTH_SERVER_LOG_PATH}
-      - USER_ACCESS_TOKEN=${USER_ACCESS_TOKEN}
-      - USER_REFRESH_TOKEN=${USER_REFRESH_TOKEN}
+      - SIGNING_KEY=Platform+Auth+Server+Secret
+      - USER_ACCESS_TOKEN=20
+      - USER_REFRESH_TOKEN=30
+      - WECUBE_CORE_ADDRESS=${WECUBE_CORE_HOST}:${WECUBE_SERVER_PORT}
+      - SENDER_NAME=
+      - SENDER_MAIL=
+      - AUTH_SERVER=
+      - AUTH_PASSWORD=
+      - SSL=Y
+      - NOTIFY_PERCENT=80
+

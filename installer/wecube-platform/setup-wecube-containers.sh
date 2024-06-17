@@ -17,9 +17,9 @@ for VOLUME_DIR in "${VOLUME_DIRECTORIES[@]}"; do
 	echo "  - ${VOLUME_DIR}"
 	mkdir -p $VOLUME_DIR
 	sudo chown -R $USER:$WECUBE_USER $VOLUME_DIR
-	sudo chmod -R 0770 $VOLUME_DIR
+	sudo chmod -R 0777 $VOLUME_DIR
 done
-
+mkdir -p /data/app/plugin-image
 echo "Starting WeCube containers..."
 
 DOCKER_COMPOSE_ENV_FILE="./wecube-platform.docker-compose.env"
@@ -36,7 +36,7 @@ PORTS_TO_CHECK=(
   "$PORTAL_PORT"
 )
 for PORT_TO_CHECK in "${PORTS_TO_CHECK[@]}"; do
-	../wait-for-it.sh -t 120 "$HOST_PRIVATE_IP:$PORT_TO_CHECK" -- echo -e "Service listening at port $PORT_TO_CHECK is ready.\n"
+	../wait-for-it.sh -t 180 "$HOST_PRIVATE_IP:$PORT_TO_CHECK" -- echo -e "Service listening at port $PORT_TO_CHECK is ready.\n"
 done
 
 # 再次启用IP转发并配置桥接来解决Docker容器对外部网络的通信问题

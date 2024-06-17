@@ -17,5 +17,5 @@ curl -sSfL \
 	--request POST "http://${CORE_HOST}:19090/auth/v1/api/login" \
 	--header 'Content-Type: application/json' \
 	--data @- <<<"${REQUEST_BODY}" \
-	| ${SCRIPT_DIR}/check-status-in-json.sh '.status == "OK" and .message == "success"' \
+	| ${SCRIPT_DIR}/check-status-in-json.sh '.status == "OK"' \
 	| jq -r '.data[] | select(.tokenType == "accessToken") | .token'
