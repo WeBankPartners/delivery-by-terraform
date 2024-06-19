@@ -17,20 +17,20 @@ RESPONSE_JSON=$(curl -sSfL \
 	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 	| ${SCRIPT_DIR}/check-status-in-json.sh
 )
-DATA_MODEL=$(jq '.data' <<<"$RESPONSE_JSON")
-
-ALLOWED_METHODS=$(curl -sSfLi \
-	--request OPTIONS "http://${CORE_HOST}:19090/platform/v1/models" \
-	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
-	| grep 'Allow:'
-)
-if [ "${ALLOWED_METHODS/POST/}" != "${ALLOWED_METHODS}" ]; then
-	curl -sSfL --request POST "http://${CORE_HOST}:19090/platform/v1/models" \
-		--header "Authorization: Bearer ${ACCESS_TOKEN}" \
-		--header 'Content-Type: application/json' \
-		--data @- <<<"${DATA_MODEL}" \
-		| ${SCRIPT_DIR}/check-status-in-json.sh \
-		| jq --exit-status '{status: .status, message: .message, data: {id: .data.id, version: .data.version, packageName: .data.packageName}}'
-else
-	jq '{status: .status, message: .message, data: {id: .data.id, version: .data.version, packageName: .data.packageName}}' <<<"$RESPONSE_JSON"
-fi
+#DATA_MODEL=$(jq '.data' <<<"$RESPONSE_JSON")
+#
+#ALLOWED_METHODS=$(curl -sSfLi \
+#	--request OPTIONS "http://${CORE_HOST}:19090/platform/v1/models" \
+#	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
+#	| grep 'Allow:'
+#)
+#if [ "${ALLOWED_METHODS/POST/}" != "${ALLOWED_METHODS}" ]; then
+#	curl -sSfL --request POST "http://${CORE_HOST}:19090/platform/v1/models" \
+#		--header "Authorization: Bearer ${ACCESS_TOKEN}" \
+#		--header 'Content-Type: application/json' \
+#		--data @- <<<"${DATA_MODEL}" \
+#		| ${SCRIPT_DIR}/check-status-in-json.sh \
+#		| jq --exit-status '{status: .status, message: .message, data: {id: .data.id, version: .data.version, packageName: .data.packageName}}'
+#else
+#	jq '{status: .status, message: .message, data: {id: .data.id, version: .data.version, packageName: .data.packageName}}' <<<"$RESPONSE_JSON"
+#fi
