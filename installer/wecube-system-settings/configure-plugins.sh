@@ -97,6 +97,14 @@ EOF
 	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
 	"$SQL_STMT"
 
+echo -e "\nUpdate taskman requestTemplate proc def id..."
+read -d '' SQL_STMT <<-EOF || true
+	update taskman.request_template rt,wecube.proc_def pd set rt.proc_def_id=pd.id where rt.proc_def_key=pd.key;
+EOF
+../execute-sql-statements.sh $CORE_DB_HOST $CORE_DB_PORT \
+	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
+	"$SQL_STMT"
+
 echo -e "\nInvoking extra config steps: ${EXTRA_CONFIG_STEPS[*]}"
 for CONFIG_STEP in "${EXTRA_CONFIG_STEPS[@]}"; do
 	echo -e "\nInvoking config step \"$CONFIG_STEP\""
