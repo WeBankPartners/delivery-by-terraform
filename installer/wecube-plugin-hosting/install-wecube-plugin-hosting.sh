@@ -43,7 +43,7 @@ else
 fi
 
 echo -e "\nWaiting for WeCube platform initialization..."
-../wait-for-it.sh -t 300 "$CORE_HOST:19100" -- echo "WeCube platform core is ready."
+../wait-for-it.sh -t 120 "$CORE_HOST:19090" -- echo "WeCube platform core is ready."
 
 echo -e "\nCreating resource server record..."
 

@@ -31,7 +31,6 @@ echo -e "\nChecking service port readiness...\n"
 PORTS_TO_CHECK=(
   "$AUTH_SERVER_PORT"
   "$WECUBE_SERVER_PORT"
-  "$WECUBE_SERVER_JMX_PORT"
   "$GATEWAY_PORT"
   "$PORTAL_PORT"
 )
