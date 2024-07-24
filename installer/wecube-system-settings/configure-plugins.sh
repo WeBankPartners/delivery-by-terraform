@@ -100,6 +100,7 @@ EOF
 echo -e "\nUpdate taskman requestTemplate proc def id..."
 read -d '' SQL_STMT <<-EOF || true
 	update taskman.request_template rt,wecube.proc_def pd set rt.proc_def_id=pd.id where rt.proc_def_key=pd.key;
+	update wecube.plugin_packages set register_done=1 where status='REGISTERED';
 EOF
 ../execute-sql-statements.sh $CORE_DB_HOST $CORE_DB_PORT \
 	$CORE_DB_NAME $CORE_DB_USERNAME $CORE_DB_PASSWORD \
