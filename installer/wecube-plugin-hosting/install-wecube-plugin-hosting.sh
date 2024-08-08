@@ -24,23 +24,23 @@ for PLUGIN_HOSTING_DIR in "${PLUGIN_HOSTING_DIRS[@]}"; do
 	sudo chmod -R 0770 $PLUGIN_HOSTING_DIR
 done
 
-kaline=`grep 'KexAlgorithms' /etc/ssh/sshd_config`
-hellmansha1='diffie-hellman-group-exchange-sha1'
-if [ -z "$kaline" ]
-then
-  echo 'KexAlgorithms line empty'
-else
-  if [[ $kaline =~ $hellmansha1 ]]
-   then
-     echo 'ssh ka check ok'
-  else
-    echo 'ssh ka check,add hellman-sha1'
-    newkaline="${kaline},${hellmansha1}"
-    echo ${newkaline}
-    sed -i "s~${kaline}~${newkaline}~g" /etc/ssh/sshd_config
-    systemctl restart sshd
-  fi
-fi
+#kaline=`grep 'KexAlgorithms' /etc/ssh/sshd_config`
+#hellmansha1='diffie-hellman-group-exchange-sha1'
+#if [ -z "$kaline" ]
+#then
+#  echo 'KexAlgorithms line empty'
+#else
+#  if [[ $kaline =~ $hellmansha1 ]]
+#   then
+#     echo 'ssh ka check ok'
+#  else
+#    echo 'ssh ka check,add hellman-sha1'
+#    newkaline="${kaline},${hellmansha1}"
+#    echo ${newkaline}
+#    sed -i "s~${kaline}~${newkaline}~g" /etc/ssh/sshd_config
+#    systemctl restart sshd
+#  fi
+#fi
 
 echo -e "\nWaiting for WeCube platform initialization..."
 ../wait-for-it.sh -t 120 "$CORE_HOST:19090" -- echo "WeCube platform core is ready."
