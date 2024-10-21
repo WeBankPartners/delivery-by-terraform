@@ -48,7 +48,6 @@ services:
     ports:
       - ${WECUBE_SERVER_PORT}:8080
     environment:
-      - TZ=Asia/Shanghai
       - version=${WECUBE_IMAGE_VERSION}
       - log_level=info
       - https_enable=false
@@ -88,7 +87,6 @@ services:
     ports:
       - ${AUTH_SERVER_PORT}:8080
     environment:
-      - TZ=Asia/Shanghai
       - LOG_LEVEL=info
       - MYSQL_SERVER_ADDR=${AUTH_SERVER_MYSQL_ADDR}
       - MYSQL_SERVER_PORT=${AUTH_SERVER_MYSQL_PORT}
