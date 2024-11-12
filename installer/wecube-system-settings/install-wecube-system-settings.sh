@@ -84,6 +84,8 @@ else
 	done
 fi
 
+../substitute-in-file.sh $ENV_FILE "./wecube_import_asset_id.json.tpl" "./wecube_import_asset_id.json"
+
 echo -e "\nAppending the following env vars in file $SYS_SETTINGS_ENV_FILE"
 cat <<-EOF | tee -a "$SYS_SETTINGS_ENV_FILE"
 	PLUGIN_PKGS=(${PLUGIN_PKGS[@]})

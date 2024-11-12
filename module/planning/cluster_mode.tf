@@ -159,7 +159,7 @@ locals {
     # 主机所在的私有网络中的子网名称
     subnet_name                = local.subnet_vdi_cluster.name
     # 主机规格类型
-    instance_type              = "S2.SMALL1"
+    instance_type              = "S5.MEDIUM2"
     # 主机初始化使用的虚拟机镜像名称
     image_id                   = "img-oikl1tzv"
     # 主机存储系统使用的磁盘类型
@@ -198,7 +198,7 @@ locals {
     # 主机所在的私有网络中的子网名称
     subnet_name                = local.subnet_proxy_cluster.name
     # 主机规格类型
-    instance_type              = "S2.SMALL1"
+    instance_type              = "S5.MEDIUM2"
     # 主机初始化使用的虚拟机镜像名称
     image_id                   = "img-oikl1tzv"
     # 主机存储系统使用的磁盘类型
@@ -262,7 +262,7 @@ locals {
     name                       = "TX_GZ_PRD_MGMT_1M1_DOCKER1__wecubeplugin01"
     availability_zone          = local.primary_availability_zone
     subnet_name                = local.subnet_app_1_cluster.name
-    instance_type              = "S2.LARGE8"
+    instance_type              = "S5.MEDIUM8"
     image_id                   = "img-oikl1tzv"
     system_disk_type           = "CLOUD_PREMIUM"
     system_disk_size           = 50
@@ -276,7 +276,7 @@ locals {
     name                       = "TX_GZ_PRD_MGMT_1M1_DOCKER1__wecubeplugin02"
     availability_zone          = local.secondary_availability_zone
     subnet_name                = local.subnet_app_2_cluster.name
-    instance_type              = "S2.LARGE8"
+    instance_type              = "S5.MEDIUM8"
     image_id                   = "img-oikl1tzv"
     system_disk_type           = "CLOUD_PREMIUM"
     system_disk_size           = 50
@@ -393,13 +393,13 @@ locals {
         db_resource_name     = local.core_db.name
         db_name              = "auth_server"
       },
-      {
-        name                 = "plugin-db-cluster"
-        installer            = "db-connectivity"
-        client_resource_name = local.plugin_host_1_cluster.name
-        db_resource_name     = local.plugin_db_instance_cluster.name
-        db_name              = "mysql"
-      },
+#       {
+#         name                 = "plugin-db-cluster"
+#         installer            = "db-connectivity"
+#         client_resource_name = local.plugin_host_1_cluster.name
+#         db_resource_name     = local.plugin_db_instance_cluster.name
+#         db_name              = "mysql"
+#       },
     ]
 
     # 应用组件部署计划

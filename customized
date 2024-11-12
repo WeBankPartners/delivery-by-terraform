@@ -3,17 +3,20 @@
 ##################################################
 
 # Version of WeCube platform docker image
-WECUBE_IMAGE_VERSION="v2.8.0"
+WECUBE_IMAGE_VERSION="v4.3.0"
 
 # Versions of WeCube plugin packages
 PLUGIN_PKGS=(
-  "https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/wecube-plugins-wecmdb-v1.5.5.7.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-saltstack-v1.10.4.zip"
-  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-monitor-v1.10.0.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-wecmdb-v2.0.27.1-pro.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-saltstack-v1.10.20.13.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-monitor-3.2.8.20.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-artifacts-v1.1.12.41.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-terraform-v0.5.13.zip"
+  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2/wecube-plugins-taskman-v1.2.5.10.zip"
 )
 
-PLUGIN_CONFIG_PKG="https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/bootcamp_dev.zip"
-
+# PLUGIN_CONFIG_PKG="https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/bootcamp_dev.zip"
+PLUGIN_CONFIG_PKG=""
 
 ################################################
 # Configurations for Specific Project Delivery #
@@ -24,5 +27,5 @@ ARTIFACTS_PKGS=(
 #  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/4523d14ea55a20293f6fa2e1da524618_demo-app-spring-boot_1.5.3.tar.gz"
 #  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/d502c4127f7c3cc6fb7a060eab1e31bb_demo-app-spring-boot-db_1.0.1.tar.gz"
 #  "https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/demo_system/d87dd39bfb554f6b40286c5965925179_demo-app-nginx_0.1.1.tar.gz"
-  "https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/bootcamp-app-java-spring-boot_1.0.0.tar.gz"
+#  "https://wecube-artifacts-1259008868.cos.ap-guangzhou.myqcloud.com/bootcamp-app-java-spring-boot_1.0.0.tar.gz"
 )

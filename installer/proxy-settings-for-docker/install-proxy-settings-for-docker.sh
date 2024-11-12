@@ -19,4 +19,4 @@ EOF
 ../wait-for-it.sh -t 60 "$PROXY_HOST:$PROXY_PORT" -- echo "Connection to proxy is ready."
 
 sudo systemctl daemon-reload
-sudo systemctl restart docker
+sudo systemctl restart dockerd
