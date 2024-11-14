@@ -90,6 +90,10 @@ module "deployment" {
   resource_map      = module.provisioning.resource_map
 }
 
+output "region" {
+  value = var.region
+}
+
 output "total_elapsed_time" {
   value = local.elapsed_time_text
 }

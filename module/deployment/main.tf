@@ -237,3 +237,13 @@ resource "null_resource" "post_deployment_steps" {
     ]
   }
 }
+
+resource "null_resource" "post_gen_asset_json" {
+  depends_on = [
+    null_resource.post_deployment_steps,
+  ]
+
+  provisioner "local-exec" {
+      command = "./gen_asset_json.sh"
+  }
+}
