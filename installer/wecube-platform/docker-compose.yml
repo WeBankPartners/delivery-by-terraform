@@ -38,6 +38,10 @@ services:
       - GATEWAY_ROUTE_ACCESS_KEY=${GATEWAY_ROUTE_ACCESS_KEY}
       - WECUBE_CORE_ADDRESS=${WECUBE_CORE_HOST}:${WECUBE_SERVER_PORT}
       - AUTH_SERVER_ADDRESS=${AUTH_SERVER_HOST}:${AUTH_SERVER_PORT}
+      - HTTP_TIMEOUT_MINUTE=30
+      - WECUBE_SUB_SYSTEM_AUTH_CODE=0001
+      - WECUBE_SUB_SYSTEM_CORE_CODE=0002
+      - WECUBE_SUB_SYSTEM_PLUGIN_CODE=0003
 
   platform-core:
     image: ${WECUBE_IMAGE_NAME}:${WECUBE_IMAGE_VERSION}
@@ -77,6 +81,8 @@ services:
       - sub_system_private_key=
       - cron_keep_batch_exec_days=20
       - host_ip=${WECUBE_CORE_HOST}
+      - encrypt_seed=
+      - menu_api_map_enable=Y
 
   auth-server:
     image: ${AUTH_SERVER_IMAGE_NAME}:${AUTH_SERVER_IMAGE_VERSION}
