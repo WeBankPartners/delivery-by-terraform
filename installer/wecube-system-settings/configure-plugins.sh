@@ -14,6 +14,7 @@ PLUGIN_PKG_DIR="$INSTALLER_DIR/plugin-packages"
 mkdir -p "$PLUGIN_PKG_DIR"
 for PLUGIN_URL in "${PLUGIN_PKGS[@]}"; do
 	PLUGIN_PKG_FILE="$PLUGIN_PKG_DIR/${PLUGIN_URL##*'/'}"
+	PLUGIN_URL=$(echo "${PLUGIN_URL}" | sed "s#https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/plugins-v2#https://wecube-package.s3.ap-southeast-1.amazonaws.com/${WECUBE_RELEASE_VERSION}#g")
 	echo -e "\nFetching plugin package from $PLUGIN_URL"
 	../curl-with-retry.sh -fL $PLUGIN_URL -o $PLUGIN_PKG_FILE
 	echo -e "\nInstalling plugin package $PLUGIN_PKG_FILE"

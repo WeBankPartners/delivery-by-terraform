@@ -112,16 +112,18 @@ sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
 sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
 
 # install yum packages
+yum remove mysql-community-libs -y
 yum install epel-release vim tar unzip jq iptables-services mysql -y
 
 # change ssh config
 sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config 
+sed -i 's/#PermitRootLogin forced-commands-only/PermitRootLogin yes/g' /etc/ssh/sshd_config 
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 systemctl restart sshd
 
 # replace latest release version
 if [ "$WECUBE_RELEASE_VERSION" == "latest" ]; then
-  WECUBE_RELEASE_VERSION = `curl -s https://api.github.com/repos/WeBankPartners/wecube-platform/releases/latest | jq -r '.tag_name'`
+  WECUBE_RELEASE_VERSION=$(curl -s https://api.github.com/repos/WeBankPartners/wecube-platform/releases/latest | jq -r '.tag_name')
   echo "Latest release version is ${WECUBE_RELEASE_VERSION}"
 fi
 
@@ -169,7 +171,17 @@ PROVISIONING_ENV_FILE="$INSTALLER_DIR/provisioning.env"
 	MYSQL_PASSWORD='${INITIAL_PASSWORD}'
 EOF
 )
-./invoke-installer.sh "$PROVISIONING_ENV_FILE" wecube-user docker mysql-docker minio-docker open-monitor-agent
+./invoke-installer.sh "$PROVISIONING_ENV_FILE" wecube-user docker
+
+# download s3 docker image and load image
+./curl-with-retry.sh -fL "https://wecube-package.s3.ap-southeast-1.amazonaws.com/${WECUBE_RELEASE_VERSION}/minio.tar" -o /tmp/minio.tar
+./curl-with-retry.sh -fL "https://wecube-package.s3.ap-southeast-1.amazonaws.com/${WECUBE_RELEASE_VERSION}/mysql.tar" -o /tmp/mysql.tar
+./curl-with-retry.sh -fL "https://wecube-package.s3.ap-southeast-1.amazonaws.com/${WECUBE_RELEASE_VERSION}/platform.zip" -o /tmp/platform.zip
+unzip -o /tmp/platform.zip -d /tmp/platform
+docker load --input /tmp/minio.tar
+docker load --input /tmp/mysql.tar
+find /tmp/platform/platform/ -name "*.tar" -exec docker load --input {} \;
+./invoke-installer.sh "$PROVISIONING_ENV_FILE" mysql-docker minio-docker open-monitor-agent
 
 WECUBE_DB_ENV_FILE="$INSTALLER_DIR/db-deployment-wecube-db-standalone.env"
 (umask 066 && cat <<-EOF >"$WECUBE_DB_ENV_FILE"
