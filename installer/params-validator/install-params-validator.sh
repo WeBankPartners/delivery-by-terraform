@@ -9,7 +9,7 @@ source $ENV_FILE
 echo "Validating installation parameters..."
 
 echo -e "\nChecking WeCube installation directory \"${WECUBE_HOME}\"..."
-if [ -d "${WECUBE_HOME}" ] && [ -n "$(ls --hide=delivery-by-terraform --hide=delivery-by-terraform-master --hide=installer --hide=wecube-installer.zip ${WECUBE_HOME})" ]; then
+if [ -d "${WECUBE_HOME}" ] && [ -n "$(ls --hide=delivery-by-terraform --hide=delivery-by-terraform-aws --hide=installer --hide=wecube-installer.zip ${WECUBE_HOME})" ]; then
 	echo -e "\e[0;31mWeCube home directory is not empty, please clean that directory or use another location.\e[0m"
 	exit 1
 else

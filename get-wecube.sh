@@ -84,12 +84,12 @@ sudo chown -R $USER:$USER $WECUBE_HOME
 INSTALLER_URL="https://github.com/WeBankPartners/delivery-by-terraform/archive/refs/heads/aws.zip"
 INSTALLER_PKG="$WECUBE_HOME/wecube-installer.zip"
 INSTALLER_DIR="$WECUBE_HOME/installer"
-INSTALLER_SOURCE_CODE_DIR="$WECUBE_HOME/delivery-by-terraform-master/installer"
+INSTALLER_SOURCE_CODE_DIR="$WECUBE_HOME/delivery-by-terraform-aws/installer"
 
 if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
   echo 'Using Gitee as mirror for WeCube code repository in Mainland China.'
   INSTALLER_URL="https://gitee.com/WeBankPartners/delivery-by-terraform/archive/refs/heads/aws.zip"
-  INSTALLER_SOURCE_CODE_DIR="$WECUBE_HOME/delivery-by-terraform-master/installer"
+  INSTALLER_SOURCE_CODE_DIR="$WECUBE_HOME/delivery-by-terraform-aws/installer"
 fi
 
 echo -e "\nFetching WeCube installer from \"$INSTALLER_URL\"..."
@@ -110,6 +110,7 @@ done
 sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
 sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
 sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+rm -f /etc/yum.repos.d/epel.repo
 
 # install yum packages
 yum remove mysql-community-libs -y
