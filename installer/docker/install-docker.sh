@@ -51,7 +51,7 @@ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 #sudo yum makecache fast
 #sudo yum install -y docker-ce docker-ce-cli containerd.io
 echo "Installing Docker ..."
-DOCKER_PACKAGE_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/docker-19.03.15.tgz"
+DOCKER_PACKAGE_URL="https://wecube-package.s3.ap-southeast-1.amazonaws.com/docker/docker-19.03.15.tgz"
 sudo ../curl-with-retry.sh -fL $DOCKER_PACKAGE_URL -o /tmp/docker-19.03.15.tgz
 sudo tar xzvf /tmp/docker-19.03.15.tgz -C /tmp
 sudo chmod +x /tmp/docker/*
@@ -59,7 +59,7 @@ sudo mv /tmp/docker/* /usr/bin
 
 # 安装Docker Compose
 echo "Installing Docker Compose..."
-DOCKER_COMPOSE_URL="https://wecube-1259801214.cos.ap-guangzhou.myqcloud.com/docker-compose-Linux-x86_64_1_25_4"
+DOCKER_COMPOSE_URL="https://wecube-package.s3.ap-southeast-1.amazonaws.com/docker/docker-compose-Linux-x86_64_1_25_4"
 DOCKER_COMPOSE_BIN="/usr/bin/docker-compose"
 sudo ../curl-with-retry.sh -fL $DOCKER_COMPOSE_URL -o $DOCKER_COMPOSE_BIN
 sudo chmod +x "$DOCKER_COMPOSE_BIN"

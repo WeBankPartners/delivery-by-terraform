@@ -36,7 +36,7 @@ WECUBE_SETTINGS_DEFAULT='standard'
 WECUBE_HOME_DEFAULT='/data/wecube'
 WECUBE_USER_DEFAULT='root'
 INITIAL_PASSWORD_DEFAULT='Wecube@123456'
-USE_MIRROR_IN_MAINLAND_CHINA_DEFAULT='true'
+USE_MIRROR_IN_MAINLAND_CHINA_DEFAULT='false'
 #### End of Configuration Section ####
 
 read -p "- Host [$INSTALL_TARGET_HOST_DEFAULT]: " INSTALL_TARGET_HOST
@@ -106,9 +106,24 @@ while [ $RETRIES -gt 0 ]; do
 done
 [ $RETRIES -eq 0 ] && echo 'Failed to fetch installer package! Installation aborted.' && exit 1
 
+# replace yum repo
+sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
+sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
+sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+
 # install yum packages
-yum install epel-release -y
-yum install unzip jq -y
+yum install epel-release vim tar unzip jq iptables-services mysql -y
+
+# change ssh config
+sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config 
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+systemctl restart sshd
+
+# replace latest release version
+if [ "$WECUBE_RELEASE_VERSION" == "latest" ]; then
+  WECUBE_RELEASE_VERSION = `curl -s https://api.github.com/repos/WeBankPartners/wecube-platform/releases/latest | jq -r '.tag_name'`
+  echo "Latest release version is ${WECUBE_RELEASE_VERSION}"
+fi
 
 unzip -o -q $INSTALLER_PKG -d $WECUBE_HOME
 cp -R $INSTALLER_SOURCE_CODE_DIR $WECUBE_HOME
