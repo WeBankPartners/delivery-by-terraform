@@ -81,14 +81,14 @@ read -p "Continue? [y/Y] " -n 1 -r && echo ""
 sudo mkdir -p $WECUBE_HOME
 sudo chown -R $USER:$USER $WECUBE_HOME
 
-INSTALLER_URL="https://github.com/WeBankPartners/delivery-by-terraform/archive/master.zip"
+INSTALLER_URL="https://github.com/WeBankPartners/delivery-by-terraform/archive/refs/heads/aws.zip"
 INSTALLER_PKG="$WECUBE_HOME/wecube-installer.zip"
 INSTALLER_DIR="$WECUBE_HOME/installer"
 INSTALLER_SOURCE_CODE_DIR="$WECUBE_HOME/delivery-by-terraform-master/installer"
 
 if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
   echo 'Using Gitee as mirror for WeCube code repository in Mainland China.'
-  INSTALLER_URL="https://gitee.com/WeBankPartners/delivery-by-terraform/repository/archive/master.zip"
+  INSTALLER_URL="https://gitee.com/WeBankPartners/delivery-by-terraform/archive/refs/heads/aws.zip"
   INSTALLER_SOURCE_CODE_DIR="$WECUBE_HOME/delivery-by-terraform-master/installer"
 fi
 
