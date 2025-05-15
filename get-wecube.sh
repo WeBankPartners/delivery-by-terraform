@@ -114,7 +114,9 @@ rm -f /etc/yum.repos.d/epel.repo
 
 # install yum packages
 yum remove mysql-community-libs -y
-yum install epel-release vim tar unzip jq iptables-services mysql -y
+yum install epel-release net-tools vim tar unzip jq iptables-services mysql -y
+systemctl start iptables
+setenforce 0
 
 # change ssh config
 sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config 
