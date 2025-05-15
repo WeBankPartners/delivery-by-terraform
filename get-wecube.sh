@@ -182,6 +182,9 @@ EOF
 unzip -o /tmp/platform.zip -d /tmp/platform
 docker load --input /tmp/minio.tar
 docker load --input /tmp/mysql.tar
+if [ "$WECUBE_RELEASE_VERSION" != "latest" ]; then
+  docker tag ccr.ccs.tencentyun.com/webankpartners/mysql:${WECUBE_RELEASE_VERSION} ccr.ccs.tencentyun.com/webankpartners/mysql:latest
+fi
 find /tmp/platform/platform/ -name "*.tar" -exec docker load --input {} \;
 ./invoke-installer.sh "$PROVISIONING_ENV_FILE" mysql-docker minio-docker open-monitor-agent
 
