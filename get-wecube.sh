@@ -286,4 +286,4 @@ popd >/dev/null
 
 ELAPSED_TIME="$((${SECONDS}/60))m$((${SECONDS}%60))s"
 echo -e "\n\n\e[0;32mWeCube installation completed in ${ELAPSED_TIME}.\e[0m"
-echo -e "\n\e[0;32mPlease visit WeCube at http://${INSTALL_TARGET_HOST}:19090\e[0m\n"
+echo -e "\n\e[0;32mPlease visit WeCube at http://${INSTALL_TARGET_HOST}:8080\e[0m\n"

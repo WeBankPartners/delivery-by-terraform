@@ -18,13 +18,13 @@ INSTANCE_PORT=$(jq --exit-status '.port' <<<"$INSANCE_JSON")
 
 echo -e "\nRemoving existing instance $INSTANCE_ID"
 curl -sSfL \
-	--request DELETE "http://${CORE_HOST}:19090/platform/v1/packages/instances/${INSTANCE_ID}/remove" \
+	--request DELETE "http://${CORE_HOST}:8080/platform/v1/packages/instances/${INSTANCE_ID}/remove" \
 	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 	| ${SCRIPT_DIR}/check-status-in-json.sh
 
 echo -e "\nLaunching new instance at $INSTANCE_HOST:$INSTANCE_PORT"
 curl -sSfL \
-	--request POST "http://${CORE_HOST}:19090/platform/v1/packages/${PLUGIN_PKG_ID}/hosts/${INSTANCE_HOST}/ports/${INSTANCE_PORT}/instance/launch" \
+	--request POST "http://${CORE_HOST}:8080/platform/v1/packages/${PLUGIN_PKG_ID}/hosts/${INSTANCE_HOST}/ports/${INSTANCE_PORT}/instance/launch" \
 	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 	| ${SCRIPT_DIR}/check-status-in-json.sh
 
