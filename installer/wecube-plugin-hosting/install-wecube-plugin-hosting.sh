@@ -43,7 +43,7 @@ done
 #fi
 
 echo -e "\nWaiting for WeCube platform initialization..."
-../wait-for-it.sh -t 120 "$CORE_HOST:19090" -- echo "WeCube platform core is ready."
+../wait-for-it.sh -t 120 "$CORE_HOST:8080" -- echo "WeCube platform core is ready."
 
 echo -e "\nCreating resource server record..."
 
@@ -53,7 +53,7 @@ CREDENTIALS=$(jq -n \
 	'{username: $username, password: $password}'
 )
 ACCESS_TOKEN=$(curl -sSfL \
-	--request POST "http://${CORE_HOST}:19090/auth/v1/api/login" \
+	--request POST "http://${CORE_HOST}:8080/auth/v1/api/login" \
 	--header 'Content-Type: application/json' \
 	--data @- <<<"${CREDENTIALS}" \
 	| ../api-utils/check-status-in-json.sh '.status == "OK"' \
@@ -63,7 +63,7 @@ ACCESS_TOKEN=$(curl -sSfL \
 [ -z "$ACCESS_TOKEN" ] && echo -e "\n\e[0;31mFailed to get access token from WeCube platform! Installation aborted.\e[0m\n" && exit 1
 
 curl -sSfL \
-	--request POST "http://${CORE_HOST}:19090/platform/resource/servers/create" \
+	--request POST "http://${CORE_HOST}:8080/platform/resource/servers/create" \
 	--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 	--header 'Content-Type: application/json' \
 	--data @- <<-EOF \

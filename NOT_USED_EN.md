@@ -96,7 +96,7 @@ ingress/egress |  protocol | port |  source CIDR  |  policy
 -|-|-|-|-
 ingress|TCP|2375|0.0.0.0/0|allow
 ingress|TCP|22|0.0.0.0/0|allow
-ingress|TCP|19090|0.0.0.0/0|allow
+ingress|TCP|8080|0.0.0.0/0|allow
 ingress|TCP|3128|10.128.194.0/25|allow
 ingress|TCP|3128|10.128.194.128/26|allow
 egress|TCP|1-65535|0.0.0.0/0|allow

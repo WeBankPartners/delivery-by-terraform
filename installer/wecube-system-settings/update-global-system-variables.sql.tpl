@@ -12,6 +12,6 @@ UPDATE `system_variables`
    AND `name`='S3_SERVER_URL';
 
 UPDATE `system_variables`
-   SET `value`='http://${GATEWAY_ENTRYPOINT}:19110'
+   SET `value`='http://${GATEWAY_ENTRYPOINT}:8005'
  WHERE `id`='system__global__GATEWAY_URL'
    AND `name`='GATEWAY_URL';

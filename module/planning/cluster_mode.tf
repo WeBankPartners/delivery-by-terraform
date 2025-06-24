@@ -463,13 +463,13 @@ locals {
     lb = [
       {
         # 负载均衡组件部署计划名称
-        name              = "http-19090-wecube-portal-1-cluster"
+        name              = "http-8080-wecube-portal-1-cluster"
         # 负载均衡器资源名称
         resource_name     = local.lb_internal_1_cluster.name
         # 负载均衡时使用的协议类型
         protocol          = "HTTP"
         # 负载均衡对外服务监听的端口
-        port              = 19090
+        port              = 8080
         # 负载均衡对外服务的访问路径
         path              = "/"
         # 健康检查的访问路径
@@ -480,73 +480,73 @@ locals {
             # 后端服务器所在的主机资源名称
             resource_name = local.core_host_1_cluster.name
             # 后端服务器监听的端口
-            port          = 19090
+            port          = 8080
             # 加权轮训时后端服务器所占权重
             weight        = 90
           },
           {
             resource_name = local.core_host_2_cluster.name
-            port          = 19090
+            port          = 8080
             weight        = 10
           },
         ]
       },
       {
-        name              = "http-19090-wecube-portal-2-cluster"
+        name              = "http-8080-wecube-portal-2-cluster"
         resource_name     = local.lb_internal_2_cluster.name
         protocol          = "HTTP"
-        port              = 19090
+        port              = 8080
         path              = "/"
         health_check_path = "/platform/v1/health-check"
         back_ends         = [
           {
             resource_name = local.core_host_1_cluster.name
-            port          = 19090
+            port          = 8080
             weight        = 10
           },
           {
             resource_name = local.core_host_2_cluster.name
-            port          = 19090
+            port          = 8080
             weight        = 90
           },
         ]
       },
       {
-        name              = "http-19110-wecube-gateway-1-cluster"
+        name              = "http-8005-wecube-gateway-1-cluster"
         resource_name     = local.lb_internal_1_cluster.name
         protocol          = "HTTP"
-        port              = 19110
+        port              = 8005
         path              = "/"
         health_check_path = "/platform/v1/health-check"
         back_ends         = [
           {
             resource_name = local.core_host_1_cluster.name
-            port          = 19110
+            port          = 8005
             weight        = 90
           },
           {
             resource_name = local.core_host_2_cluster.name
-            port          = 19110
+            port          = 8005
             weight        = 10
           },
         ]
       },
       {
-        name              = "http-19110-wecube-gateway-2-cluster"
+        name              = "http-8005-wecube-gateway-2-cluster"
         resource_name     = local.lb_internal_2_cluster.name
         protocol          = "HTTP"
-        port              = 19110
+        port              = 8005
         path              = "/"
         health_check_path = "/platform/v1/health-check"
         back_ends         = [
           {
             resource_name = local.core_host_1_cluster.name
-            port          = 19110
+            port          = 8005
             weight        = 10
           },
           {
             resource_name = local.core_host_2_cluster.name
-            port          = 19110
+            port          = 8005
             weight        = 90
           },
         ]

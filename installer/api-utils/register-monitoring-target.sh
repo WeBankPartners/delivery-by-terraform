@@ -14,14 +14,14 @@ SCRIPT_DIR=$(dirname "$0")
 
 if [ -z "${REQUEST_BODY_JSON}" ]; then
 	curl -sSfL \
-		--request POST "http://${CORE_HOST}:19090/monitor/api/v1/agent/register" \
+		--request POST "http://${CORE_HOST}:8080/monitor/api/v1/agent/register" \
 		--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 		--header 'Content-Type: application/json' \
 		--data @- \
 		| ${SCRIPT_DIR}/check-status-in-json.sh '.code == 200 and .status == "OK"'
 else
 	curl -sSfL \
-		--request POST "http://${CORE_HOST}:19090/monitor/api/v1/agent/register" \
+		--request POST "http://${CORE_HOST}:8080/monitor/api/v1/agent/register" \
 		--header "Authorization: Bearer ${ACCESS_TOKEN}" \
 		--header 'Content-Type: application/json' \
 		--data "${REQUEST_BODY_JSON}" \
