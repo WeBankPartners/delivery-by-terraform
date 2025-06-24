@@ -12,6 +12,8 @@ echo -e "\nInstalling the following WeCube plugin packages..."
 printf '  %s\n' "${PLUGIN_PKGS[@]}"
 PLUGIN_PKG_DIR="$INSTALLER_DIR/plugin-packages"
 mkdir -p "$PLUGIN_PKG_DIR"
+mkdir -p /data/terminal/logs && chmod 777 /data/terminal/logs
+mkdir -p /data/terminal/records && chmod 777 /data/terminal/records
 for PLUGIN_URL in "${PLUGIN_PKGS[@]}"; do
 	PLUGIN_PKG_FILE="$PLUGIN_PKG_DIR/${PLUGIN_URL##*'/'}"
 	echo -e "\nFetching plugin package from $PLUGIN_URL"
