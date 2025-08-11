@@ -32,7 +32,7 @@ echo -e "\nPlease specify the configuration parameters for WeCube installation.\
 #### Configuration Section ####
 INSTALL_TARGET_HOST_DEFAULT='127.0.0.1'
 WECUBE_RELEASE_VERSION_DEFAULT='latest'
-WECUBE_SETTINGS_DEFAULT='standard'
+WECUBE_SETTINGS_DEFAULT='init'
 WECUBE_HOME_DEFAULT='/data/wecube'
 WECUBE_USER_DEFAULT='root'
 INITIAL_PASSWORD_DEFAULT='Wecube@123456'
