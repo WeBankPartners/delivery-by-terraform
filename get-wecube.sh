@@ -81,6 +81,9 @@ read -p "Continue? [y/Y] " -n 1 -r && echo ""
 sudo mkdir -p $WECUBE_HOME
 sudo chown -R $USER:$USER $WECUBE_HOME
 
+sudo mkdir -p /data/terminal/logs /data/terminal/records /data/wecmdb/log
+sudo chmod 777 /data/terminal/logs /data/terminal/records /data/wecmdb/log
+
 INSTALLER_URL="https://github.com/WeBankPartners/delivery-by-terraform/archive/refs/heads/aws.zip"
 INSTALLER_PKG="$WECUBE_HOME/wecube-installer.zip"
 INSTALLER_DIR="$WECUBE_HOME/installer"
