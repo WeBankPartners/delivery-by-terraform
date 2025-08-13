@@ -48,6 +48,7 @@ services:
     restart: always
     volumes:
       - ${APP_LOG_PATH}:/app/platform-core/logs
+      - /data/platform-core/tmp:/tmp
       - /etc/localtime:/etc/localtime
     ports:
       - ${WECUBE_SERVER_PORT}:8080
