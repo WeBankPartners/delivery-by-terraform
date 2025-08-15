@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
   mysql-wecube:
     image: ccr.ccs.tencentyun.com/webankpartners/mysql:${WECUBE_RELEASE_VERSION}
@@ -10,6 +10,7 @@ services:
         "--default-time-zone=+8:00",
         "--max_allowed_packet=16M",
         "--lower_case_table_names=1",
+        "--max-connections=500",
       ]
     volumes:
       - ${MYSQL_DATA_PATH}:/var/lib/mysql

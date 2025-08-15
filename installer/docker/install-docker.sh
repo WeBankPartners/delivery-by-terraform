@@ -51,15 +51,15 @@ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 #sudo yum makecache fast
 #sudo yum install -y docker-ce docker-ce-cli containerd.io
 echo "Installing Docker ..."
-DOCKER_PACKAGE_URL="https://wecube-package.s3.ap-southeast-1.amazonaws.com/docker/docker-19.03.15.tgz"
-sudo ../curl-with-retry.sh -fL $DOCKER_PACKAGE_URL -o /tmp/docker-19.03.15.tgz
-sudo tar xzvf /tmp/docker-19.03.15.tgz -C /tmp
+DOCKER_PACKAGE_URL="https://wecube-package.s3.ap-southeast-1.amazonaws.com/docker/docker-24.09.tar.gz"
+sudo ../curl-with-retry.sh -fL $DOCKER_PACKAGE_URL -o /tmp/docker-24.09.tar.gz
+sudo tar xzvf /tmp/docker-24.09.tar.gz -C /tmp
 sudo chmod +x /tmp/docker/*
 sudo mv /tmp/docker/* /usr/bin
 
 # 安装Docker Compose
 echo "Installing Docker Compose..."
-DOCKER_COMPOSE_URL="https://wecube-package.s3.ap-southeast-1.amazonaws.com/docker/docker-compose-Linux-x86_64_1_25_4"
+DOCKER_COMPOSE_URL="https://wecube-package.s3.ap-southeast-1.amazonaws.com/docker/docker-compose-Linux-x86_64_2_31_0"
 DOCKER_COMPOSE_BIN="/usr/bin/docker-compose"
 sudo ../curl-with-retry.sh -fL $DOCKER_COMPOSE_URL -o $DOCKER_COMPOSE_BIN
 sudo chmod +x "$DOCKER_COMPOSE_BIN"
@@ -68,7 +68,7 @@ sudo chmod +x "$DOCKER_COMPOSE_BIN"
 echo "Configuring Docker daemon..."
 sudo mkdir -p /etc/systemd/system/docker.service.d /etc/docker
 sudo cp daemon.json /etc/docker/
-DOCKER_START_CMD="/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:$DOCKER_PORT"
+DOCKER_START_CMD="/usr/bin/dockerd -H unix:///var/run/docker.sock"
 #if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
 #	echo 'Using mirror for docker image registry in Mainland China https://mirror.ccs.tencentyun.com'
 #	DOCKER_START_CMD="$DOCKER_START_CMD --registry-mirror=https://mirror.ccs.tencentyun.com"
