@@ -16,11 +16,6 @@ if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(sudo docker-compose version 
 	echo 'Docker Compose is not properly installed!'
 	PREREQUISITES_SATISFIED='false'
 fi
-if [ "$PREREQUISITES_SATISFIED" != 'false' ] && ! $(curl -sSLf "http://$HOST_PRIVATE_IP:$DOCKER_PORT/version" >/dev/null 2>&1); then
-	echo 'Docker Engine is not listening on port $DOCKER_PORT!'
-	PREREQUISITES_SATISFIED='false'
-fi
-
 if [ "$PREREQUISITES_SATISFIED" != 'false' ]; then
 	echo "Congratulations, Docker is properly installed."
 	exit 0
