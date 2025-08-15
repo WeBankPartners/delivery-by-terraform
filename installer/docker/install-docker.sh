@@ -67,7 +67,7 @@ sudo chmod +x "$DOCKER_COMPOSE_BIN"
 # 配置Docker Engine以监听远程API请求
 echo "Configuring Docker daemon..."
 sudo mkdir -p /etc/systemd/system/docker.service.d /etc/docker
-sudo cp daemon.json /etc/docker/
+sudo cp daemon.json /etc/docker/ 
 DOCKER_START_CMD="/usr/bin/dockerd -H unix:///var/run/docker.sock"
 #if [ "$USE_MIRROR_IN_MAINLAND_CHINA" == "true" ]; then
 #	echo 'Using mirror for docker image registry in Mainland China https://mirror.ccs.tencentyun.com'
