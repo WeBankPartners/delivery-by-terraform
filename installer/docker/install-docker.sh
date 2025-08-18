@@ -101,7 +101,6 @@ EOF
 # 启动Docker服务
 sudo systemctl enable dockerd.service
 sudo systemctl start dockerd.service
-../wait-for-it.sh -t 60 "$HOST_PRIVATE_IP:$DOCKER_PORT" -- echo "Docker Engine is ready."
 sudo docker run --rm -t hello-world
 
 # 启用IP转发并配置桥接来解决Docker容器对外部网络的通信问题
