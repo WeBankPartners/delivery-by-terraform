@@ -116,17 +116,28 @@ sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
 rm -f /etc/yum.repos.d/epel.repo
 
 # install yum packages
-yum remove mysql-community-libs -y
-yum install epel-release net-tools vim tar unzip jq iptables-services mysql -y
+if [[ -f /etc/redhat-release ]] && grep -q "release 9" /etc/redhat-release; then
+    pkgs="net-tools vim tar unzip jq iptables-services mysql"
+else
+    pkgs="epel-release net-tools vim tar unzip jq iptables-services mysql"
+fi
+
+yum install -y $pkgs
+# yum remove mysql-community-libs -y
+# yum install epel-release net-tools vim tar unzip jq iptables-services mysql -y
 SELINUX_STATUS=$(getenforce)
 if [ "$SELINUX_STATUS" != "Disabled" ]; then
 	setenforce 0
 fi
 
 # change ssh config
-sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config 
-sed -i 's/PermitRootLogin forced-commands-only/PermitRootLogin yes/g' /etc/ssh/sshd_config 
+sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+sed -i 's/PermitRootLogin forced-commands-only/PermitRootLogin yes/g' /etc/ssh/sshd_config
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+if [[ -f /etc/ssh/sshd_config.d/50-cloud-init.conf ]]; then
+    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config.d/50-cloud-init.conf
+fi
 systemctl restart sshd
 
 # replace latest release version
