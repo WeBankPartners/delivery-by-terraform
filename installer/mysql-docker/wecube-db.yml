@@ -11,6 +11,7 @@ services:
         "--max_allowed_packet=16M",
         "--lower_case_table_names=1",
         "--max-connections=500",
+        "--innodb_log_file_size=1G",
       ]
     volumes:
       - ${MYSQL_DATA_PATH}:/var/lib/mysql
