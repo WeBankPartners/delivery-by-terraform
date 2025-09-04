@@ -37,6 +37,7 @@ WECUBE_HOME_DEFAULT='/data/wecube'
 WECUBE_USER_DEFAULT='root'
 INITIAL_PASSWORD_DEFAULT='Wecube@123456'
 USE_MIRROR_IN_MAINLAND_CHINA_DEFAULT='false'
+USE_EXTERNAL_MYSQL_DEFAULT='false'
 #### End of Configuration Section ####
 
 read -p "- Host [$INSTALL_TARGET_HOST_DEFAULT]: " INSTALL_TARGET_HOST
@@ -54,13 +55,37 @@ WECUBE_HOME=${WECUBE_HOME:-$WECUBE_HOME_DEFAULT}
 read -p "- User to run WeCube [$WECUBE_USER_DEFAULT]: " WECUBE_USER
 WECUBE_USER=${WECUBE_USER:-$WECUBE_USER_DEFAULT}
 
-read -s -p "- User password (As initial password for MySQL root) [$INITIAL_PASSWORD_DEFAULT]: " INITIAL_PASSWORD_1 && echo ""
+read -s -p "- User password (As initial password for Host & MySQL root) [$INITIAL_PASSWORD_DEFAULT]: " INITIAL_PASSWORD_1 && echo ""
 [ -n "$INITIAL_PASSWORD_1" ] && read -s -p "Please re-enter the password to confirm: " INITIAL_PASSWORD_2 && echo ""
 [ -n "$INITIAL_PASSWORD_1" ] && [ "$INITIAL_PASSWORD_1" != "$INITIAL_PASSWORD_2" ] && echo 'Inputs do not match!' && exit 1
 INITIAL_PASSWORD=${INITIAL_PASSWORD_1:-$INITIAL_PASSWORD_DEFAULT}
 
+read -p "- Should use external MySQL? (true/false) [$USE_EXTERNAL_MYSQL_DEFAULT]: " USE_EXTERNAL_MYSQL
+USE_EXTERNAL_MYSQL=${USE_EXTERNAL_MYSQL:-$USE_EXTERNAL_MYSQL_DEFAULT}
+
+if [ "$USE_EXTERNAL_MYSQL" == "true" ]; then
+    read -p "- External MySQL host: " MYSQL_HOST
+    read -p "- External MySQL port [3306]: " MYSQL_PORT
+    MYSQL_PORT=${MYSQL_PORT:-3306}
+    read -p "- External MySQL username [root]: " MYSQL_USERNAME
+    MYSQL_USERNAME=${MYSQL_USERNAME:-root}
+    read -s -p "- External MySQL password: " MYSQL_PASSWORD_1 && echo ""
+    [ -n "$MYSQL_PASSWORD_1" ] && read -s -p "Please re-enter the password to confirm: " MYSQL_PASSWORD_2 && echo ""
+    [ -n "$MYSQL_PASSWORD_1" ] && [ "$MYSQL_PASSWORD_1" != "$MYSQL_PASSWORD_2" ] && echo 'Inputs do not match!' && exit 1
+    MYSQL_PASSWORD=${MYSQL_PASSWORD_1}
+else
+    MYSQL_HOST=${INSTALL_TARGET_HOST}
+    MYSQL_PORT=3307
+    MYSQL_USERNAME=root
+    MYSQL_PASSWORD=${INITIAL_PASSWORD}
+fi
+
 read -p "- Should use mirror sites in Mainland China [$USE_MIRROR_IN_MAINLAND_CHINA_DEFAULT]: " USE_MIRROR_IN_MAINLAND_CHINA
 USE_MIRROR_IN_MAINLAND_CHINA=${USE_MIRROR_IN_MAINLAND_CHINA:-$USE_MIRROR_IN_MAINLAND_CHINA_DEFAULT}
+
+
+
+
 
 echo -e "\nPlease review the following configuration:\n"
 cat <<-EOF | tee "$INSTALLER_LOG_DIR/input-params.log"
@@ -71,6 +96,11 @@ cat <<-EOF | tee "$INSTALLER_LOG_DIR/input-params.log"
 	- WECUBE_USER                  = ${WECUBE_USER}
 	- INITIAL_PASSWORD             = (*hidden*)
 	- USE_MIRROR_IN_MAINLAND_CHINA = ${USE_MIRROR_IN_MAINLAND_CHINA}
+	- USE_EXTERNAL_MYSQL           = ${USE_EXTERNAL_MYSQL}
+	- MYSQL_HOST                   = ${MYSQL_HOST}
+	- MYSQL_PORT                   = ${MYSQL_PORT}
+	- MYSQL_USERNAME               = ${MYSQL_USERNAME}
+	- MYSQL_PASSWORD               = (*hidden*)
 EOF
 echo ""
 
@@ -185,9 +215,9 @@ PROVISIONING_ENV_FILE="$INSTALLER_DIR/provisioning.env"
 	S3_ACCESS_KEY=access_key
 	S3_SECRET_KEY=secret_key
 
-	MYSQL_PORT=3307
-	MYSQL_USERNAME=root
-	MYSQL_PASSWORD='${INITIAL_PASSWORD}'
+	MYSQL_PORT=${MYSQL_PORT}
+	MYSQL_USERNAME=${MYSQL_USERNAME}
+	MYSQL_PASSWORD='${MYSQL_PASSWORD}'
 EOF
 )
 ./invoke-installer.sh "$PROVISIONING_ENV_FILE" wecube-user docker
@@ -203,17 +233,22 @@ if [ "$WECUBE_RELEASE_VERSION" != "latest" ]; then
   docker tag ccr.ccs.tencentyun.com/webankpartners/mysql:${WECUBE_RELEASE_VERSION} ccr.ccs.tencentyun.com/webankpartners/mysql:latest
 fi
 find /tmp/platform/platform/ -name "*.tar" -exec docker load --input {} \;
-./invoke-installer.sh "$PROVISIONING_ENV_FILE" mysql-docker minio-docker open-monitor-agent
+if [ "$USE_EXTERNAL_MYSQL" == "true" ]; then
+    ./invoke-installer.sh "$PROVISIONING_ENV_FILE" minio-docker open-monitor-agent
+else
+    ./invoke-installer.sh "$PROVISIONING_ENV_FILE" mysql-docker minio-docker open-monitor-agent
+fi
+
 
 WECUBE_DB_ENV_FILE="$INSTALLER_DIR/db-deployment-wecube-db-standalone.env"
 (umask 066 && cat <<-EOF >"$WECUBE_DB_ENV_FILE"
 	${BASE_ENV}
 
-	DB_HOST='${INSTALL_TARGET_HOST}'
-	DB_PORT=3307
+	DB_HOST='${MYSQL_HOST}'
+	DB_PORT=${MYSQL_PORT}
 	DB_NAME=wecube
-	DB_USERNAME=root
-	DB_PASSWORD='${INITIAL_PASSWORD}'
+	DB_USERNAME=${MYSQL_USERNAME}
+	DB_PASSWORD='${MYSQL_PASSWORD}'
 	WECUBE_RELEASE_VERSION='${WECUBE_RELEASE_VERSION}'
 EOF
 )
@@ -223,11 +258,11 @@ AUTH_SERVER_DB_ENV_FILE="$INSTALLER_DIR/db-deployment-auth-server-db-standalone.
 (umask 066 && cat <<-EOF >"$AUTH_SERVER_DB_ENV_FILE"
 	${BASE_ENV}
 
-	DB_HOST='${INSTALL_TARGET_HOST}'
-	DB_PORT=3307
+	DB_HOST='${MYSQL_HOST}'
+	DB_PORT=${MYSQL_PORT}
 	DB_NAME=auth_server
-	DB_USERNAME=root
-	DB_PASSWORD='${INITIAL_PASSWORD}'
+	DB_USERNAME=${MYSQL_USERNAME}
+	DB_PASSWORD='${MYSQL_PASSWORD}'
 EOF
 )
 ./invoke-installer.sh "$AUTH_SERVER_DB_ENV_FILE" db-connectivity
@@ -239,17 +274,17 @@ WECUBE_PLATFORM_ENV_FILE="$INSTALLER_DIR/app-deployment-wecube-platform-standalo
 	STATIC_RESOURCE_HOSTS='${INSTALL_TARGET_HOST}'
 	S3_HOST='${INSTALL_TARGET_HOST}'
 
-	CORE_DB_HOST='${INSTALL_TARGET_HOST}'
-	CORE_DB_PORT=3307
+	CORE_DB_HOST='${MYSQL_HOST}'
+	CORE_DB_PORT=${MYSQL_PORT}
 	CORE_DB_NAME=wecube
-	CORE_DB_USERNAME=root
-	CORE_DB_PASSWORD='${INITIAL_PASSWORD}'
+	CORE_DB_USERNAME=${MYSQL_USERNAME}
+	CORE_DB_PASSWORD='${MYSQL_PASSWORD}'
 
-	AUTH_SERVER_DB_HOST='${INSTALL_TARGET_HOST}'
-	AUTH_SERVER_DB_PORT=3307
+	AUTH_SERVER_DB_HOST='${MYSQL_HOST}'
+	AUTH_SERVER_DB_PORT=${MYSQL_PORT}
 	AUTH_SERVER_DB_NAME=auth_server
-	AUTH_SERVER_DB_USERNAME=root
-	AUTH_SERVER_DB_PASSWORD='${INITIAL_PASSWORD}'
+	AUTH_SERVER_DB_USERNAME=${MYSQL_USERNAME}
+	AUTH_SERVER_DB_PASSWORD='${MYSQL_PASSWORD}'
 EOF
 )
 ./invoke-installer.sh "$WECUBE_PLATFORM_ENV_FILE" wecube-platform
@@ -278,23 +313,23 @@ WECUBE_SYSTEM_SETTINGS_ENV_FILE="$INSTALLER_DIR/app-deployment-wecube-system-set
 	PORTAL_ENTRYPOINT='${INSTALL_TARGET_HOST}'
 	GATEWAY_ENTRYPOINT='${INSTALL_TARGET_HOST}'
 
-	CORE_DB_HOST='${INSTALL_TARGET_HOST}'
-	CORE_DB_PORT=3307
+	CORE_DB_HOST='${MYSQL_HOST}'
+	CORE_DB_PORT=${MYSQL_PORT}
 	CORE_DB_NAME=wecube
-	CORE_DB_USERNAME=root
-	CORE_DB_PASSWORD='${INITIAL_PASSWORD}'
+	CORE_DB_USERNAME=${MYSQL_USERNAME}
+	CORE_DB_PASSWORD='${MYSQL_PASSWORD}'
 
-	AUTH_SERVER_DB_HOST='${INSTALL_TARGET_HOST}'
-	AUTH_SERVER_DB_PORT=3307
+	AUTH_SERVER_DB_HOST='${MYSQL_HOST}'
+	AUTH_SERVER_DB_PORT=${MYSQL_PORT}
 	AUTH_SERVER_DB_NAME=auth_server
-	AUTH_SERVER_DB_USERNAME=root
-	AUTH_SERVER_DB_PASSWORD='${INITIAL_PASSWORD}'
+	AUTH_SERVER_DB_USERNAME=${MYSQL_USERNAME}
+	AUTH_SERVER_DB_PASSWORD='${MYSQL_PASSWORD}'
 
-	PLUGIN_DB_HOST='${INSTALL_TARGET_HOST}'
-	PLUGIN_DB_PORT=3307
+	PLUGIN_DB_HOST='${MYSQL_HOST}'
+	PLUGIN_DB_PORT=${MYSQL_PORT}
 	PLUGIN_DB_NAME=mysql
-	PLUGIN_DB_USERNAME=root
-	PLUGIN_DB_PASSWORD='${INITIAL_PASSWORD}'
+	PLUGIN_DB_USERNAME=${MYSQL_USERNAME}
+	PLUGIN_DB_PASSWORD='${MYSQL_PASSWORD}'
 EOF
 )
 ./invoke-installer.sh "$WECUBE_SYSTEM_SETTINGS_ENV_FILE" wecube-system-settings
